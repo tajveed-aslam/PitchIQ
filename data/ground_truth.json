@@ -1,0 +1,12 @@
+{
+  "_rules": "Juggling touches = every contact that sends the ball back up, including the first lift; the final trap or drop is not counted. Counted by reviewing every second frame (12 fps). status: provisional until checked by the owner.",
+  "clips": {
+    "mixkit-42524": {
+      "skill": "juggling",
+      "touches": 16,
+      "touch_times": [0.0, 0.92, 1.46, 2.21, 2.95, 3.75, 4.34, 5.0, 5.6, 6.34, 7.05, 7.68, 8.36, 8.93, 9.6, 10.22],
+      "notes": "Head out of frame. Ball leaves the bottom of the frame at 10.84 s (not counted).",
+      "status": "provisional"
+    }
+  }
+}
