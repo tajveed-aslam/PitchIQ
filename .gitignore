@@ -1,0 +1,22 @@
+# secrets
+.env
+*.env.local
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# node
+node_modules/
+.next/
+out/
+# local working data
+data/raw/
+data/uploads/
+models/*.onnx
+reports/
+# internal working notes (local only)
+PROGRESS.md
+# downloaded AI models (fetched by scripts/fetch_models.py)
+models/*.task
+models/*.tflite
