@@ -6,14 +6,27 @@ Run:  python -u -m analysis.spike.evaluate_juggling [clip ids...]
 """
 
 import json
+import pickle
 import sys
 from pathlib import Path
 
 from analysis.juggling import count_touches
-from analysis.tracking import interpolate, track_video
+from analysis.tracking import track_video
 
 ROOT = Path(__file__).resolve().parents[2]
+CACHE = ROOT / "reports/cache"  # tracker output per clip (gitignored): tracking is slow, counting is instant
 TOLERANCE = 0.25  # seconds: a detected touch within this of a true touch counts as a match
+
+
+def tracked(clip_id: str):
+    """Tracker output for a clip, cached. Delete reports/cache after changing the tracker."""
+    path = CACHE / f"{clip_id}.pkl"
+    if path.exists():
+        return pickle.loads(path.read_bytes())
+    result = track_video(ROOT / "data/raw" / f"{clip_id}.mp4")
+    CACHE.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(pickle.dumps(result))
+    return result
 
 
 def match(found: list[float], truth: list[float]) -> tuple[int, list[float], list[float]]:
@@ -33,8 +46,8 @@ if __name__ == "__main__":
     ids = sys.argv[1:] or [k for k, v in gt.items() if v["skill"] == "juggling"]
     for clip_id in ids:
         truth = gt[clip_id]
-        points, fps, _ = track_video(ROOT / "data/raw" / f"{clip_id}.mp4")
-        result = count_touches(interpolate(points), fps)
+        points, fps, _ = tracked(clip_id)
+        result = count_touches(points, fps)
         s = result.summary()
         hits, missed, extra = match(s["times"], truth["touch_times"])
         print(f"{clip_id}: model {s['touches']} (certain {s['certain']}, range {s['range']}) vs truth {truth['touches']}"
