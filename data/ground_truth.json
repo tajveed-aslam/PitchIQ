@@ -54,6 +54,64 @@
       ],
       "notes": "Low camera, night, camera pans. 3.57 s: high foot kick sends the ball out of the top of the frame until 4.25 s (a touch at the TOP of an arc, not the bottom). 6.26 s: failed touch, ball drops to the ground; re-lifted at 7.10 s after resting on the foot. 11.53 s: very low toe touch, could be mistaken for a bounce. Final trap at 12.0 s not counted.",
       "status": "provisional"
+    },
+    "mixkit-43487": {
+      "skill": "juggling",
+      "touches": 39,
+      "touch_times": [
+        0.04,
+        0.44,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.25,
+        3.94,
+        4.67,
+        5.26,
+        5.72,
+        6.28,
+        6.92,
+        7.53,
+        8.17,
+        8.76,
+        9.43,
+        9.84,
+        10.32,
+        10.84,
+        11.3,
+        11.95,
+        12.35,
+        12.93,
+        13.66,
+        14.1,
+        14.51,
+        14.97,
+        15.52,
+        16.6,
+        17.52,
+        18.22,
+        18.69,
+        19.27,
+        19.77,
+        20.31,
+        20.83,
+        21.35,
+        21.95
+      ],
+      "drops": [
+        16.27,
+        23.11
+      ],
+      "notes": "Night, full body, player far from camera (small ball). Several around-the-world tricks (foot circles the ball, no contact). 16.27 s: ball reaches the ground beside the standing foot and comes back up: counted as a bounce, not a touch (ambiguous). 17.52 s: high foot touch near the top of the frame. From 22.3 s the camera moves and zooms; 22.8 s bicycle-kick attempt misses (ball in smooth free fall), ball bounces at 23.11 s and 24.0 s (not touches).",
+      "status": "provisional"
+    },
+    "mixkit-43513": {
+      "skill": "juggling",
+      "use": "quality_gate",
+      "expected_gate": "camera_moving",
+      "notes": "Camera zooms out continuously from a close-up of the legs to a full-body shot, so ball size and position in the image change with the camera. Not an accuracy sample: PitchIQ requires a still camera, and this clip should be flagged by the quality gate.",
+      "status": "provisional"
     }
   }
 }

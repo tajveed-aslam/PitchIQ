@@ -43,7 +43,7 @@ def match(found: list[float], truth: list[float]) -> tuple[int, list[float], lis
 
 if __name__ == "__main__":
     gt = json.loads((ROOT / "data/ground_truth.json").read_text())["clips"]
-    ids = sys.argv[1:] or [k for k, v in gt.items() if v["skill"] == "juggling"]
+    ids = sys.argv[1:] or [k for k, v in gt.items() if v["skill"] == "juggling" and "touches" in v]
     for clip_id in ids:
         truth = gt[clip_id]
         points, fps, _ = tracked(clip_id)
