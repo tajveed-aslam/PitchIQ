@@ -57,8 +57,16 @@ class JugglingResult:
                 "times": [round(t.time, 2) for t in self.touches]}
 
 
+def _usable(p: BallPoint | None, ball: float) -> bool:
+    """Whether a detection measures the ball's height: not if it's over twice its usual size. Then the ball is flying
+    at the camera, out of the player's plane, and its height in the picture says little about its height above the
+    ground (spike 2e: the ball after a missed bicycle kick in clip 43487). (Ignoring balls cut off by the frame edge
+    was tried too and dropped: in close-ups every touch is at the bottom edge.)"""
+    return p is not None and p.size <= 2 * ball
+
+
 def _clean_heights(points: list[BallPoint | None], ball: float) -> np.ndarray:
-    """Ball y per frame (NaN where unknown). Removes glitches only:
+    """Ball y per frame (NaN where unknown). Skips unusable detections (see _usable), then removes glitches only:
     - a point far from BOTH neighbours (more than 1.5 ball diameters from their average);
     - a point that no nearby detection agrees with: reaching it from the closest detection on either side (within
       a few frames) would take an impossible speed, over a ball diameter per frame (spike 2c: a false detection at
@@ -66,7 +74,7 @@ def _clean_heights(points: list[BallPoint | None], ball: float) -> np.ndarray:
       they're often the only sighting of a bounce's bottom.
     Deliberately NOT a median/average filter: those flatten the bottom of each bounce, which is exactly the turning
     point touches are counted from (found in spike 2b)."""
-    y = np.array([p.y if p is not None else np.nan for p in points], dtype=float)
+    y = np.array([p.y if _usable(p, ball) else np.nan for p in points], dtype=float)
     out = y.copy()
     for i in range(1, len(y) - 1):
         a, b = y[i - 1], y[i + 1]
@@ -166,9 +174,12 @@ def count_touches(points: list[BallPoint | None], fps: float, min_arc_seconds: f
     if not known:
         return JugglingResult([], fps)
 
+    # Ball x per frame: seen, or straight-line between sightings (only used to say where a touch happened).
+    seen_i = np.flatnonzero(~np.isnan(seen))
+    xs = np.interp(np.arange(len(points)), seen_i, [points[i].x for i in seen_i])
+
     def add(i: int, certain: bool):
-        p = points[i]
-        touches.append(Touch(i, i / fps, p.x if p else 0.0, float(y[i]), certain))
+        touches.append(Touch(i, i / fps, float(xs[i]), float(y[i]), certain))
 
     falling = False
     low_i = high_i = known[0]
@@ -202,8 +213,7 @@ def count_touches(points: list[BallPoint | None], fps: float, min_arc_seconds: f
     if touches and touches[0].frame > first + 3:
         top = np.nanmin(y[first:touches[0].frame + 1])
         if y[first] - top >= min_rise:
-            p = points[first]
-            touches.insert(0, Touch(first, first / fps, p.x if p else 0.0, float(y[first]), True))
+            touches.insert(0, Touch(first, first / fps, float(xs[first]), float(y[first]), True))
     touches.sort(key=lambda t: t.frame)
     return JugglingResult(touches, fps, hidden_gaps=_unexplained_gaps(y, touches, min_gap))
 
