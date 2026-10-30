@@ -51,7 +51,7 @@ const LITE_PLANS: Plan[] = [
     price: "$4",
     period: "per month",
     blurb: "Feedback and drills written for you.",
-    features: ["Everything in Skill Analysis", "AI coaching on every report", "Weekly drill plan", "Help chat"],
+    features: ["Everything in Skill Analysis", "AI coaching on every report", "Drills picked for you", "Coaching checked against your numbers"],
   },
   {
     id: "events",
@@ -59,7 +59,7 @@ const LITE_PLANS: Plan[] = [
     price: "$1",
     period: "per event",
     blurb: "Enter challenges and see where you rank.",
-    features: ["Monthly juggling challenge", "Leaderboard", "Badges"],
+    features: ["Monthly juggling challenge", "Your rank on the leaderboard", "5 analyses a month"],
   },
 ];
 

@@ -29,8 +29,8 @@ FAQ = [
      "a": "On our hand-counted test videos it found 92% of touches and was within 2 touches every time. Each report "
           "shows a likely range: touches the camera couldn't see clearly are covered by it."},
     {"q": "How much data does an upload use?",
-     "a": "With the data saver on, your phone shrinks the video before uploading: usually 1-3 MB for 30 seconds. "
-          "Turn it off only on Wi-Fi."},
+     "a": "With the data saver on, your phone shrinks the video to 480p before uploading: about 5 MB for 30 "
+          "seconds instead of 30-80 MB. It keeps enough quality for an accurate count."},
     {"q": "How long does an analysis take?",
      "a": "Usually under a minute for a 30-second video, a bit longer if the service has just woken up."},
     {"q": "What do rhythm and control mean?",

@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { EDITION } from "@/config/editions";
+import { AuthProvider } from "@/lib/auth";
 
 const display = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-display" });
 const body = Inter({ subsets: ["latin"], variable: "--font-body" });
@@ -20,9 +21,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="flex min-h-screen flex-col">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <AuthProvider>
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </AuthProvider>
       </body>
     </html>
   );
