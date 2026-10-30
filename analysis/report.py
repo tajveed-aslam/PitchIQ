@@ -9,6 +9,7 @@ Run on a file:  python -u -m analysis.report data/raw/mixkit-43490.mp4
 import json
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
 
 import cv2
@@ -77,11 +78,17 @@ def quality(points, cam_still: bool, cam_moving: float, info: dict, every: int) 
             "camera_moving_pct": round(100 * cam_moving), "ball_size_pct": round(ball_pct, 1)}
 
 
-def analyse_juggling(path: Path, every: int = EVERY) -> dict:
+def analyse_juggling(path: Path, every: int = EVERY, on_stage: Callable[[str], None] | None = None) -> dict:
+    """Full analysis of one juggling video. on_stage(name) is called as each stage starts ("quality", "tracking",
+    "counting") so a job can report progress."""
+    stage = on_stage or (lambda _name: None)
     started = time.perf_counter()
     info = _video_info(path)
+    stage("quality")
     cam = camera_motion(path)
+    stage("tracking")
     points, fps, _ = track_video(path, every=every)
+    stage("counting")
     result = count_touches(points, fps)
     sizes = [p.size for p in points if p is not None]
     ball = float(np.median(sizes)) if sizes else 1.0
