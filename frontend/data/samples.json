@@ -1,0 +1,402 @@
+[
+  {
+    "id": "juggling-43490",
+    "title": "Floodlit freestyle",
+    "blurb": "Feet and knees under the lights, low camera. A clean test with one drop and a re-lift.",
+    "level": "Intermediate",
+    "video": "/samples/juggling-43490.mp4",
+    "poster": "/samples/juggling-43490.jpg",
+    "credit": "Mixkit (Free License)",
+    "ground_truth": {
+      "touches": 19,
+      "touch_times_s": [
+        0.04,
+        0.54,
+        1.0,
+        1.46,
+        1.84,
+        2.5,
+        3.04,
+        3.57,
+        4.67,
+        5.17,
+        5.76,
+        7.1,
+        7.84,
+        8.84,
+        9.34,
+        9.93,
+        10.43,
+        10.93,
+        11.53
+      ],
+      "counted_by": "hand, frame by frame"
+    },
+    "report": {
+      "schema_version": 1,
+      "model_version": "juggling-0.1",
+      "skill": "juggling",
+      "video": {
+        "duration_s": 12.93,
+        "fps": 23.98,
+        "width": 854,
+        "height": 480
+      },
+      "quality": {
+        "verdict": "ok",
+        "issues": [],
+        "ball_seen_pct": 55,
+        "camera_moving_pct": 3,
+        "ball_size_pct": 8.6
+      },
+      "metrics": {
+        "touches": 17,
+        "touches_range": [
+          12,
+          20
+        ],
+        "touches_certain": 12,
+        "touch_times_s": [
+          0.42,
+          1.0,
+          1.46,
+          1.84,
+          2.42,
+          2.92,
+          4.25,
+          4.71,
+          5.21,
+          5.67,
+          7.88,
+          8.72,
+          9.3,
+          9.88,
+          10.3,
+          10.97,
+          11.59
+        ],
+        "touches_per_minute": 85.9,
+        "interval_s": {
+          "mean": 0.7,
+          "cv": 0.64
+        },
+        "arc_height_balls": {
+          "mean": 2.07,
+          "cv": 0.62
+        }
+      },
+      "notes": [
+        "Touch count is measured from the ball's path; touches the camera couldn't see are covered by the range.",
+        "Rhythm and arc height are approximate."
+      ],
+      "timing": {
+        "analysis_s": 22.4
+      }
+    }
+  },
+  {
+    "id": "juggling-43487",
+    "title": "Long session, full body",
+    "blurb": "39 touches in 22 seconds, with around-the-world tricks and a missed bicycle kick at the end.",
+    "level": "Advanced",
+    "video": "/samples/juggling-43487.mp4",
+    "poster": "/samples/juggling-43487.jpg",
+    "credit": "Mixkit (Free License)",
+    "ground_truth": {
+      "touches": 39,
+      "touch_times_s": [
+        0.04,
+        0.44,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.25,
+        3.94,
+        4.67,
+        5.26,
+        5.72,
+        6.28,
+        6.92,
+        7.53,
+        8.17,
+        8.76,
+        9.43,
+        9.84,
+        10.32,
+        10.84,
+        11.3,
+        11.95,
+        12.35,
+        12.93,
+        13.66,
+        14.1,
+        14.51,
+        14.97,
+        15.52,
+        16.6,
+        17.52,
+        18.22,
+        18.69,
+        19.27,
+        19.77,
+        20.31,
+        20.83,
+        21.35,
+        21.95
+      ],
+      "counted_by": "hand, frame by frame"
+    },
+    "report": {
+      "schema_version": 1,
+      "model_version": "juggling-0.1",
+      "skill": "juggling",
+      "video": {
+        "duration_s": 24.57,
+        "fps": 23.98,
+        "width": 854,
+        "height": 480
+      },
+      "quality": {
+        "verdict": "ok",
+        "issues": [],
+        "ball_seen_pct": 82,
+        "camera_moving_pct": 0,
+        "ball_size_pct": 4.7
+      },
+      "metrics": {
+        "touches": 38,
+        "touches_range": [
+          36,
+          39
+        ],
+        "touches_certain": 36,
+        "touch_times_s": [
+          0.0,
+          0.38,
+          1.0,
+          1.46,
+          1.96,
+          2.46,
+          3.96,
+          4.63,
+          5.26,
+          5.71,
+          6.21,
+          6.88,
+          7.55,
+          8.13,
+          8.72,
+          9.38,
+          9.8,
+          10.3,
+          10.8,
+          11.26,
+          12.3,
+          12.93,
+          13.64,
+          14.1,
+          14.51,
+          14.89,
+          15.47,
+          16.27,
+          17.52,
+          18.14,
+          18.64,
+          19.23,
+          19.77,
+          20.31,
+          20.85,
+          21.31,
+          21.77,
+          23.61
+        ],
+        "touches_per_minute": 94.0,
+        "interval_s": {
+          "mean": 0.64,
+          "cv": 0.47
+        },
+        "arc_height_balls": {
+          "mean": 2.15,
+          "cv": 0.7
+        }
+      },
+      "notes": [
+        "Touch count is measured from the ball's path; touches the camera couldn't see are covered by the range.",
+        "Rhythm and arc height are approximate."
+      ],
+      "timing": {
+        "analysis_s": 26.6
+      }
+    }
+  },
+  {
+    "id": "juggling-42524",
+    "title": "Street pitch rhythm",
+    "blurb": "Close camera, head out of the picture. Steady foot and thigh touches.",
+    "level": "Beginner",
+    "video": "/samples/juggling-42524.mp4",
+    "poster": "/samples/juggling-42524.jpg",
+    "credit": "Mixkit (Free License)",
+    "ground_truth": {
+      "touches": 16,
+      "touch_times_s": [
+        0.0,
+        0.92,
+        1.46,
+        2.21,
+        2.95,
+        3.75,
+        4.34,
+        5.0,
+        5.6,
+        6.34,
+        7.05,
+        7.68,
+        8.36,
+        8.93,
+        9.6,
+        10.22
+      ],
+      "counted_by": "hand, frame by frame"
+    },
+    "report": {
+      "schema_version": 1,
+      "model_version": "juggling-0.1",
+      "skill": "juggling",
+      "video": {
+        "duration_s": 11.18,
+        "fps": 23.98,
+        "width": 854,
+        "height": 480
+      },
+      "quality": {
+        "verdict": "ok",
+        "issues": [],
+        "ball_seen_pct": 44,
+        "camera_moving_pct": 0,
+        "ball_size_pct": 14.6
+      },
+      "metrics": {
+        "touches": 14,
+        "touches_range": [
+          8,
+          18
+        ],
+        "touches_certain": 8,
+        "touch_times_s": [
+          0.0,
+          0.83,
+          1.5,
+          2.92,
+          3.67,
+          4.38,
+          5.09,
+          5.67,
+          6.26,
+          7.72,
+          8.38,
+          8.88,
+          9.55,
+          10.26
+        ],
+        "touches_per_minute": 76.0,
+        "interval_s": {
+          "mean": 0.79,
+          "cv": 0.37
+        },
+        "arc_height_balls": {
+          "mean": 1.27,
+          "cv": 0.48
+        }
+      },
+      "notes": [
+        "Touch count is measured from the ball's path; touches the camera couldn't see are covered by the range.",
+        "Rhythm and arc height are approximate."
+      ],
+      "timing": {
+        "analysis_s": 18.9
+      }
+    }
+  },
+  {
+    "id": "juggling-43513",
+    "title": "Garage session (moving camera)",
+    "blurb": "The camera zooms out while filming. Try it to see the quality check ask for a re-film.",
+    "level": "Quality check",
+    "video": "/samples/juggling-43513.mp4",
+    "poster": "/samples/juggling-43513.jpg",
+    "credit": "Mixkit (Free License)",
+    "ground_truth": {
+      "touches": null,
+      "touch_times_s": null,
+      "counted_by": "hand, frame by frame"
+    },
+    "report": {
+      "schema_version": 1,
+      "model_version": "juggling-0.1",
+      "skill": "juggling",
+      "video": {
+        "duration_s": 14.89,
+        "fps": 23.98,
+        "width": 854,
+        "height": 480
+      },
+      "quality": {
+        "verdict": "reject",
+        "issues": [
+          {
+            "code": "camera_moving",
+            "message": "The camera moved. Prop the phone up so it stays still."
+          }
+        ],
+        "ball_seen_pct": 64,
+        "camera_moving_pct": 77,
+        "ball_size_pct": 6.8
+      },
+      "metrics": {
+        "touches": 17,
+        "touches_range": [
+          13,
+          19
+        ],
+        "touches_certain": 13,
+        "touch_times_s": [
+          0.92,
+          3.09,
+          3.59,
+          4.21,
+          4.71,
+          5.34,
+          6.09,
+          8.38,
+          9.05,
+          9.47,
+          9.93,
+          10.47,
+          11.14,
+          11.8,
+          12.39,
+          12.97,
+          13.81
+        ],
+        "touches_per_minute": 74.5,
+        "interval_s": {
+          "mean": 0.81,
+          "cv": 0.68
+        },
+        "arc_height_balls": {
+          "mean": 2.32,
+          "cv": 0.41
+        }
+      },
+      "notes": [
+        "Touch count is measured from the ball's path; touches the camera couldn't see are covered by the range.",
+        "Rhythm and arc height are approximate."
+      ],
+      "timing": {
+        "analysis_s": 21.4
+      }
+    }
+  }
+]
