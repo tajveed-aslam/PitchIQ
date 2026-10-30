@@ -124,7 +124,7 @@ export default function UploadPage() {
               <button type="button" onClick={start} disabled={!file || busy} className="btn-primary w-full disabled:opacity-50" data-testid="upload-submit">
                 Analyse my session
               </button>
-              <p className="text-xs text-chalk/55">
+              <p className="text-xs text-chalk/60">
                 {allowance.remaining} of {allowance.limit} analyses left. Videos are deleted after analysis; we keep a thumbnail and the report. Up to 90 seconds.
               </p>
             </>

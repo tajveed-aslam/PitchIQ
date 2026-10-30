@@ -30,4 +30,28 @@ compressed for the demo and are not redistributed as standalone stock.
 
 ## Photos
 
-Added with the UI (Unsplash / Pexels), listed here with photographer credits.
+The website's photos are still frames taken from the Mixkit clips above (same Free License): no separate stock
+photos, no famous players. Files in `frontend/public/images/`:
+
+| File | From clip | Moment |
+|---|---|---|
+| hero-bicycle.webp | 43487 | 22.86 s, bicycle-kick attempt |
+| high-kick.webp | 43487 | 17.52 s, high foot touch |
+| floodlights.webp | 43487 | 2.92 s |
+| knee-volley.webp | 43490 | 2.17 s |
+| head-height.webp | 43490 | 8.30 s |
+| street-juggle.webp | 42524 | 8.0 s |
+| garage-session.webp | 43513 | 9.0 s |
+| first-touch.webp | 42529 | 4.0 s |
+
+The sample videos on the site (`frontend/public/samples/`) are 480p re-encodes of 43487, 43490, 42524 and 43513.
+
+## Testimonials and people
+
+Testimonials on the landing page are invented examples, labelled "Sample", shown with initials only. Leaderboard
+players are fictional. The demo account ("Demo Player") is fictional.
+
+## Software
+
+Next.js, React, Tailwind CSS, lucide-react (ISC), mp4-muxer (MIT), FastAPI, SQLAlchemy, MediaPipe, OpenCV,
+Google Gemini API (coaching and help chat).

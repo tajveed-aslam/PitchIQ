@@ -6,13 +6,13 @@ from collections import defaultdict, deque
 
 from fastapi import APIRouter, HTTPException, Request
 
+from ..config import settings
 from ..services import coaching
 from ..services.worker_client import WorkerUnavailable, get_worker
 from .analyses import SAMPLE_TITLES
 
 router = APIRouter()
 
-RUNS_PER_HOUR = 6
 _runs: dict[str, deque] = defaultdict(deque)
 _coaching_cache: dict[str, dict] = {}  # the pipeline is deterministic: one coaching per sample + model version
 _job_sample: dict[str, str] = {}
@@ -27,7 +27,7 @@ def _rate_limit(ip: str):
     now, runs = time.time(), _runs[ip]
     while runs and runs[0] < now - 3600:
         runs.popleft()
-    if len(runs) >= RUNS_PER_HOUR:
+    if len(runs) >= settings.sample_runs_per_hour:
         raise HTTPException(status_code=429, detail="You've run a lot of samples this hour. Try again later, "
                             "or sign up to analyse your own videos.")
     runs.append(now)

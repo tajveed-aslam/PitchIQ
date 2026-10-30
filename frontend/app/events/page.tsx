@@ -87,7 +87,7 @@ export default function EventsPage() {
               <Link href="/signup?plan=events" className="btn-primary">Join the challenge</Link>
             </>
           )}
-          <p className="text-xs text-chalk/50">Leaderboard players are fictional sample players.</p>
+          <p className="text-xs text-chalk/60">Leaderboard players are fictional sample players.</p>
         </aside>
       </div>
     </>

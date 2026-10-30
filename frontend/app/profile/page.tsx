@@ -122,5 +122,5 @@ function ProfileInner() {
 }
 
 export default function ProfilePage() {
-  return <Suspense><ProfileInner /></Suspense>;
+  return <Suspense fallback={<Loading />}><ProfileInner /></Suspense>;
 }

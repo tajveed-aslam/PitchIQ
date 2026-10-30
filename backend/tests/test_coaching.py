@@ -108,4 +108,6 @@ def test_every_sample_report_fits_the_contract(sample):
     assert r["schema_version"] == 1 and r["quality"]["verdict"] in ("ok", "warn", "reject")
     lo, hi = r["metrics"]["touches_range"]
     assert lo <= r["metrics"]["touches"] <= hi
-    assert rule_based(r)["summary"]
+    out = rule_based(r)
+    assert out["summary"] and len(out["drills"]) == 3  # always three drills (E2E found a report with two)
+    assert len({d["name"] for d in out["drills"]}) == 3

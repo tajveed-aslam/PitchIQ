@@ -1,0 +1,19 @@
+{
+  "name": "pitchiq-e2e",
+  "private": true,
+  "description": "End-to-end tests for PitchIQ (Playwright): desktop Chrome, Pixel 7, iPhone 14, plus axe accessibility checks.",
+  "scripts": {
+    "test": "playwright test",
+    "test:desktop": "playwright test --project=desktop-chrome",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.64.0",
+    "@types/node": "^20",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "playwright-core": "1.64.0"
+  }
+}

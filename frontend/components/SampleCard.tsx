@@ -68,7 +68,7 @@ export function SampleCard({ sample }: { sample: Sample }) {
               <span className="chip">{sample.level}</span>
             </div>
             <p className="mt-2 text-chalk/75">{sample.blurb}</p>
-            <p className="mt-2 text-xs text-chalk/50">{sample.report.video.duration_s.toFixed(0)} s · Video: {sample.credit}</p>
+            <p className="mt-2 text-xs text-chalk/60">{sample.report.video.duration_s.toFixed(0)} s · Video: {sample.credit}</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={analyse} disabled={stage !== null} className="btn-primary disabled:opacity-70" data-testid={`analyse-${sample.id}`}>
@@ -79,7 +79,7 @@ export function SampleCard({ sample }: { sample: Sample }) {
               <Download className="h-5 w-5" aria-hidden="true" /> Download
             </a>
           </div>
-          <p className="text-xs text-chalk/50">Download it to try the normal upload flow from your phone or laptop.</p>
+          <p className="text-xs text-chalk/60">Download it to try the normal upload flow from your phone or laptop.</p>
         </div>
 
         <div className="space-y-4 border-t border-white/10 bg-ink-900/60 p-5 sm:p-6 lg:border-l lg:border-t-0" aria-live="polite">
@@ -87,13 +87,13 @@ export function SampleCard({ sample }: { sample: Sample }) {
             <div className="space-y-3 py-6">
               <ol className="space-y-3">
                 {STAGES.map((s, i) => (
-                  <li key={s} className={`flex items-center gap-3 text-sm ${i <= current ? "text-white" : "text-chalk/40"}`}>
+                  <li key={s} className={`flex items-center gap-3 text-sm ${i <= current ? "text-white" : "text-chalk/60"}`}>
                     <span className={`h-2.5 w-2.5 rounded-full ${i < current ? "bg-pitch-400" : i === current ? "animate-pulse bg-pitch-300" : "bg-ink-600"}`} />
                     {STAGE_LABEL[s]}
                   </li>
                 ))}
               </ol>
-              <p className="text-xs text-chalk/55">Running the real analysis on the server. If it has been asleep, the first run takes a little longer.</p>
+              <p className="text-xs text-chalk/60">Running the real analysis on the server. If it has been asleep, the first run takes a little longer.</p>
             </div>
           )}
           {result && (

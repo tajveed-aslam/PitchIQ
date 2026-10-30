@@ -48,7 +48,7 @@ function SignupForm() {
         <input name="password" type="password" required minLength={8} autoComplete="new-password" className={inputCls} data-testid="signup-password" />
       </Field>
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-white">Plan <span className="font-normal text-chalk/55">(test mode, nothing is charged)</span></legend>
+        <legend className="text-sm font-medium text-white">Plan <span className="font-normal text-chalk/60">(test mode, nothing is charged)</span></legend>
         <div className="grid grid-cols-2 gap-2">
           {EDITION.plans.map((p) => (
             <label key={p.id} className={`cursor-pointer rounded-xl border p-3 text-sm transition ${plan === p.id ? "border-pitch-400 bg-pitch-400/10" : "border-white/15 hover:border-white/30"}`}>
@@ -73,7 +73,8 @@ function SignupForm() {
 export default function SignupPage() {
   return (
     <AuthLayout title="Start training smarter" subtitle="Free for 7 days: three analyses with AI coaching. No card needed." image="/images/knee-volley.webp" imageAlt="A player lifts the ball with his knee on a floodlit pitch">
-      <Suspense>
+      {/* fixed-height placeholder while the form loads: no layout shift (Lighthouse CLS) */}
+      <Suspense fallback={<div className="min-h-[600px]" />}>
         <SignupForm />
       </Suspense>
     </AuthLayout>

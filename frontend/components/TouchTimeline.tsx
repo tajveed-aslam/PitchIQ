@@ -47,7 +47,7 @@ export function TouchTimeline({ duration, ai, truth }: Props) {
     <div className="space-y-2">
       <Row label="AI" times={ai} matched={near(truth)} duration={duration} tone="ai" />
       {truth && <Row label="Hand" times={truth} matched={near(ai)} duration={duration} tone="truth" />}
-      <div className="flex justify-between pl-[4.75rem] text-[11px] text-chalk/50">
+      <div className="flex justify-between pl-[4.75rem] text-[11px] text-chalk/60">
         <span>0 s</span>
         <span>{duration.toFixed(0)} s</span>
       </div>

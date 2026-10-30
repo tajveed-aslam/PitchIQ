@@ -114,7 +114,7 @@ export default function DashboardPage() {
                 {data.notifications.map((n) => (
                   <li key={n.id} className="text-sm text-chalk/85">
                     {n.link ? <Link href={n.link} className="hover:text-white">{n.text}</Link> : n.text}
-                    <span className="ml-2 text-xs text-chalk/45">{new Date(n.created_at).toLocaleDateString()}</span>
+                    <span className="ml-2 text-xs text-chalk/60">{new Date(n.created_at).toLocaleDateString()}</span>
                   </li>
                 ))}
               </ul>

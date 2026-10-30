@@ -40,7 +40,7 @@ export function ReportCard({ report, truth }: Props) {
           <v.icon className="h-4 w-4" aria-hidden="true" />
           {v.text}
         </span>
-        <span className="text-xs text-chalk/50">
+        <span className="text-xs text-chalk/60">
           Analysed in {report.timing.analysis_s} s · model {report.model_version}
         </span>
       </div>
@@ -95,7 +95,7 @@ export function ReportCard({ report, truth }: Props) {
         <TouchTimeline duration={report.video.duration_s} ai={m.touch_times_s} truth={truth?.touch_times_s} />
       </div>
 
-      <p className="text-xs text-chalk/50">{report.notes.join(" ")}</p>
+      <p className="text-xs text-chalk/60">{report.notes.join(" ")}</p>
     </div>
   );
 }

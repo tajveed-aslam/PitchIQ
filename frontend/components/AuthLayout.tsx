@@ -29,13 +29,13 @@ export function Field({ label, children, hint }: { label: string; children: Reac
     <label className="block space-y-1.5">
       <span className="text-sm font-medium text-white">{label}</span>
       {children}
-      {hint && <span className="block text-xs text-chalk/55">{hint}</span>}
+      {hint && <span className="block text-xs text-chalk/60">{hint}</span>}
     </label>
   );
 }
 
 export const inputCls =
-  "w-full rounded-xl border border-white/15 bg-ink-900 px-4 py-3 text-white placeholder:text-chalk/40 focus:border-pitch-400 focus:outline-none";
+  "w-full rounded-xl border border-white/15 bg-ink-900 px-4 py-3 text-white placeholder:text-chalk/60 focus:border-pitch-400 focus:outline-none";
 
 export function FormError({ message }: { message: string | null }) {
   if (!message) return null;

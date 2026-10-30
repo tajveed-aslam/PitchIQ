@@ -21,3 +21,4 @@ PROGRESS.md
 models/*.task
 models/*.tflite
 *.db
+deploy-worker-key.txt

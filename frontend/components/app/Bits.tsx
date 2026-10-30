@@ -65,7 +65,7 @@ export function ReportTile({ a }: { a: AnalysisSummary }) {
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-2 p-4">
         <div className="min-w-0">
           <p className="truncate font-semibold text-white">{a.title}</p>
-          <p className="text-xs text-chalk/55">{new Date(a.created_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
+          <p className="text-xs text-chalk/60">{new Date(a.created_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
         </div>
         <div className="flex items-center justify-between gap-2">
           <StatusChip a={a} />

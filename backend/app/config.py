@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     # Upload limits (the Lite data saver normally keeps uploads to a few MB).
     max_upload_mb: int = 40
 
+    # Public "Analyse this sample" runs per visitor per hour (raised for local end-to-end test runs).
+    sample_runs_per_hour: int = 6
+
     @property
     def cors_origins(self) -> list[str]:
         return [o.strip() for o in self.frontend_origins.split(",") if o.strip()]

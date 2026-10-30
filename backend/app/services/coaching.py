@@ -190,7 +190,8 @@ def rule_based(report: dict) -> dict:
     if not focus:
         focus.append("Add your weaker foot: alternate feet every touch to build balance.")
     picks += [("Weak-foot ladder", "Makes both feet reliable."),
-              ("Count-up challenge", f"Pushes you towards {f['next_target_touches']} touches.")]
+              ("Count-up challenge", f"Pushes you towards {f['next_target_touches']} touches."),
+              ("Thigh-foot combo", "Adds variety once your feet are steady.")]  # always enough for three drills
     summary = (f"{f['touches']} touches (likely {f['likely_range'][0]}–{f['likely_range'][1]}). "
                f"Rhythm: {f['rhythm']}. Ball control: {f['control']}.")
     return {"summary": summary, "strengths": strengths[:3], "focus": focus[:3],
