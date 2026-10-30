@@ -2,8 +2,9 @@
 # analysis/, worker/ and the sample clips, with this file at its root.
 FROM python:3.12-slim
 
-# OpenCV (pulled in by MediaPipe) needs these system libraries.
-RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 \
+# OpenCV (pulled in by MediaPipe) needs libGL; MediaPipe's task runtime loads libEGL and libGLES even on CPU
+# (found by CI: "libEGL.so.1: cannot open shared object file").
+RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libegl1 libgles2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Spaces run as user 1000.
