@@ -2,7 +2,7 @@
 
 For each clip in data/ground_truth.json: the model's count, its range, and which true touches it matched (within
 0.25 s), missed, or invented. That's precision/recall for touch detection.
-Run:  python -u -m analysis.spike.evaluate_juggling [clip ids...] [--contacts]
+Run:  python -u -m analysis.spike.evaluate_juggling [clip ids...] [--contacts] [--every=2]
 """
 
 import json
@@ -21,12 +21,12 @@ CACHE = ROOT / "reports/cache"  # tracker output per clip (gitignored): tracking
 TOLERANCE = 0.25  # seconds: a detected touch within this of a true touch counts as a match
 
 
-def tracked(clip_id: str):
+def tracked(clip_id: str, every: int = 1):
     """Tracker output for a clip, cached. Delete reports/cache after changing the tracker."""
-    path = CACHE / f"{clip_id}.pkl"
+    path = CACHE / (f"{clip_id}.pkl" if every == 1 else f"{clip_id}-every{every}.pkl")
     if path.exists():
         return pickle.loads(path.read_bytes())
-    result = track_video(ROOT / "data/raw" / f"{clip_id}.mp4")
+    result = track_video(ROOT / "data/raw" / f"{clip_id}.mp4", every=every)
     CACHE.mkdir(parents=True, exist_ok=True)
     path.write_bytes(pickle.dumps(result))
     return result
@@ -47,10 +47,11 @@ def match(found: list[float], truth: list[float]) -> tuple[int, list[float], lis
 if __name__ == "__main__":
     gt = json.loads((ROOT / "data/ground_truth.json").read_text())["clips"]
     contacts_on = "--contacts" in sys.argv
+    every = int(next((a.split("=")[1] for a in sys.argv if a.startswith("--every=")), 1))  # track every Nth frame
     ids = [a for a in sys.argv[1:] if not a.startswith("--")] or [k for k, v in gt.items() if v["skill"] == "juggling" and "touches" in v]
     for clip_id in ids:
         truth = gt[clip_id]
-        points, fps, _ = tracked(clip_id)
+        points, fps, _ = tracked(clip_id, every)
         result = count_touches(points, fps)
         s = result.summary()
         hits, missed, extra = match(s["times"], truth["touch_times"])
