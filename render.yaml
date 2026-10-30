@@ -1,0 +1,26 @@
+# Render Blueprint for the PitchIQ API. Secrets marked sync: false are entered in the Render dashboard.
+services:
+  - type: web
+    name: pitchiq-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    # Same region as the Neon database (AWS eu-central-1) so API <-> DB calls stay fast.
+    region: frankfurt
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        sync: false # postgresql://... connection string from Neon (database "pitchiq")
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FRONTEND_ORIGINS
+        sync: false # both Vercel URLs, comma-separated (Lite and Main editions)
+      - key: WORKER_URL
+        sync: false # https://<hf-user>-pitchiq-worker.hf.space
+      - key: WORKER_KEY
+        sync: false # same random key as the Space secret
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-flash-lite-latest

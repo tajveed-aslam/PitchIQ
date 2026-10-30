@@ -58,11 +58,15 @@ def thumbnail(path: Path, at_s: float = 1.0, width: int = 320) -> str | None:
 
 
 def video_seconds(path: Path) -> float:
+    """Length in seconds, or 0 if it isn't a readable video. (OpenCV reports fps = frames = -1 for a file it can't
+    open, which divides to a plausible-looking +1 s: so check it opens and yields a first frame.)"""
     cap = cv2.VideoCapture(str(path))
     try:
         fps = cap.get(cv2.CAP_PROP_FPS)
         frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-        return frames / fps if fps else 0.0
+        if not cap.isOpened() or fps <= 0 or frames <= 0 or not cap.read()[0]:
+            return 0.0
+        return frames / fps
     finally:
         cap.release()
 

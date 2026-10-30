@@ -1,7 +1,8 @@
-# Versions tested in the analysis spike (Windows, Python 3.13); Linux wheels checked for Python 3.12.
+# Versions tested in the analysis spike. mediapipe brings opencv-contrib-python (the cv2 module); don't add another
+# OpenCV build: two packages providing cv2 conflict.
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 python-multipart==0.0.20
 mediapipe==1.2.0
-opencv-python-headless==5.0.0.93
+opencv-contrib-python==5.0.0.93
 numpy==2.5.4
