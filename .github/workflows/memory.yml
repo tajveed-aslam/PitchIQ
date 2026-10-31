@@ -1,0 +1,38 @@
+name: Memory check (manual)
+
+# Peak memory of one analysis on Linux, for fitting Render's free 512 MB. Run from the Actions tab or
+# `gh workflow run memory.yml`. Not part of CI.
+on: workflow_dispatch
+
+jobs:
+  memory:
+    strategy:
+      fail-fast: false
+      matrix:
+        opencv: [contrib, headless]
+        detector: [efficientdet_lite2.tflite, efficientdet_lite0.tflite]
+    runs-on: ubuntu-latest
+    env:
+      PITCHIQ_FULL_DETECTOR: ${{ matrix.detector }}
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libegl1 libgles2 ffmpeg
+      - name: Install (OpenCV ${{ matrix.opencv }})
+        run: |
+          if [ "${{ matrix.opencv }}" = "contrib" ]; then
+            pip install -r worker/requirements.txt
+          else
+            pip install mediapipe==1.2.0 --no-deps
+            pip install "absl-py~=2.3" certifi numpy==2.5.4 "flatbuffers~=25.9" opencv-python-headless==5.0.0.93 fastapi==0.115.6 python-multipart==0.0.20
+          fi
+      - run: python -m analysis.get_models efficientdet_lite0.tflite efficientdet_lite2.tflite
+      - name: Test videos (480p samples, plus 1080p and 4K made from one)
+        run: |
+          ffmpeg -loglevel error -i frontend/public/samples/juggling-43490.mp4 -vf scale=1920:1080 -c:v libx264 -preset fast -crf 20 -r 30 hd1080.mp4
+          ffmpeg -loglevel error -i frontend/public/samples/juggling-43490.mp4 -vf scale=3840:2160 -c:v libx264 -preset ultrafast -crf 23 -r 30 uhd4k.mp4
+      - run: python -m analysis.spike.memory_check frontend/public/samples/juggling-43490.mp4 frontend/public/samples/juggling-43487.mp4 frontend/public/samples/juggling-42524.mp4 hd1080.mp4 uhd4k.mp4
