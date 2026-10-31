@@ -67,6 +67,7 @@ test.describe("Accounts", () => {
 
 test.describe("Upload and analysis", () => {
   test("TC-UPL-01 upload a real video: live stages, then report and coaching; allowance goes down", async ({ page, request }) => {
+    test.setTimeout(ANALYSIS_TIMEOUT + 90_000);
     await signedUp(page, request, "trial");
     await page.goto("/upload");
     await page.getByTestId("file-input").setInputFiles(require("./helpers").SAMPLE_VIDEO);

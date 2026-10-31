@@ -147,6 +147,7 @@ test.describe("Main edition: player", () => {
 
   test("TC-MAIN-10 upload, report, then a training week built from it", async ({ page, request }, info) => {
     test.skip(isPhone(info.project.name), "one real analysis per run is enough: desktop only");
+    test.setTimeout(ANALYSIS_TIMEOUT + 120_000);
     await global(page);
     await signedUp(page, request, "coach");
     await page.goto("/upload");
