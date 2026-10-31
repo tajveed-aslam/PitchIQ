@@ -84,3 +84,122 @@ class SupportMessage(Base):
     email: Mapped[str] = mapped_column(String(255))
     message: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+# ---- Main (Global) edition. New tables only, so the live database needs no migration (create_all adds them). ----
+
+class PlayerProfile(Base):
+    """The physical side of the full player card. Optional, entered by the player. No health data beyond what a
+    football card shows (the brief's blood group is left out on purpose: sensitive and not needed for training)."""
+    __tablename__ = "player_profiles"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    height_cm: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    weight_kg: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    birth_year: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    body_type: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    shirt_number: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # Settings page: which notifications the player wants ({"tasks": true, "reports": true, "badges": true}).
+    prefs: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now, onupdate=now)
+
+
+class Assessment(Base):
+    """A finished test: mindset (self-assessment questionnaire), reaction (in-browser tap test) or logic (pattern
+    puzzles graded by the server). score is 0-100; detail keeps the per-trait scores or the raw timings."""
+    __tablename__ = "assessments"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(12), index=True)  # mindset | reaction | logic
+    score: Mapped[int] = mapped_column(Integer)
+    detail: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now, index=True)
+
+
+class TrainingPlan(Base):
+    """A weekly plan written from the player's measured numbers (services/training.py). done: ids of finished
+    sessions ("d1s0" = day 1, session 0)."""
+    __tablename__ = "training_plans"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    plan: Mapped[dict] = mapped_column(JSON)
+    done: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now, index=True)
+
+
+class Badge(Base):
+    __tablename__ = "badges"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    code: Mapped[str] = mapped_column(String(30))
+    earned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+class Room(Base):
+    """A coach's group room: a team squad, or an academy trial where applicants are checked against criteria.
+    Players join with a code that expires (the brief's security requirement); the coach can issue a new one."""
+    __tablename__ = "rooms"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    coach_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    name: Mapped[str] = mapped_column(String(80))
+    kind: Mapped[str] = mapped_column(String(10), default="team")  # team | academy
+    description: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    join_code: Mapped[str] = mapped_column(String(12), unique=True, index=True)
+    code_expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    criteria: Mapped[dict | None] = mapped_column(JSON, nullable=True)  # academy: {"min_touches": 20, ...}
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+    members: Mapped[list["RoomMember"]] = relationship(back_populates="room", cascade="all, delete-orphan")
+    tasks: Mapped[list["Task"]] = relationship(back_populates="room", cascade="all, delete-orphan")
+
+
+class RoomMember(Base):
+    __tablename__ = "room_members"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id", ondelete="CASCADE"), index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    joined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    scouting_note: Mapped[str | None] = mapped_column(Text, nullable=True)  # academy rooms: the coach's report
+
+    room: Mapped[Room] = relationship(back_populates="members")
+    user: Mapped[User] = relationship()
+
+
+class Task(Base):
+    """A video task for the whole room (assignee_id empty) or one player, with a deadline and an optional target."""
+    __tablename__ = "tasks"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id", ondelete="CASCADE"), index=True)
+    assignee_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    title: Mapped[str] = mapped_column(String(120))
+    notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    skill: Mapped[str] = mapped_column(String(20), default="juggling")
+    target_touches: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+    room: Mapped[Room] = relationship(back_populates="tasks")
+    submissions: Mapped[list["Submission"]] = relationship(back_populates="task", cascade="all, delete-orphan")
+
+
+class Submission(Base):
+    """A player hands in one of their analysed videos for a task; the coach scores it and adds a note."""
+    __tablename__ = "submissions"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"), index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    analysis_id: Mapped[int] = mapped_column(ForeignKey("analyses.id", ondelete="CASCADE"))
+    coach_score: Mapped[int | None] = mapped_column(Integer, nullable=True)  # 0-100
+    coach_note: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    task: Mapped[Task] = relationship(back_populates="submissions")
+    analysis: Mapped[Analysis] = relationship()

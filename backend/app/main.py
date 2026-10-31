@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .database import Base, engine
-from .routers import analyses, auth, events, me, samples, support
+from .routers import analyses, auth, events, insights, me, player, rooms, samples, support
 
 Base.metadata.create_all(bind=engine)
 
@@ -27,6 +27,10 @@ app.include_router(analyses.router, prefix="/analyses", tags=["analyses"])
 app.include_router(samples.router, prefix="/samples", tags=["samples"])
 app.include_router(events.router, prefix="/events", tags=["events"])
 app.include_router(support.router, prefix="/support", tags=["support"])
+# Main (Global) edition
+app.include_router(player.router, prefix="/player", tags=["player"])
+app.include_router(insights.router, prefix="/insights", tags=["insights"])
+app.include_router(rooms.router, prefix="/rooms", tags=["rooms"])
 
 
 @app.get("/")

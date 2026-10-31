@@ -72,6 +72,9 @@ def finish(db: Session, a: Analysis, report: dict, thumbnail_b64: str | None):
         if plan_of(a.user).coaching or a.user.is_guest:
             a.coaching = coaching.generate(report, profile_for_coaching(a.user))
         notify(db, a.user, f"Your report for “{a.title}” is ready: {a.touches} touches.", f"/reports/{a.id}")
+        db.flush()
+        from .badges import award  # badges imports notify from here
+        award(db, a.user)
 
 
 def refresh(db: Session, a: Analysis) -> Analysis:

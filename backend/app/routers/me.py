@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta, timezone
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
@@ -9,35 +7,10 @@ from ..models import Analysis, Notification, User, now
 from ..plans import PLANS, allowance
 from ..schemas import NotificationOut, PlanIn, ProfileIn, UserOut
 from ..services.analyses import notify
+from ..services.card import player_card
 from .analyses import summary
 
 router = APIRouter()
-
-
-def _clamp(x: float) -> int:
-    return int(max(30, min(99, round(x))))
-
-
-def player_card(user: User, done: list[Analysis]) -> dict:
-    """A simple FIFA-style card from the player's own measured sessions (Lite). Ratings 30-99:
-    touches from the best count, rhythm from how even the timing is, control from how low the ball stays,
-    and activity from sessions in the last 30 days."""
-    if not done:
-        return {"overall": None, "attributes": [], "sessions": 0}
-    best = max(a.touches or 0 for a in done)
-    recent = done[:5]
-    cvs = [a.report["metrics"]["interval_s"]["cv"] for a in recent if (a.report["metrics"].get("interval_s") or {}).get("cv") is not None]
-    arcs = [a.report["metrics"]["arc_height_balls"]["mean"] for a in recent if a.report["metrics"].get("arc_height_balls")]
-    month_ago = datetime.now(timezone.utc) - timedelta(days=30)
-    active = sum(1 for a in done if (a.created_at if a.created_at.tzinfo else a.created_at.replace(tzinfo=timezone.utc)) >= month_ago)
-    attrs = [
-        {"key": "TCH", "label": "Touches", "value": _clamp(40 + best * 1.2)},
-        {"key": "RHY", "label": "Rhythm", "value": _clamp(100 - 70 * (sum(cvs) / len(cvs))) if cvs else None},
-        {"key": "CTL", "label": "Control", "value": _clamp(105 - 15 * (sum(arcs) / len(arcs))) if arcs else None},
-        {"key": "ACT", "label": "Activity", "value": _clamp(40 + active * 7)},
-    ]
-    values = [a["value"] for a in attrs if a["value"] is not None]
-    return {"overall": round(sum(values) / len(values)), "attributes": attrs, "sessions": len(done), "best": best}
 
 
 @router.get("")

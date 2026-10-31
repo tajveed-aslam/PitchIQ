@@ -17,7 +17,8 @@ def signup(body: SignupIn, db: Session = Depends(get_db)):
     email = body.email.lower()
     if db.scalar(select(User).where(User.email == email)):
         raise HTTPException(status_code=409, detail="An account with this email already exists. Log in instead.")
-    user = User(email=email, name=body.name.strip(), password_hash=hash_password(body.password), plan=body.plan)
+    user = User(email=email, name=body.name.strip(), password_hash=hash_password(body.password), plan=body.plan,
+                edition=body.edition)
     db.add(user)
     db.flush()
     notify(db, user, "Welcome to PitchIQ! Start with a sample video or film your first session.", "/dashboard")
