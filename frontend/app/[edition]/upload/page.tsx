@@ -92,7 +92,7 @@ export default function UploadPage() {
 
               {file && (
                 <p className="flex items-center gap-2 rounded-lg bg-white/5 px-4 py-3 text-sm text-chalk" data-testid="chosen-file">
-                  <CheckCircle2 className="h-4 w-4 text-pitch-400" aria-hidden="true" /> {file.name} · {mb(file.size)}
+                  <CheckCircle2 className="h-4 w-4 text-accent-400" aria-hidden="true" /> {file.name} · {mb(file.size)}
                 </p>
               )}
 
@@ -101,9 +101,9 @@ export default function UploadPage() {
               </Field>
 
               <label className={`flex items-start gap-3 rounded-xl border p-4 ${supported ? "border-white/15" : "border-white/10 opacity-60"}`}>
-                <input type="checkbox" checked={saver && supported} disabled={!supported || busy} onChange={(e) => setSaver(e.target.checked)} className="mt-1 h-5 w-5 accent-[#5be07f]" data-testid="data-saver" />
+                <input type="checkbox" checked={saver && supported} disabled={!supported || busy} onChange={(e) => setSaver(e.target.checked)} className="mt-1 h-5 w-5 accent-[rgb(var(--accent-400))]" data-testid="data-saver" />
                 <span>
-                  <span className="flex items-center gap-2 font-semibold text-white"><Wifi className="h-4 w-4 text-pitch-400" aria-hidden="true" /> Data saver</span>
+                  <span className="flex items-center gap-2 font-semibold text-white"><Wifi className="h-4 w-4 text-accent-400" aria-hidden="true" /> Data saver</span>
                   <span className="text-sm text-chalk/70">
                     {supported ? "Shrinks the video on your phone first (to 480p, no sound): usually a few MB instead of tens. Takes about as long as the clip." : "Your browser can't shrink videos, so the original will be sent. Record at 720p to save data."}
                   </span>
@@ -113,10 +113,10 @@ export default function UploadPage() {
               {step.kind !== "idle" && (
                 <div className="space-y-2" aria-live="polite" data-testid="upload-progress">
                   <div className="flex items-center gap-2 text-sm text-white">
-                    <Loader2 className="h-4 w-4 animate-spin text-pitch-400" aria-hidden="true" />
+                    <Loader2 className="h-4 w-4 animate-spin text-accent-400" aria-hidden="true" />
                     {step.kind === "shrinking" ? `Shrinking video… ${step.pct}%` : `Uploading ${mb(step.size)}… ${step.pct}%`}
                   </div>
-                  <div className="h-2 rounded-full bg-ink-950"><div className="h-2 rounded-full bg-pitch-400 transition-all" style={{ width: `${step.pct}%` }} /></div>
+                  <div className="h-2 rounded-full bg-ink-950"><div className="h-2 rounded-full bg-accent-400 transition-all" style={{ width: `${step.pct}%` }} /></div>
                 </div>
               )}
               {note && <p className="text-sm text-chalk/70">{note}</p>}

@@ -69,7 +69,7 @@ function LoginForm() {
         </button>
       </form>
       <p className="text-center text-sm text-chalk/70">
-        New here? <Link href="/signup" className="font-semibold text-pitch-300 hover:underline">Start your free trial</Link>
+        New here? <Link href="/signup" className="font-semibold text-accent-300 hover:underline">Start your free trial</Link>
       </p>
     </div>
   );

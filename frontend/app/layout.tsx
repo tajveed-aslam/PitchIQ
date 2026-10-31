@@ -1,31 +1,21 @@
-import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import type { Viewport } from "next";
+import { Barlow_Condensed, Inter, Sora } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
-import { EDITION } from "@/config/editions";
 import { AuthProvider } from "@/lib/auth";
 
-const display = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-display" });
+// Display fonts per edition (app/globals.css picks one): Lite's condensed sporty Barlow, Main's geometric Sora.
+const barlow = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-barlow" });
+const sora = Sora({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-sora" });
 const body = Inter({ subsets: ["latin"], variable: "--font-body" });
-
-export const metadata: Metadata = {
-  title: `${EDITION.name}: AI football skill analysis`,
-  description:
-    "Film a juggling session on your phone and get your touch count, rhythm and control measured by computer vision, with coaching tips.",
-};
 
 export const viewport: Viewport = { themeColor: "#050a14" };
 
+// The edition (Africa = Lite, Global = Main) is chosen in app/[edition]/layout.tsx; see middleware.ts.
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <body className="flex min-h-screen flex-col">
-        <AuthProvider>
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </AuthProvider>
+    <html lang="en" className={`${barlow.variable} ${sora.variable} ${body.variable}`}>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

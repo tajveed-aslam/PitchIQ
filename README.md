@@ -3,8 +3,10 @@
 **Film a football juggling session on your phone; PitchIQ counts your touches with computer vision, measures your
 rhythm and ball control, and an AI coach turns those numbers into feedback and drills.**
 
-Two editions from one codebase: **Lite** (built first, for players on slow and expensive mobile data) and **Main**
-(the full training platform, next). A portfolio project: payments are in test mode.
+Two editions on one site, picked with the **region switch** in the header: **Africa** = PitchIQ Lite (built first,
+for players on slow and expensive mobile data; the default) and **Global** = the full platform (next phase: shows a
+coming-soon page in its own design for now). One API and database serve both. A portfolio project: payments are in
+test mode.
 
 - Live: Lite: _coming soon_ · Main: _coming soon_
 - How to try it with the built-in sample videos: [docs/HOW_TO_TEST.md](docs/HOW_TO_TEST.md)
@@ -56,7 +58,7 @@ list · plans with allowances (test mode) · monthly challenge leaderboard · he
 | `analysis/` | Computer vision: tracking, touch counting, camera motion, report builder, model download, spikes |
 | `worker/` | Analysis jobs (one at a time, limits); runs inside the API, or as its own HTTP service |
 | `backend/` | FastAPI API: auth, profile, plans, analysis jobs, coaching, events, support, seed data |
-| `frontend/` | Next.js 14 + Tailwind; `NEXT_PUBLIC_EDITION=lite|main` picks the edition |
+| `frontend/` | Next.js 14 + Tailwind; `app/[edition]/` pages, per-edition themes (CSS variables) and region switch |
 | `e2e/` | Playwright end-to-end and accessibility tests |
 | `data/ground_truth.json` | Hand-counted touches for the accuracy clips |
 | `docs/` | Test plan, test cases, RTM, bug reports, model accuracy, how to test, credits |
@@ -93,7 +95,9 @@ Test plan, cases, traceability and results: [docs/TEST_PLAN.md](docs/TEST_PLAN.m
 - **API + analysis:** Render Blueprint (`render.yaml`, root `Dockerfile`, Frankfurt, free plan). Env:
   `DATABASE_URL` (Neon), `GEMINI_API_KEY`, `FRONTEND_ORIGINS`; limits `MAX_UPLOAD_MB=25`, `MAX_VIDEO_SECONDS=60`.
   Measured peak memory during an analysis: ~410 MB of the 512 MB.
-- **Web:** two Vercel projects from `frontend/` (`NEXT_PUBLIC_EDITION=lite` and `main`, `NEXT_PUBLIC_API_URL`).
+- **Web:** one Vercel project from `frontend/` (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SAMPLE_MODE=stored`). The region
+  switch sets a cookie; `middleware.ts` serves `app/[edition]/…` (both editions prerendered). Later the default can
+  come from the visitor's country (Vercel's `x-vercel-ip-country`).
 - **Optional separate worker:** `worker/Dockerfile` + `python -m worker.deploy_space` (Hugging Face Docker Spaces
   now need a paid plan).
 

@@ -26,6 +26,7 @@ added after deployment.
 | R-17 | Privacy: videos deleted after analysis; reports private | test_upload_is_deleted_after_analysis; test_reports_are_private; test_thumbnail_needs_the_signature | Pass |
 | R-18 | Accessibility (WCAG 2 A/AA, no serious/critical issues) | TC-A11Y ×7 on 3 devices; Lighthouse accessibility 100 | Pass |
 | R-19 | Fast on slow connections (Lite budget) | Build: ≤ 118 kB first-load JS per page; Lighthouse mobile: performance 88–97, page weight 258–358 KB, CLS ≤ 0.04 | Pass |
+| R-21 | One site, region switch: Africa (Lite) default, Global (Main) coming soon | TC-REG-01, TC-REG-02 | Pass |
 | R-20 | Security: login required, ownership, worker key, rate limits | TC-AUTH-03; test_protected_routes_need_a_valid_token; test_reports_are_private; test_health_and_key; test_public_sample_rate_limit_and_unknowns | Pass |
 
 ## Run log

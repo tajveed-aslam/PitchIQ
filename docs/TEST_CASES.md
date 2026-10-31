@@ -25,6 +25,8 @@ End-to-end cases run on three devices each (desktop Chrome, Pixel 7, iPhone 14) 
 | TC-PLN-01 | Progress gating | Trial user; switch to Skill Analysis | Progress locked, then shown; "20 of 20 analyses left this month" |
 | TC-PLN-02 | Challenge gating | Trial user on `/events`; switch to Events | "Your plan doesn't include challenges", then "You're in." |
 | TC-SUP-01 | Support | Ask the chat "Why was my video rejected?"; send the contact form | FAQ (10), a reply about the camera, "Thanks!" |
+| TC-REG-01 | Default region | Open `/` | Africa: Lite badge, no coming-soon page |
+| TC-REG-02 | Region switch | Choose Global; open /samples, /dashboard, /upload; switch back | Coming-soon page on every page (remembered), accessible; back to Lite |
 | TC-A11Y ×7 | Accessibility | axe on `/`, `/samples`, `/login`, `/signup`, `/events`, `/support`, and (demo) dashboard, reports, a report, upload | No serious or critical WCAG 2 A/AA violations |
 
 ## API (pytest, `backend/tests`)

@@ -5,14 +5,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { AuthLayout, Field, FormError, inputCls } from "@/components/AuthLayout";
-import { EDITION } from "@/config/editions";
 import { api } from "@/lib/api";
 import { useSession } from "@/lib/auth";
+import { useEdition } from "@/lib/edition";
 
 function SignupForm() {
   const router = useRouter();
   const planParam = useSearchParams().get("plan");
-  const initialPlan = EDITION.plans.some((p) => p.id === planParam) ? planParam! : "trial";
+  const plans = useEdition().plans.filter((p) => !p.comingSoon);
+  const initialPlan = plans.some((p) => p.id === planParam) ? planParam! : "trial";
   const { login } = useSession();
   const [plan, setPlan] = useState(initialPlan);
   const [busy, setBusy] = useState(false);
@@ -50,8 +51,8 @@ function SignupForm() {
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium text-white">Plan <span className="font-normal text-chalk/60">(test mode, nothing is charged)</span></legend>
         <div className="grid grid-cols-2 gap-2">
-          {EDITION.plans.map((p) => (
-            <label key={p.id} className={`cursor-pointer rounded-xl border p-3 text-sm transition ${plan === p.id ? "border-pitch-400 bg-pitch-400/10" : "border-white/15 hover:border-white/30"}`}>
+          {plans.map((p) => (
+            <label key={p.id} className={`cursor-pointer rounded-xl border p-3 text-sm transition ${plan === p.id ? "border-accent-400 bg-accent-400/10" : "border-white/15 hover:border-white/30"}`}>
               <input type="radio" name="plan" value={p.id} checked={plan === p.id} onChange={() => setPlan(p.id)} className="sr-only" />
               <span className="block font-semibold text-white">{p.name}</span>
               <span className="text-chalk/60">{p.price} {p.period}</span>
@@ -64,7 +65,7 @@ function SignupForm() {
         {busy && <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />} Create account
       </button>
       <p className="text-center text-sm text-chalk/70">
-        Already have one? <Link href="/login" className="font-semibold text-pitch-300 hover:underline">Log in</Link>
+        Already have one? <Link href="/login" className="font-semibold text-accent-300 hover:underline">Log in</Link>
       </p>
     </form>
   );

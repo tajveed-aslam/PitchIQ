@@ -26,15 +26,15 @@ export function PageShell({ eyebrow, title, action, children }: {
 export function Loading({ label = "Loading" }: { label?: string }) {
   return (
     <div className="flex items-center justify-center gap-3 py-24 text-chalk/70" role="status">
-      <Loader2 className="h-6 w-6 animate-spin text-pitch-400" aria-hidden="true" /> {label}…
+      <Loader2 className="h-6 w-6 animate-spin text-accent-400" aria-hidden="true" /> {label}…
     </div>
   );
 }
 
 const STATUS = {
   queued: { icon: Clock, text: "Waiting", cls: "text-chalk bg-white/10" },
-  processing: { icon: Loader2, text: "Analysing", cls: "text-pitch-200 bg-pitch-400/15" },
-  done: { icon: CheckCircle2, text: "Ready", cls: "text-pitch-300 bg-pitch-400/15" },
+  processing: { icon: Loader2, text: "Analysing", cls: "text-accent-200 bg-accent-400/15" },
+  done: { icon: CheckCircle2, text: "Ready", cls: "text-accent-300 bg-accent-400/15" },
   rejected: { icon: AlertTriangle, text: "Re-film", cls: "text-flare bg-flare/15" },
   failed: { icon: XCircle, text: "Failed", cls: "text-flare bg-flare/15" },
 };
@@ -52,7 +52,7 @@ export function StatusChip({ a }: { a: AnalysisSummary }) {
 export function ReportTile({ a }: { a: AnalysisSummary }) {
   const thumb = thumbUrl(a);
   return (
-    <Link href={`/reports/${a.id}`} className="group card flex overflow-hidden transition hover:border-pitch-400/50" data-testid="report-tile">
+    <Link href={`/reports/${a.id}`} className="group card flex overflow-hidden transition hover:border-accent-400/50" data-testid="report-tile">
       <div className="relative w-28 shrink-0 bg-ink-700 sm:w-36">
         {thumb ? (
           // API-served thumbnail: plain img (next/image would need the API domain configured per deployment)
@@ -83,17 +83,17 @@ export function ReportTile({ a }: { a: AnalysisSummary }) {
 export function PlayerCard({ data }: { data: Dashboard }) {
   const { user, card } = data;
   return (
-    <div className="relative isolate overflow-hidden rounded-3xl border border-pitch-400/30 p-6 shadow-glow" data-testid="player-card">
+    <div className="relative isolate overflow-hidden rounded-3xl border border-accent-400/30 p-6 shadow-glow" data-testid="player-card">
       <Image src="/images/floodlights-sm.webp" alt="" fill sizes="400px" className="-z-20 object-cover" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-950/60 via-ink-950/85 to-ink-950" />
       <div className="flex items-start justify-between">
         <div>
-          <p className="font-display text-6xl font-extrabold leading-none text-pitch-400">{card.overall ?? "–"}</p>
+          <p className="font-display text-6xl font-extrabold leading-none text-accent-400">{card.overall ?? "–"}</p>
           <p className="mt-1 font-display text-sm font-bold uppercase tracking-widest text-white">
             {user.position ? user.position.slice(0, 3).toUpperCase() : "PLR"}
           </p>
         </div>
-        <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-pitch-400/60 bg-ink-800 font-display text-3xl font-extrabold text-white">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-accent-400/60 bg-ink-800 font-display text-3xl font-extrabold text-white">
           {user.name.charAt(0).toUpperCase()}
         </span>
       </div>
@@ -124,9 +124,9 @@ export function Sparkline({ points }: { points: { date: string; touches: number 
   const line = pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p.touches).toFixed(1)}`).join(" ");
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="h-24 w-full" role="img" aria-label={`Touches went from ${pts[0].touches} to ${pts[pts.length - 1].touches} over ${pts.length} sessions`}>
-      <path d={`${line} L${x(pts.length - 1)},${h} L${x(0)},${h} Z`} fill="rgba(91,224,127,.12)" />
-      <path d={line} fill="none" stroke="#5be07f" strokeWidth="2.5" strokeLinejoin="round" />
-      {pts.map((p, i) => <circle key={i} cx={x(i)} cy={y(p.touches)} r="3.5" fill="#050a14" stroke="#5be07f" strokeWidth="2" />)}
+      <path d={`${line} L${x(pts.length - 1)},${h} L${x(0)},${h} Z`} fill="rgb(var(--accent-400) / .12)" />
+      <path d={line} fill="none" stroke="rgb(var(--accent-400))" strokeWidth="2.5" strokeLinejoin="round" />
+      {pts.map((p, i) => <circle key={i} cx={x(i)} cy={y(p.touches)} r="3.5" fill="rgb(var(--ink-950))" stroke="rgb(var(--accent-400))" strokeWidth="2" />)}
     </svg>
   );
 }

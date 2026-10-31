@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LayoutDashboard, LogOut, Menu, UserRound, X } from "lucide-react";
 import { useSession } from "@/lib/auth";
+import { RegionSwitch } from "./RegionSwitch";
 
 const APP_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
@@ -37,12 +38,13 @@ export function AuthNav() {
         ))}
       </nav>
       <div className="flex items-center gap-2">
+        <RegionSwitch className="hidden lg:flex" />
         {loading ? (
           <span className="h-9 w-24" />
         ) : user ? (
           <>
-            <Link href="/profile" className="hidden items-center gap-2 rounded-full border border-white/15 py-1 pl-1 pr-3 text-sm text-white hover:border-pitch-400 sm:flex" data-testid="nav-profile">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-pitch-400 font-display font-bold text-ink-950">
+            <Link href="/profile" className="hidden items-center gap-2 rounded-full border border-white/15 py-1 pl-1 pr-3 text-sm text-white hover:border-accent-400 sm:flex" data-testid="nav-profile">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-accent-400 font-display font-bold text-ink-950">
                 {user.name.charAt(0).toUpperCase()}
               </span>
               {user.is_guest ? "Demo" : user.name.split(" ")[0]}
@@ -77,6 +79,7 @@ export function AuthNav() {
       {open && (
         <div className="absolute inset-x-0 top-16 z-40 border-y border-white/10 bg-ink-900/95 backdrop-blur md:hidden">
           <nav aria-label="Mobile" className="container-page flex flex-col py-3">
+            <RegionSwitch className="mb-2 w-fit" />
             {links.map((l) => (
               <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="py-3 text-lg font-medium text-white">
                 {l.label}

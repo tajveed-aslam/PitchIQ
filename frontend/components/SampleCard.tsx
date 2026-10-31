@@ -105,7 +105,7 @@ export function SampleCard({ sample }: { sample: Sample }) {
               <ol className="space-y-3">
                 {STAGES.map((s, i) => (
                   <li key={s} className={`flex items-center gap-3 text-sm ${i <= current ? "text-white" : "text-chalk/60"}`}>
-                    <span className={`h-2.5 w-2.5 rounded-full ${i < current ? "bg-pitch-400" : i === current ? "animate-pulse bg-pitch-300" : "bg-ink-600"}`} />
+                    <span className={`h-2.5 w-2.5 rounded-full ${i < current ? "bg-accent-400" : i === current ? "animate-pulse bg-accent-300" : "bg-ink-600"}`} />
                     {STAGE_LABEL[s]}
                   </li>
                 ))}
@@ -124,7 +124,7 @@ export function SampleCard({ sample }: { sample: Sample }) {
           )}
           {stage === null && !result && (
             <div className="flex h-full min-h-48 flex-col items-center justify-center gap-2 text-center text-chalk/60">
-              <ScanSearch className="h-10 w-10 text-pitch-400/70" aria-hidden="true" />
+              <ScanSearch className="h-10 w-10 text-accent-400/70" aria-hidden="true" />
               <p>Press <span className="text-white">Analyse this sample</span> to run the AI on it,</p>
               <p className="text-sm">then compare its count with the hand count.</p>
             </div>

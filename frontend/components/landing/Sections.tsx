@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Camera, Check, CloudUpload, Lightbulb, MessageSquareText, Smartphone, Sun, Wifi } from "lucide-react";
-import { EDITION } from "@/config/editions";
+import { EDITIONS, type Edition } from "@/config/editions";
 import { SAMPLES } from "@/lib/samples";
 
 // Accuracy figures come from the ground-truth tests (analysis/spike/evaluate_juggling.py), not marketing.
@@ -18,7 +18,7 @@ export function StatsStrip() {
       <div className="container-page grid grid-cols-2 gap-6 py-8 md:grid-cols-4">
         {STATS.map((s) => (
           <div key={s.label}>
-            <p className="font-display text-4xl font-extrabold text-pitch-400">{s.value}</p>
+            <p className="font-display text-4xl font-extrabold text-accent-400">{s.value}</p>
             <p className="text-sm text-chalk/70">{s.label}</p>
           </div>
         ))}
@@ -43,13 +43,13 @@ export function HowItWorks() {
           <article key={s.title} className="card overflow-hidden">
             <div className="relative aspect-video">
               <Image src={s.img} alt={s.alt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
-              <span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-pitch-400 font-display text-lg font-extrabold text-ink-950">
+              <span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-accent-400 font-display text-lg font-extrabold text-ink-950">
                 {i + 1}
               </span>
             </div>
             <div className="space-y-2 p-5">
               <h3 className="flex items-center gap-2 font-display text-2xl font-bold uppercase text-white">
-                <s.icon className="h-5 w-5 text-pitch-400" aria-hidden="true" /> {s.title}
+                <s.icon className="h-5 w-5 text-accent-400" aria-hidden="true" /> {s.title}
               </h3>
               <p className="text-chalk/75">{s.text}</p>
             </div>
@@ -78,7 +78,7 @@ export function SamplesPreview() {
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {SAMPLES.map((s) => (
-            <Link key={s.id} href={`/samples#${s.id}`} className="group card overflow-hidden transition hover:border-pitch-400/50">
+            <Link key={s.id} href={`/samples#${s.id}`} className="group card overflow-hidden transition hover:border-accent-400/50">
               <div className="relative aspect-video">
                 <Image src={s.poster} alt={`Still from the sample video: ${s.title}`} fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
                 <span className="chip absolute left-2 top-2 bg-ink-950/80">{s.level}</span>
@@ -99,16 +99,17 @@ export function SamplesPreview() {
   );
 }
 
-export function Plans() {
+export function Plans({ edition }: { edition: Edition }) {
+  const plans = EDITIONS[edition].plans;
   return (
     <section id="plans" className="container-page scroll-mt-20 py-20">
       <p className="eyebrow">Plans</p>
       <h2 className="heading mt-2">Priced for players, not clubs</h2>
       <p className="mt-3 text-chalk/70">Test mode: pick any plan to explore it, nothing is charged.</p>
-      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {EDITION.plans.map((p) => (
-          <article key={p.id} className={`card flex flex-col p-6 ${p.highlight ? "border-pitch-400/60 shadow-glow" : ""}`}>
-            {p.highlight && <span className="chip mb-3 w-fit border-pitch-400/40 text-pitch-300">Most popular</span>}
+      <div className={`mt-10 grid gap-5 sm:grid-cols-2 ${plans.length > 4 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>
+        {plans.map((p) => (
+          <article key={p.id} className={`card flex flex-col p-6 ${p.highlight ? "border-accent-400/60 shadow-glow" : ""}`}>
+            {p.highlight && <span className="chip mb-3 w-fit border-accent-400/40 text-accent-300">Most popular</span>}
             <h3 className="font-display text-2xl font-bold uppercase text-white">{p.name}</h3>
             <p className="mt-1 text-sm text-chalk/70">{p.blurb}</p>
             <p className="mt-5 font-display text-5xl font-extrabold text-white">
@@ -118,13 +119,19 @@ export function Plans() {
             <ul className="mt-5 flex-1 space-y-2 text-sm">
               {p.features.map((f) => (
                 <li key={f} className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-pitch-400" aria-hidden="true" /> {f}
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" /> {f}
                 </li>
               ))}
             </ul>
-            <Link href={`/signup?plan=${p.id}`} className={`mt-6 ${p.highlight ? "btn-primary" : "btn-secondary"}`}>
-              Choose {p.name}
-            </Link>
+            {p.comingSoon ? (
+              <span className="mt-6 inline-flex justify-center rounded-full border border-dashed border-white/20 px-6 py-3 text-sm text-chalk/70">
+                Coming soon
+              </span>
+            ) : (
+              <Link href={`/signup?plan=${p.id}`} className={`mt-6 ${p.highlight ? "btn-primary" : "btn-secondary"}`}>
+                Choose {p.name}
+              </Link>
+            )}
           </article>
         ))}
       </div>
@@ -152,8 +159,8 @@ export function FilmingTips() {
           <ul className="mt-8 space-y-4">
             {TIPS.map((t) => (
               <li key={t.text} className="flex gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pitch-400/15">
-                  <t.icon className="h-5 w-5 text-pitch-400" aria-hidden="true" />
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-400/15">
+                  <t.icon className="h-5 w-5 text-accent-400" aria-hidden="true" />
                 </span>
                 <p className="pt-2 text-chalk/85">{t.text}</p>
               </li>
@@ -181,7 +188,7 @@ export function Testimonials() {
         {QUOTES.map((q) => (
           <figure key={q.name} className="card relative p-6">
             <span className="chip absolute right-4 top-4 text-[10px] uppercase tracking-wider">Sample</span>
-            <Lightbulb className="h-6 w-6 text-pitch-400" aria-hidden="true" />
+            <Lightbulb className="h-6 w-6 text-accent-400" aria-hidden="true" />
             <blockquote className="mt-4 text-chalk/90">&ldquo;{q.quote}&rdquo;</blockquote>
             <figcaption className="mt-5 flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-ink-600 font-display font-bold text-white">{q.initials}</span>

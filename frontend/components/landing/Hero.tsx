@@ -21,11 +21,11 @@ export function Hero() {
 
       <div className="container-page grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
         <div className="max-w-xl space-y-6">
-          <span className="chip border-pitch-400/30 bg-pitch-400/10 text-pitch-200">
+          <span className="chip border-accent-400/30 bg-accent-400/10 text-accent-200">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> Computer vision + AI coaching
           </span>
           <h1 className="font-display text-5xl font-extrabold uppercase leading-[0.9] tracking-tight text-white sm:text-7xl">
-            Your phone sees <span className="text-pitch-400">every touch.</span>
+            Your phone sees <span className="text-accent-400">every touch.</span>
           </h1>
           <p className="max-w-lg text-lg text-chalk/85">
             Film a juggling session, upload it, and PitchIQ counts your touches, reads your rhythm and ball control, then

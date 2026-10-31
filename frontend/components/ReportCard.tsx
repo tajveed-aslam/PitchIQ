@@ -8,7 +8,7 @@ interface Props {
 }
 
 const VERDICT = {
-  ok: { icon: CheckCircle2, text: "Good video", cls: "text-pitch-300 bg-pitch-400/10 border-pitch-400/30" },
+  ok: { icon: CheckCircle2, text: "Good video", cls: "text-accent-300 bg-accent-400/10 border-accent-400/30" },
   warn: { icon: AlertTriangle, text: "Usable, with warnings", cls: "text-flare bg-flare/10 border-flare/30" },
   reject: { icon: XCircle, text: "Please re-film", cls: "text-flare bg-flare/10 border-flare/40" },
 };
@@ -17,7 +17,7 @@ function Stat({ icon: Icon, label, value, sub }: { icon: typeof Gauge; label: st
   return (
     <div className="rounded-xl bg-ink-900/80 p-4">
       <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-chalk/60">
-        <Icon className="h-4 w-4 text-pitch-400" aria-hidden="true" />
+        <Icon className="h-4 w-4 text-accent-400" aria-hidden="true" />
         {label}
       </div>
       <p className="mt-1 font-display text-2xl font-bold text-white">{value}</p>
@@ -68,15 +68,15 @@ export function ReportCard({ report, truth }: Props) {
         </div>
         <div className="space-y-2" aria-label={`Likely range ${lo} to ${hi} touches`}>
           <div className="relative h-3 rounded-full bg-ink-950">
-            <div className="absolute inset-y-0 rounded-full bg-pitch-400/30" style={{ left: pct(lo), width: `calc(${pct(hi)} - ${pct(lo)})` }} />
-            <div className="absolute -top-1 h-5 w-1.5 -translate-x-1/2 rounded-full bg-pitch-400" style={{ left: pct(m.touches) }} />
+            <div className="absolute inset-y-0 rounded-full bg-accent-400/30" style={{ left: pct(lo), width: `calc(${pct(hi)} - ${pct(lo)})` }} />
+            <div className="absolute -top-1 h-5 w-1.5 -translate-x-1/2 rounded-full bg-accent-400" style={{ left: pct(m.touches) }} />
             {truth?.touches != null && (
               <div className="absolute -top-1.5 h-6 w-0.5 -translate-x-1/2 bg-white" style={{ left: pct(truth.touches) }} />
             )}
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-chalk/60">
-            <span><span className="mr-1 inline-block h-2 w-2 rounded-full bg-pitch-400" />AI count</span>
-            <span><span className="mr-1 inline-block h-2 w-4 rounded-full bg-pitch-400/30" />likely range</span>
+            <span><span className="mr-1 inline-block h-2 w-2 rounded-full bg-accent-400" />AI count</span>
+            <span><span className="mr-1 inline-block h-2 w-4 rounded-full bg-accent-400/30" />likely range</span>
             {truth?.touches != null && (
               <span><span className="mr-1 inline-block h-3 w-0.5 bg-white align-middle" />hand count: {truth.touches}</span>
             )}

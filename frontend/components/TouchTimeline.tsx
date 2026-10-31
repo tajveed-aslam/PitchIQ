@@ -25,7 +25,7 @@ function Row({ label, times, matched, duration, tone }: {
         <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
         {times.map((t, i) => {
           const ok = matched(t);
-          const color = ok ? (tone === "ai" ? "bg-pitch-400" : "bg-white") : "bg-flare";
+          const color = ok ? (tone === "ai" ? "bg-accent-400" : "bg-white") : "bg-flare";
           return (
             <span
               key={i}

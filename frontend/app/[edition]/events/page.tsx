@@ -54,11 +54,11 @@ export default function EventsPage() {
               </thead>
               <tbody>
                 {board.leaderboard.map((r) => (
-                  <tr key={r.rank} className={`border-t border-white/5 ${r.is_you ? "bg-pitch-400/10" : ""}`}>
+                  <tr key={r.rank} className={`border-t border-white/5 ${r.is_you ? "bg-accent-400/10" : ""}`}>
                     <td className="px-4 py-3 font-display text-xl font-bold text-white">
                       {r.rank <= 3 ? <Medal className={`h-5 w-5 ${MEDAL[r.rank - 1]}`} aria-label={`Rank ${r.rank}`} /> : r.rank}
                     </td>
-                    <td className="px-4 py-3 text-white">{r.name}{r.is_you && <span className="chip ml-2 text-pitch-300">You</span>}</td>
+                    <td className="px-4 py-3 text-white">{r.name}{r.is_you && <span className="chip ml-2 text-accent-300">You</span>}</td>
                     <td className="hidden px-4 py-3 text-chalk/70 sm:table-cell">{r.country ?? "–"}</td>
                     <td className="px-4 py-3 text-right font-display text-2xl font-extrabold text-white">{r.touches}</td>
                   </tr>
@@ -68,7 +68,7 @@ export default function EventsPage() {
           )}
         </div>
         <aside className="card h-fit space-y-4 p-6">
-          <Trophy className="h-8 w-8 text-pitch-400" aria-hidden="true" />
+          <Trophy className="h-8 w-8 text-accent-400" aria-hidden="true" />
           {board?.can_enter ? (
             <>
               <p className="text-white">You&apos;re in. Your best accepted video this month counts automatically.</p>

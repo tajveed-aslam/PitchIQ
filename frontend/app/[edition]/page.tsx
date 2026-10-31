@@ -17,7 +17,7 @@ export default function Home() {
       <HowItWorks />
       <SamplesPreview />
       <FilmingTips />
-      <Plans />
+      <Plans edition="lite" />
       <Testimonials />
       <FinalCta />
     </>

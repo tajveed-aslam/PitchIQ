@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { EDITION } from "@/config/editions";
+import { EDITIONS, type Edition } from "@/config/editions";
 import { Logo } from "./Logo";
 
-export function SiteFooter() {
+export function SiteFooter({ edition }: { edition: Edition }) {
   return (
     <footer className="border-t border-white/10 bg-ink-950">
       <div className="container-page grid gap-8 py-10 text-sm text-chalk/60 sm:grid-cols-[1.5fr_1fr_1fr]">
         <div className="space-y-3">
           <Logo />
-          <p className="max-w-sm">{EDITION.tagline}</p>
+          <p className="max-w-sm">{EDITIONS[edition].tagline}</p>
           <p>A portfolio project. Payments are in test mode; no real charges.</p>
         </div>
         <div className="space-y-2">

@@ -5,15 +5,16 @@ import { Suspense, useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { Loading, PageShell } from "@/components/app/Bits";
 import { Field, FormError, inputCls } from "@/components/AuthLayout";
-import { EDITION } from "@/config/editions";
 import { api, type User } from "@/lib/api";
 import { useRequireUser } from "@/lib/auth";
+import { useEdition } from "@/lib/edition";
 
 const POSITIONS = ["Goalkeeper", "Defender", "Midfielder", "Forward"];
 const FEET = ["Right", "Left", "Both"];
 
 function ProfileInner() {
   const { user, allowance, refresh } = useRequireUser();
+  const edition = useEdition();
   const welcome = useSearchParams().get("welcome");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -60,7 +61,7 @@ function ProfileInner() {
 
   return (
     <PageShell eyebrow="Profile" title={welcome ? "Tell us about you" : "Your profile"}>
-      {welcome && <p className="mb-6 rounded-xl border border-pitch-400/30 bg-pitch-400/10 px-4 py-3 text-chalk">Welcome! These details go on your player card and help the coach tailor drills. All optional.</p>}
+      {welcome && <p className="mb-6 rounded-xl border border-accent-400/30 bg-accent-400/10 px-4 py-3 text-chalk">Welcome! These details go on your player card and help the coach tailor drills. All optional.</p>}
       {readOnly && <p className="mb-6 text-sm text-chalk/70">This is the shared demo profile, so it can&apos;t be edited.</p>}
       <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
         <form onSubmit={save} className="card space-y-4 p-5 sm:p-6" data-testid="profile-form">
@@ -95,17 +96,17 @@ function ProfileInner() {
           <h2 className="font-display text-3xl font-bold uppercase text-white">Plan</h2>
           <p className="text-sm text-chalk/70">Test mode: switching is instant and nothing is charged.</p>
           <div className="grid gap-3 sm:grid-cols-2">
-            {EDITION.plans.map((p) => {
+            {edition.plans.filter((p) => !p.comingSoon).map((p) => {
               const current = allowance.plan === p.id;
               return (
-                <div key={p.id} className={`card flex flex-col p-4 ${current ? "border-pitch-400/70 shadow-glow" : ""}`} data-testid={`plan-${p.id}`}>
+                <div key={p.id} className={`card flex flex-col p-4 ${current ? "border-accent-400/70 shadow-glow" : ""}`} data-testid={`plan-${p.id}`}>
                   <div className="flex items-baseline justify-between">
                     <h3 className="font-display text-xl font-bold uppercase text-white">{p.name}</h3>
                     <span className="text-sm text-chalk/70">{p.price} {p.period}</span>
                   </div>
                   <ul className="mt-2 flex-1 space-y-1 text-sm text-chalk/80">{p.features.map((f) => <li key={f}>• {f}</li>)}</ul>
                   {current ? (
-                    <span className="mt-3 text-sm font-semibold text-pitch-300">Current plan{allowance.trial_expired ? " (ended)" : ""}</span>
+                    <span className="mt-3 text-sm font-semibold text-accent-300">Current plan{allowance.trial_expired ? " (ended)" : ""}</span>
                   ) : (
                     <button type="button" onClick={() => choose(p.id)} disabled={readOnly || switching !== null} className="btn-secondary mt-3 !py-2 disabled:opacity-50">
                       {switching === p.id && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />} Switch
