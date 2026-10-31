@@ -1,0 +1,28 @@
+name: Accuracy (manual)
+
+# Accuracy against the hand-counted ground truth on Linux, the platform production runs on (8-bit model maths
+# differs slightly between platforms), and the stored sample results the website shows, produced the same way.
+# Run: gh workflow run accuracy.yml; download the "samples-json" artifact into frontend/data/.
+on: workflow_dispatch
+
+jobs:
+  accuracy:
+    runs-on: ubuntu-latest
+    env:
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libegl1 libgles2
+      - run: pip install --no-deps mediapipe==1.2.0 && pip install -r worker/requirements.txt
+      - run: python -m analysis.get_models efficientdet_lite0_int8.tflite efficientdet_lite2_int8.tflite
+      - name: Touch-by-touch accuracy against the ground truth (the served 480p files)
+        run: python -u -m analysis.spike.evaluate_juggling --every=2 --samples
+      - name: Stored sample results for the website
+        run: python -u -m analysis.samples
+      - uses: actions/upload-artifact@v4
+        with:
+          name: samples-json
+          path: frontend/data/samples.json

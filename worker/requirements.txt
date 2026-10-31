@@ -1,8 +1,13 @@
-# Versions tested in the analysis spike. mediapipe brings opencv-contrib-python (the cv2 module); don't add another
-# OpenCV build: two packages providing cv2 conflict.
+# Install with:  pip install --no-deps mediapipe==1.2.0 && pip install -r worker/requirements.txt
+# mediapipe is installed without its dependencies so that pip doesn't pull in opencv-contrib-python (the GUI build,
+# ~25 MB more memory on Linux); these are the dependencies it actually needs for the vision tasks, with headless OpenCV.
+# Spike 3 measured the result on Linux: 8-bit models + headless OpenCV peak at ~400 MB for a 480p video.
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 python-multipart==0.0.20
-mediapipe==1.2.0
-opencv-contrib-python==5.0.0.93
+opencv-python-headless==5.0.0.93
 numpy==2.5.4
+absl-py~=2.3
+flatbuffers~=25.9
+certifi
+matplotlib  # imported by mediapipe.tasks.python.vision (drawing helpers), even though we don't draw

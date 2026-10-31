@@ -24,7 +24,7 @@ print(json.dumps({"touches": r["metrics"]["touches"], "verdict": r["quality"]["v
 """
 
 if __name__ == "__main__":
-    detector = os.environ.get("PITCHIQ_MODELS", "float32")
+    detector = os.environ.get("PITCHIQ_MODELS", "int8")
     for video in sys.argv[1:]:
         out = subprocess.run([sys.executable, "-c", CHILD, video], capture_output=True, text=True)
         line = out.stdout.strip().splitlines()[-1] if out.stdout.strip() else out.stderr[-400:]

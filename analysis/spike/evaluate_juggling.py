@@ -2,7 +2,7 @@
 
 For each clip in data/ground_truth.json: the model's count, its range, and which true touches it matched (within
 0.25 s), missed, or invented. That's precision/recall for touch detection.
-Run:  python -u -m analysis.spike.evaluate_juggling [clip ids...] [--contacts] [--every=2]
+Run:  python -u -m analysis.spike.evaluate_juggling [clip ids...] [--contacts] [--every=2] [--samples]
 """
 
 import json
@@ -22,13 +22,22 @@ CACHE = ROOT / "reports/cache"  # tracker output per clip (gitignored): tracking
 TOLERANCE = 0.25  # seconds: a detected touch within this of a true touch counts as a match
 
 
+def video_for(clip_id: str) -> Path:
+    """--samples: use the 480p files the site serves (in git, so this runs anywhere, e.g. CI on Linux) instead of
+    the original downloads in data/raw (not in git). Same clips, same timing, so the ground truth applies."""
+    if "--samples" in sys.argv:
+        return ROOT / "frontend/public/samples" / f"juggling-{clip_id.split('-')[1]}.mp4"
+    return ROOT / "data/raw" / f"{clip_id}.mp4"
+
+
 def tracked(clip_id: str, every: int = 1):
     """Tracker output for a clip, cached. Delete reports/cache after changing the tracker."""
-    variant = os.environ.get("PITCHIQ_MODELS", "")
-    path = CACHE / (f"{clip_id}{'-every' + str(every) if every != 1 else ''}{'-' + variant if variant else ''}.pkl")
+    variant = os.environ.get("PITCHIQ_MODELS", "int8")
+    tag = "-samples" if "--samples" in sys.argv else ""
+    path = CACHE / (f"{clip_id}{'-every' + str(every) if every != 1 else ''}{'-' + variant if variant else ''}{tag}.pkl")
     if path.exists():
         return pickle.loads(path.read_bytes())
-    result = track_video(ROOT / "data/raw" / f"{clip_id}.mp4", every=every)
+    result = track_video(video_for(clip_id), every=every)
     CACHE.mkdir(parents=True, exist_ok=True)
     path.write_bytes(pickle.dumps(result))
     return result
@@ -66,7 +75,7 @@ if __name__ == "__main__":
         # With the body-contact check: a candidate with no body part at the ball is a bounce, not a touch.
         # Spike 2e: this does NOT work in 2D (a player lying beside a bouncing ball looks "in contact").
         ball = float(np.median([p.size for p in points if p is not None]))
-        contacts = find_contacts(ROOT / "data/raw" / f"{clip_id}.mp4", result.touches, ball)
+        contacts = find_contacts(video_for(clip_id), result.touches, ball)
         kept = [round(t.time, 2) for t, c in zip(result.touches, contacts) if c.part]
         hits, missed, extra = match(kept, truth["touch_times"])
         print(f"   + body contact: model {len(kept)} vs truth {truth['touches']} | matched {hits}"

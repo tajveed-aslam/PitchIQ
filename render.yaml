@@ -25,5 +25,7 @@ services:
         value: "25"
       - key: MAX_VIDEO_SECONDS
         value: "60"
+      - key: MAX_VIDEO_SIDE
+        value: "1280" # up to 720p (the data saver sends 480p); 1080p+ needs too much memory for 512 MB
       - key: SAMPLE_RUNS_PER_HOUR
         value: "3"

@@ -24,7 +24,7 @@ test mode.
                                                        checked; rule-based fallback
 ```
 
-On the free Render plan (0.1 CPU) an analysis takes about 10× the video's length (2 minutes for a 13 s clip), so
+On the free Render plan (0.1 CPU) an analysis takes about 12× the video's length (about 3 minutes for a 15 s clip), so
 videos are limited to 60 s and the sample library shows pre-computed results. The analysis can also run as a
 separate service (`worker/`, set `WORKER_URL`) on a host with more CPU.
 

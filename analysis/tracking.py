@@ -50,9 +50,10 @@ def _detector(model: str, threshold: float) -> vision.ObjectDetector:
 class BallTracker:
     def __init__(self, crop_balls: float = 6.0, max_misses: int = 6):
         # Whole-frame search uses the bigger, more accurate model; zoomed search the small fast one.
-        # PITCHIQ_MODELS=int8 uses the 8-bit versions (less memory; spike 3). PITCHIQ_FULL_DETECTOR overrides the
-        # whole-frame model (tried: lite0 for both searches lost a third of the touches).
-        suffix = "_int8" if os.environ.get("PITCHIQ_MODELS") == "int8" else ""
+        # 8-bit models by default: on Linux they cut peak memory from ~520 to ~400 MB at 480p (spike 3) with the same
+        # or better accuracy (ground truth: 70 of 74 touches found vs 67). PITCHIQ_MODELS=float32 for the originals.
+        # PITCHIQ_FULL_DETECTOR overrides the whole-frame model (tried: lite0 for both lost a third of the touches).
+        suffix = "" if os.environ.get("PITCHIQ_MODELS") == "float32" else "_int8"
         self.full = _detector(os.environ.get("PITCHIQ_FULL_DETECTOR", f"efficientdet_lite2{suffix}.tflite"), threshold=0.25)
         self.zoom = _detector(f"efficientdet_lite0{suffix}.tflite", threshold=0.15)
         self.crop_balls = crop_balls  # crop width in ball diameters

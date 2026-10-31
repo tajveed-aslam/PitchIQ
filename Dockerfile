@@ -14,11 +14,12 @@ WORKDIR /app
 
 COPY backend/requirements.txt backend/requirements.txt
 COPY worker/requirements.txt worker/requirements.txt
-RUN pip install --no-cache-dir -r backend/requirements.txt -r worker/requirements.txt
+RUN pip install --no-cache-dir --no-deps mediapipe==1.2.0 \
+    && pip install --no-cache-dir -r backend/requirements.txt -r worker/requirements.txt
 
 COPY analysis analysis
 # The exact model files the accuracy tests used, checked by SHA-256.
-RUN python -m analysis.get_models efficientdet_lite0.tflite efficientdet_lite2.tflite
+RUN python -m analysis.get_models efficientdet_lite0_int8.tflite efficientdet_lite2_int8.tflite
 COPY worker worker
 COPY frontend/public/samples frontend/public/samples
 COPY frontend/data/samples.json frontend/data/samples.json

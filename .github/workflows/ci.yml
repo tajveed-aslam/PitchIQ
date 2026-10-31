@@ -52,6 +52,6 @@ jobs:
           cache: pip
           cache-dependency-path: worker/requirements.txt
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libegl1 libgles2
-      - run: pip install -r worker/requirements.txt pytest==8.3.4 httpx==0.28.1
-      - run: python -m analysis.get_models efficientdet_lite0.tflite efficientdet_lite2.tflite
+      - run: pip install --no-deps mediapipe==1.2.0 && pip install -r worker/requirements.txt pytest==8.3.4 httpx==0.28.1
+      - run: python -m analysis.get_models efficientdet_lite0_int8.tflite efficientdet_lite2_int8.tflite
       - run: python -m pytest worker/tests -p no:warnings

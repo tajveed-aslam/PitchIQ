@@ -21,7 +21,7 @@ from analysis.tracking import track_video
 from analysis.video import open_video
 
 SCHEMA_VERSION = 1
-MODEL_VERSION = "juggling-0.1"
+MODEL_VERSION = "juggling-0.2"  # 0.2: 8-bit detector models
 EVERY = 2  # track every 2nd frame: same accuracy as every frame on the ground-truth clips, half the time (spike 2f)
 
 

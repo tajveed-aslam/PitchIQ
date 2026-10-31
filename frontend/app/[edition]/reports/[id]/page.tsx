@@ -70,7 +70,7 @@ export default function ReportPage() {
               </li>
             ))}
           </ol>
-          <p className="text-xs text-chalk/60">On the free server this takes a few minutes (about 2 for a 15-second clip). You can leave this page; the report will be in Reports and you&apos;ll get a notification.</p>
+          <p className="text-xs text-chalk/60">On the free server this takes a few minutes (about 3 for a 15-second clip). You can leave this page; the report will be in Reports and you&apos;ll get a notification.</p>
         </div>
       )}
       {a.status === "failed" && (

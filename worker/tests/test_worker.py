@@ -73,7 +73,7 @@ def test_upload_is_deleted_after_analysis():
 
 
 def test_oversized_video_is_refused(tmp_path, monkeypatch):
-    """4K needs more memory than the free server has: refused with a clear message (live crash, BUG-14)."""
+    """Big videos need more memory than the free server has: refused with a clear message (BUG-14)."""
     import worker.jobs as jobs
     monkeypatch.setattr(jobs, "MAX_SIDE", 400)  # the samples are 854 px wide: pretend that's too big
     data = (SAMPLES / "juggling-42524.mp4").read_bytes()

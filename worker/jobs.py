@@ -26,9 +26,9 @@ from analysis.video import open_video
 # Longer videos are refused: they'd hold the single worker for minutes. 60 on the free Render server
 # (~1 CPU-second per second of video, at 0.1 CPU: a 60 s clip takes ~10 min).
 MAX_SECONDS = int(os.environ.get("MAX_VIDEO_SECONDS", "90"))
-# Larger frames need more memory to decode: 4K peaked at 478 MB (with one decoder thread) against 512 MB on the free
-# server, shared with the API. 1080p is 369 MB; the data saver sends 480p.
-MAX_SIDE = int(os.environ.get("MAX_VIDEO_SIDE", "1920"))
+# Larger frames need more memory to decode (Linux, 8-bit models: 480p ~400 MB, 1080p ~453, 4K ~578) against 512 MB on the free
+# server, shared with the API. Up to 720p is accepted; the data saver sends 480p.
+MAX_SIDE = int(os.environ.get("MAX_VIDEO_SIDE", "1280"))
 KEEP_SECONDS = 3600  # finished jobs are forgotten after an hour (the API stores what it needs)
 
 
@@ -133,8 +133,8 @@ class JobStore:
             if seconds <= 0:
                 raise ValueError("This file couldn't be read as a video.")
             if size > MAX_SIDE:
-                raise ValueError(f"The video is {size} pixels wide (4K?). Turn on the data saver, or record at 1080p "
-                                 "or lower, and upload again.")
+                raise ValueError(f"The video is too large ({size} pixels wide). Turn on the data saver (it shrinks the "
+                                 "video on your phone), or record at 720p, and upload again.")
             if seconds > MAX_SECONDS:
                 raise ValueError(f"The video is {seconds:.0f} s long; the limit is {MAX_SECONDS} s. Trim it and try again.")
 
