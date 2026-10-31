@@ -63,14 +63,15 @@ From the Main brief (player card, training plans, skill analysis, challenges, me
 | 3 | 2026-10-31 | 130 | 1 | 4 | 9.4 min | TC-SMP-03 still queued at 120 s behind other live analyses; test waits now match the page's 180 s fallback; Global sample test desktop-only |
 | 4 | 2026-10-31 | 129 | 0 | 6 | 8.0 min | |
 | 5 | 2026-10-31 | 128 | 1 | 6 | 7.7 min | TC-MAIN-07 (iPhone) click timeout under load; not reproduced in 51 targeted repeats; no API errors in the log |
-| 6 | 2026-10-31 | 129 | 0 | 6 | 8.9 min | |
-| 7 | 2026-10-31 | 127 | 2 | 6 | 15.0 min | TC-UPL-01 (Pixel), TC-MAIN-10: uploads still "Waiting in line" at 120 s on a slow run; local wait raised to 6 min |
-| 8 | 2026-10-31 | 128 | 1 | 6 | 14.3 min | TC-MAIN-06 (iPhone): one slow tap failed the reaction test: BUG-24, fixed |
-| 9 | 2026-10-31 | 129 | 0 | 6 | 14.1 min | |
-| 10 | 2026-10-31 | 129 | 0 | 6 | 14.2 min | |
-| **11** | 2026-11-01 | 129 | 0 | 6 | 14.3 min | **three consecutive clean runs (11–13)** |
-| **12** | 2026-11-01 | 129 | 0 | 6 | 15.6 min | |
-| **13** | 2026-11-01 | 129 | 0 | 6 | 14.9 min | |
+| 6 | 2026-10-31 | 129 | 0 | 6 | 6.8 min | |
+| 7 | 2026-10-31 | 129 | 0 | 6 | 8.9 min | |
+| 8 | 2026-10-31 | 127 | 2 | 6 | 15.0 min | TC-UPL-01 (Pixel), TC-MAIN-10: uploads still "Waiting in line" at 120 s on a slow run; local wait raised to 6 min |
+| 9 | 2026-10-31 | 128 | 1 | 6 | 14.3 min | TC-MAIN-06 (iPhone): one slow tap failed the whole reaction test: BUG-24, fixed |
+| 10 | 2026-10-31 | 129 | 0 | 6 | 14.1 min | |
+| 11 | 2026-10-31 | 129 | 0 | 6 | 14.2 min | |
+| **12** | 2026-11-01 | 129 | 0 | 6 | 14.3 min | **three consecutive clean runs on the final build (12–14)** |
+| **13** | 2026-11-01 | 129 | 0 | 6 | 15.6 min | |
+| **14** | 2026-11-01 | 129 | 0 | 6 | 14.9 min | |
 
 Skipped by design: TC-WEB-04 and TC-MAIN-14 on desktop (phone layouts), TC-MAIN-02 and TC-MAIN-10 on phones (one
 real analysis per run). API: 80 passed. CI (Linux): API, frontend lint + build + route check, worker + accuracy
