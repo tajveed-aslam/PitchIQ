@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 # One thread per math library: at 0.1 CPU more threads only add memory (see analysis/video.py).
 ENV OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+# glibc gives each thread its own memory pool by default; two pools keep the 512 MB server from bloating.
+ENV MALLOC_ARENA_MAX=2
 WORKDIR /app
 
 COPY backend/requirements.txt backend/requirements.txt

@@ -7,6 +7,8 @@ One job runs at a time: tracking is CPU-bound, so parallel jobs would only slow 
 """
 
 import base64
+import ctypes
+import gc
 import os
 import shutil
 import tempfile
@@ -84,6 +86,16 @@ def video_seconds(path: Path) -> float:
     return probe(path)[0]
 
 
+def _release_memory():
+    """Give memory freed by the analysis back to the system. Without this the server's peak crept up job by job
+    (live: 430 MB after one video, 478 after the next) towards Render's 512 MB limit."""
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)  # glibc keeps freed memory otherwise
+    except OSError:  # not Linux/glibc
+        pass
+
+
 def _lower_priority():
     """Run the analysis at low CPU priority. When it shares a small server with the API (Render free: 0.1 CPU), API
     requests then go first instead of waiting behind the analysis (found by live E2E: a plan switch took over 15 s
@@ -153,6 +165,7 @@ class JobStore:
             job.finished_at = time.time()
             if delete:
                 path.unlink(missing_ok=True)
+            _release_memory()
 
     def _forget_old(self):
         cutoff = time.time() - KEEP_SECONDS
