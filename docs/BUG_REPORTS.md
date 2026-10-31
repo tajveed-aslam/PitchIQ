@@ -28,6 +28,7 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 | BUG-21 | High | AI training plans | E2E with the real Gemini API (TC-MAIN-10 page snapshot) | Fixed |
 | BUG-22 | Medium | Global accessibility | E2E axe checks | Fixed |
 | BUG-23 | Low | Rule-based training plan | Screenshot review | Fixed |
+| BUG-24 | Medium | Global reaction test | Three-run E2E check (run 6, iPhone) | Fixed |
 
 ---
 
@@ -206,3 +207,14 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 - **Actual:** "Balance" day with a breathing drill; Friday and Saturday identical to Monday and Tuesday.
 - **Fix:** each day is named after what its lead drill trains, and drills are paired with an offset so every day is a
   different combination.
+
+### BUG-24: One slow tap threw away the whole reaction test
+- **Steps:** take the reaction test and, in one round, tap more than 1.5 s after the panel turns gold (seen when the
+  browser was busy during a full E2E run; a distracted player does the same).
+- **Expected:** that round is repeated.
+- **Actual:** all five rounds finished, then the API refused the timings ("too fast or too slow") and the player had
+  to start again.
+- **Fix:** the page applies the API's 1.5 s limit itself: a slower tap shows "Too slow: tap to try that round again",
+  like an early tap. The API still checks every timing.
+- **Guard:** TC-MAIN-06 plays the rounds like a person and handles repeated rounds.
+
