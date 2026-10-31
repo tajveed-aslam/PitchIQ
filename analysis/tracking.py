@@ -20,6 +20,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 from mediapipe.tasks.python import BaseOptions, vision
+from analysis.video import open_video
 
 MODELS = Path(__file__).resolve().parents[1] / "models"
 
@@ -110,7 +111,7 @@ class BallTracker:
 
 def track_video(path: Path, every: int = 1) -> tuple[list[BallPoint | None], float, tuple[int, int]]:
     """Track the ball through a video. Returns one point (or None) per frame, the fps and the frame size."""
-    cap = cv2.VideoCapture(str(path))
+    cap = open_video(path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     tracker, points, i = BallTracker(), [], 0

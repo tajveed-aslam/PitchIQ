@@ -16,6 +16,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 from mediapipe.tasks.python import BaseOptions, vision
+from analysis.video import open_video
 
 MODEL = Path(__file__).resolve().parents[1] / "models/pose_landmarker_full.task"
 
@@ -68,7 +69,7 @@ def find_contacts(path: Path, touches: list, ball: float, reach: int = 2, max_di
         for f in range(t.frame - reach, t.frame + reach + 1):
             wanted.setdefault(f, []).append(n)
     best = [Contact(None, np.inf, t.frame) for t in touches]
-    cap, landmarker, i = cv2.VideoCapture(str(path)), _landmarker(), 0
+    cap, landmarker, i = open_video(path), _landmarker(), 0
     try:
         last = max(wanted, default=-1)
         while i <= last:

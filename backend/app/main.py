@@ -1,4 +1,5 @@
 import os
+import time
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +10,7 @@ from .routers import analyses, auth, events, me, samples, support
 
 Base.metadata.create_all(bind=engine)
 
+STARTED = time.time()
 app = FastAPI(title="PitchIQ API", version="1.0.0")
 
 app.add_middleware(
@@ -29,5 +31,12 @@ app.include_router(support.router, prefix="/support", tags=["support"])
 
 @app.get("/")
 def health():
-    return {"status": "ok", "app": "PitchIQ API", "worker": "remote" if settings.worker_url else "in-process",
-            "version": os.environ.get("RENDER_GIT_COMMIT", "local")[:7]}
+    out = {"status": "ok", "app": "PitchIQ API", "worker": "remote" if settings.worker_url else "in-process",
+           "version": os.environ.get("RENDER_GIT_COMMIT", "local")[:7], "cpus_seen": os.cpu_count(),
+           "uptime_s": round(time.time() - STARTED)}
+    try:  # peak memory of this process since it started (Linux reports KB): watch it against Render's 512 MB
+        import resource
+        out["peak_memory_mb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
+    except ImportError:  # Windows
+        pass
+    return out

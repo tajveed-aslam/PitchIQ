@@ -18,6 +18,7 @@ import numpy as np
 from analysis.camera import camera_motion
 from analysis.juggling import JugglingResult, count_touches
 from analysis.tracking import track_video
+from analysis.video import open_video
 
 SCHEMA_VERSION = 1
 MODEL_VERSION = "juggling-0.1"
@@ -25,7 +26,7 @@ EVERY = 2  # track every 2nd frame: same accuracy as every frame on the ground-t
 
 
 def _video_info(path: Path) -> dict:
-    cap = cv2.VideoCapture(str(path))
+    cap = open_video(path)
     try:
         fps = cap.get(cv2.CAP_PROP_FPS) or 0.0
         frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))

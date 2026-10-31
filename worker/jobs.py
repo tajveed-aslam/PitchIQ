@@ -21,10 +21,14 @@ from pathlib import Path
 import cv2
 
 from analysis.report import analyse_juggling
+from analysis.video import open_video
 
 # Longer videos are refused: they'd hold the single worker for minutes. 60 on the free Render server
 # (~1 CPU-second per second of video, at 0.1 CPU: a 60 s clip takes ~10 min).
 MAX_SECONDS = int(os.environ.get("MAX_VIDEO_SECONDS", "90"))
+# Larger frames need more memory to decode: 4K peaked at 478 MB (with one decoder thread) against 512 MB on the free
+# server, shared with the API. 1080p is 369 MB; the data saver sends 480p.
+MAX_SIDE = int(os.environ.get("MAX_VIDEO_SIDE", "1920"))
 KEEP_SECONDS = 3600  # finished jobs are forgotten after an hour (the API stores what it needs)
 
 
@@ -46,7 +50,7 @@ class Job:
 
 def thumbnail(path: Path, at_s: float = 1.0, width: int = 320) -> str | None:
     """A small JPEG from about a second in, base64-encoded, for the report list."""
-    cap = cv2.VideoCapture(str(path))
+    cap = open_video(path)
     try:
         cap.set(cv2.CAP_PROP_POS_MSEC, at_s * 1000)
         ok, frame = cap.read()
@@ -60,18 +64,24 @@ def thumbnail(path: Path, at_s: float = 1.0, width: int = 320) -> str | None:
         cap.release()
 
 
-def video_seconds(path: Path) -> float:
-    """Length in seconds, or 0 if it isn't a readable video. (OpenCV reports fps = frames = -1 for a file it can't
-    open, which divides to a plausible-looking +1 s: so check it opens and yields a first frame.)"""
-    cap = cv2.VideoCapture(str(path))
+def probe(path: Path) -> tuple[float, int]:
+    """(length in seconds, longer side in pixels), or (0, 0) if it isn't a readable video. (OpenCV reports
+    fps = frames = -1 for a file it can't open, which divides to a plausible-looking +1 s: so check it opens and
+    yields a first frame.)"""
+    cap = open_video(path)
     try:
         fps = cap.get(cv2.CAP_PROP_FPS)
         frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-        if not cap.isOpened() or fps <= 0 or frames <= 0 or not cap.read()[0]:
-            return 0.0
-        return frames / fps
+        ok, frame = cap.read()
+        if not cap.isOpened() or fps <= 0 or frames <= 0 or not ok:
+            return 0.0, 0
+        return frames / fps, max(frame.shape[:2])
     finally:
         cap.release()
+
+
+def video_seconds(path: Path) -> float:
+    return probe(path)[0]
 
 
 def _lower_priority():
@@ -119,9 +129,12 @@ class JobStore:
         _lower_priority()
         try:
             job.status = "processing"
-            seconds = video_seconds(path)
+            seconds, size = probe(path)
             if seconds <= 0:
                 raise ValueError("This file couldn't be read as a video.")
+            if size > MAX_SIDE:
+                raise ValueError(f"The video is {size} pixels wide (4K?). Turn on the data saver, or record at 1080p "
+                                 "or lower, and upload again.")
             if seconds > MAX_SECONDS:
                 raise ValueError(f"The video is {seconds:.0f} s long; the limit is {MAX_SECONDS} s. Trim it and try again.")
 

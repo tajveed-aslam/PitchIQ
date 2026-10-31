@@ -16,6 +16,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+from analysis.video import open_video
 
 WIDTH = 320  # analyse a small copy: plenty for background motion, and fast
 
@@ -39,7 +40,7 @@ class CameraMotion:
 def camera_motion(path: Path, shift_pct: float = 0.4, zoom_pct: float = 0.4, smooth: int = 7) -> CameraMotion:
     """Per-frame camera motion. Defaults: moving if the background shifts by more than 0.4% of the frame width
     (about 5 px at 1280) or zooms by more than 0.4% between frames, as a running median over `smooth` frames."""
-    cap = cv2.VideoCapture(str(path))
+    cap = open_video(path)
     prev, shifts, zooms = None, [0.0], [0.0]
     try:
         while True:
