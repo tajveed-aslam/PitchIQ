@@ -73,20 +73,19 @@ const LITE_PLANS: Plan[] = [
   },
 ];
 
-// Global prices; Coach and Federation plans arrive with the Main edition's coach rooms.
+// Global prices and features (the API's plans.py enforces them). Federation is quoted per organisation.
 const MAIN_PLANS: Plan[] = [
-  { ...LITE_PLANS[0] },
-  { ...LITE_PLANS[1], price: "$6" },
-  { ...LITE_PLANS[2], price: "$12" },
-  { ...LITE_PLANS[3], price: "$3" },
+  { ...LITE_PLANS[0], features: ["3 skill analyses", "Full player card and tests", "AI coaching on each report", "Compare sessions"] },
+  { ...LITE_PLANS[1], price: "$6", features: ["20 analyses a month", "Progress analytics and trend", "Compare any two sessions", "Full player card and tests"] },
+  { ...LITE_PLANS[2], price: "$12", features: ["Everything in Skill Analysis", "AI coaching on every report", "AI weekly training plans", "Coaching checked against your numbers"] },
+  { ...LITE_PLANS[3], price: "$3", features: ["Monthly touch challenge", "Your rank on the leaderboard", "5 analyses a month"] },
   {
-    id: "coach-team",
+    id: "team",
     name: "Coach",
     price: "$29",
     period: "per month",
     blurb: "Run a squad: rooms, tasks and a team dashboard.",
-    features: ["Group rooms with join codes", "Tasks with deadlines", "Feedback on players' videos", "Team leaderboard"],
-    comingSoon: true,
+    features: ["Team and academy-trial rooms", "Join codes that expire", "Tasks with deadlines and feedback", "Team dashboard with alerts", "50 analyses a month"],
   },
   {
     id: "federation",

@@ -4,6 +4,7 @@
   show steady progress, plus one video the quality check rejected, with coaching and notifications. Anything
   visitors add to the demo account is removed after a day.
 - Fictional leaderboard players for the monthly challenge (names only, no photos).
+- Main (Global) edition: the demo player's card, tests and training week, and a demo coach's rooms (seed_main.py).
 
 Seeded reports are synthetic but shaped exactly like real ones (analysis/report.py, schema_version 1), and are
 marked source="seed" so they're never confused with real analyses.
@@ -129,6 +130,8 @@ def seed():
             when = now - timedelta(days=rng.randint(1, 20))
             db.add(Analysis(user_id=p.id, title="Challenge entry", source="seed", status="done", stage="done",
                             report=report, touches=report["metrics"]["touches"], created_at=when, finished_at=when))
+        from .seed_main import seed_main  # Main (Global) edition: card, tests, plan, demo coach and rooms
+        seed_main(db, demo, thumbs, now)
         db.commit()
         print(f"Seeded demo player ({len(DEMO_SESSIONS) + 1} reports) and {len(LEADERBOARD)} leaderboard players.")
     finally:

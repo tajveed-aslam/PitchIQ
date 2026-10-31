@@ -44,7 +44,23 @@ photos, no famous players. Files in `frontend/public/images/`:
 | garage-session.webp | 43513 | 9.0 s |
 | first-touch.webp | 42529 | 4.0 s |
 
+The Global (Main) edition has its own stills, from clips the Lite pages don't use, in `frontend/public/images/main/`
+(each with a half-size `-sm` version):
+
+| File | From clip | Moment |
+|---|---|---|
+| hero-trick.webp | 43518 | 25.6 s, seated juggling trick (landing hero) |
+| trick-closeup.webp | 43518 | 27.4 s |
+| night-kick.webp | 43487 | 7.2 s, high kick under floodlights |
+| neon-dribble.webp | 42530 | 4.9 s |
+| thigh-control.webp | 42543 | 8.9 s |
+| knee-touch.webp | 42540 | 0.8 s |
+| feet-closeup.webp | 42541 | 3.0 s |
+
 The sample videos on the site (`frontend/public/samples/`) are 480p re-encodes of 43487, 43490, 42524 and 43513.
+
+Fictional people in the Global demo: the squad (Lucas Moreira, Sofia Lindqvist, Daniel Okafor, Mei Tanaka, Omar
+Haddad, Ella Brennan), the academy applicants and "Demo Coach" are invented names with initials only, no photos.
 
 ## Testimonials and people
 

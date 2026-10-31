@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from .config import settings
@@ -18,6 +18,13 @@ engine = create_engine(
     connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {},
     pool_pre_ping=True,  # Neon closes idle connections; check before use instead of failing a request
 )
+if DATABASE_URL.startswith("sqlite"):
+    @event.listens_for(engine, "connect")
+    def _foreign_keys(conn, _record):
+        # SQLite ignores ON DELETE CASCADE unless asked; Postgres (production) always applies it. Same behaviour
+        # in tests and local runs as in production.
+        conn.execute("PRAGMA foreign_keys=ON")
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

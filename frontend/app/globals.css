@@ -22,6 +22,9 @@
     --glow: 34 211 238;
     --chalk: 232 238 247;
     --flare: 255 181 71;
+    --good: 91 224 127;
+    --series-1: 91 224 127;
+    --series-2: 34 211 238;
     --font-display: var(--font-barlow);
   }
 
@@ -40,6 +43,11 @@
     --glow: 139 92 246;
     --chalk: 240 236 228;
     --flare: 251 113 133;
+    --good: 52 211 153;
+    /* Chart series (dataviz validator, dark surface #100E17: lightness band, CVD and contrast all pass):
+       ochre for "this / newer", violet for "earlier / comparison". The brighter gold stays for UI. */
+    --series-1: 184 134 11;
+    --series-2: 139 92 246;
     --font-display: var(--font-sora);
   }
 
@@ -56,6 +64,7 @@
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
   }
@@ -99,6 +108,33 @@
   }
   [data-edition="main"] .btn-secondary {
     @apply border-white/15 bg-white/5 font-sans text-sm normal-case tracking-normal backdrop-blur hover:bg-white/10;
+  }
+  /* ---- Main (Global) components: glass panels, HUD labels, data figures ---- */
+  .glass {
+    @apply rounded-3xl border border-white/[0.08] bg-gradient-to-b from-ink-800/80 to-ink-900/80 shadow-[0_1px_0_0_rgb(255_255_255/0.06)_inset] backdrop-blur-xl;
+  }
+  .glass-hover {
+    @apply transition hover:border-accent-400/30 hover:shadow-glow;
+  }
+  .hud {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-chalk/60;
+  }
+  .figure {
+    @apply font-display font-semibold tracking-[-0.04em] text-white;
+  }
+  .m-input {
+    @apply w-full rounded-2xl border border-white/10 bg-ink-950/70 px-4 py-3 text-white placeholder:text-chalk/40 focus:border-accent-400/60 focus:outline-none focus:ring-2 focus:ring-accent-400/20;
+  }
+  .m-tab {
+    @apply rounded-full px-4 py-2 text-sm font-medium text-chalk/70 transition hover:text-white;
+  }
+  .m-tab[aria-selected="true"], .m-tab[aria-current="page"] {
+    @apply bg-white/10 text-white;
+  }
+  .grid-bg {
+    background-image: linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
   .text-gradient {
     @apply bg-gradient-to-r from-accent-200 via-accent-400 to-glow bg-clip-text text-transparent;

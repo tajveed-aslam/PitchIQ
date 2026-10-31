@@ -19,13 +19,17 @@ class Plan:
     progress: bool  # progress over time (history chart)
     events: bool  # enter the monthly challenge
     trial_days: int | None = None
+    training: bool = False  # Main: AI weekly training plans
+    rooms: bool = False  # Main: run group rooms as a coach (players join rooms on any plan)
 
 
 PLANS: dict[str, Plan] = {
     "trial": Plan("trial", "Free trial", analyses=3, coaching=True, progress=False, events=False, trial_days=7),
     "skill": Plan("skill", "Skill Analysis", analyses=20, coaching=False, progress=True, events=False),
-    "coach": Plan("coach", "AI Coach", analyses=20, coaching=True, progress=True, events=False),
+    "coach": Plan("coach", "AI Coach", analyses=20, coaching=True, progress=True, events=False, training=True),
     "events": Plan("events", "Events", analyses=5, coaching=False, progress=False, events=True),
+    # Main (Global) only: the brief's Coach plan for teams and academies.
+    "team": Plan("team", "Coach", analyses=50, coaching=True, progress=True, events=True, training=True, rooms=True),
 }
 
 GUEST_DAILY_ANALYSES = 20  # the demo account is shared by every visitor
@@ -81,5 +85,6 @@ def allowance(db: Session, user: User) -> dict:
         "remaining": 0 if expired else max(0, limit - used),
         "period": "today" if user.is_guest else ("trial" if plan.trial_days else "month"),
         "trial_expired": expired,
-        "features": {"coaching": plan.coaching, "progress": plan.progress, "events": plan.events},
+        "features": {"coaching": plan.coaching, "progress": plan.progress, "events": plan.events,
+                     "training": plan.training, "rooms": plan.rooms},
     }

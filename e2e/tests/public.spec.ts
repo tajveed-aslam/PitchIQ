@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { SAMPLE_TIMEOUT } from "../playwright.config";
 import { isPhone } from "./helpers";
 
 test.describe("Landing page", () => {
@@ -55,11 +56,12 @@ test.describe("Sample library", () => {
   });
 
   test("TC-SMP-02 analysing a sample shows the AI count next to the hand count", async ({ page }) => {
+    test.setTimeout(SAMPLE_TIMEOUT + 60_000);
     await page.goto("/samples");
     const card = page.locator("#juggling-43490");
     await card.getByTestId("analyse-juggling-43490").click();
     const count = card.getByTestId("touch-count");
-    await expect(count).toBeVisible({ timeout: 120_000 });
+    await expect(count).toBeVisible({ timeout: SAMPLE_TIMEOUT });
     const n = Number(await count.textContent());
     expect(n).toBeGreaterThanOrEqual(15); // hand count 19; regression band as in the worker tests
     expect(n).toBeLessThanOrEqual(21);
@@ -68,10 +70,11 @@ test.describe("Sample library", () => {
   });
 
   test("TC-SMP-03 the moving-camera sample is rejected by the quality check", async ({ page }) => {
+    test.setTimeout(SAMPLE_TIMEOUT + 60_000);
     await page.goto("/samples");
     const card = page.locator("#juggling-43513");
     await card.getByTestId("analyse-juggling-43513").click();
-    await expect(card.getByText("Please re-film")).toBeVisible({ timeout: 120_000 });
+    await expect(card.getByText("Please re-film")).toBeVisible({ timeout: SAMPLE_TIMEOUT });
     await expect(card.getByText(/camera moved/i)).toBeVisible();
   });
 });

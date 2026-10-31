@@ -7,11 +7,16 @@ export const BASE_URL = process.env.BASE_URL || "http://localhost:3100";
 export const API_URL = process.env.API_URL || "http://localhost:8010";
 // LIVE=1 when testing the deployed site: the free server analyses at ~8x video length, one video at a time.
 export const LIVE = !!process.env.LIVE;
-export const ANALYSIS_TIMEOUT = LIVE ? 600_000 : 120_000;
+// Real uploads queue behind each other: the server analyses one video at a time, and with three browser workers a
+// local run can have ~10 analyses waiting (seen: 2+ minutes "Waiting in line" on a slow run).
+export const ANALYSIS_TIMEOUT = LIVE ? 600_000 : 360_000;
+// Sample pages in live mode fall back to the stored result after 180 s (SampleCard / SampleRunner), and the server
+// analyses one video at a time, so a sample run queued behind others can legitimately take that long.
+export const SAMPLE_TIMEOUT = 200_000;
 
 export default defineConfig({
   testDir: "./tests",
-  timeout: LIVE ? 900_000 : 150_000, // a real analysis runs inside some tests
+  timeout: LIVE ? 900_000 : 150_000, // tests that wait for a real analysis set their own (ANALYSIS_TIMEOUT + margin)
   expect: { timeout: 15_000 },
   fullyParallel: true,
   workers: process.env.CI ? 2 : 3,

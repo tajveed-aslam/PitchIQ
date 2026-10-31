@@ -3,12 +3,16 @@
 **Film a football juggling session on your phone; PitchIQ counts your touches with computer vision, measures your
 rhythm and ball control, and an AI coach turns those numbers into feedback and drills.**
 
-Two editions on one site, picked with the **region switch** in the header: **Africa** = PitchIQ Lite (built first,
-for players on slow and expensive mobile data; the default) and **Global** = the full platform (next phase: shows a
-coming-soon page in its own design for now). One API and database serve both. A portfolio project: payments are in
-test mode.
+Two editions on one site, picked with the **region switch** in the header, each with its own design:
 
-- Live: Lite: _coming soon_ · Main: _coming soon_
+- **Africa = PitchIQ Lite** (the default): built for slow, expensive mobile data. Small pages, on-device video
+  shrinking, one skill done properly.
+- **Global = the full platform**: a measured player card with mindset, reaction and logic tests, comparisons and
+  analytics, AI weekly training plans, challenges and badges, and coach rooms for squads and academy trials.
+
+One API and one database serve both. A portfolio project: payments are in test mode.
+
+- Live: https://pitch-iq-psi.vercel.app (pick **Global** top right for the full platform)
 - How to try it with the built-in sample videos: [docs/HOW_TO_TEST.md](docs/HOW_TO_TEST.md)
 
 ## How it works
@@ -51,14 +55,37 @@ player · profile and player card (ratings from your own sessions) · upload wit
 analysis stages · report (count, range, pace, rhythm, control, touch timeline) · AI coaching with drills · reports
 list · plans with allowances (test mode) · monthly challenge leaderboard · help chat, FAQ, contact.
 
+## Features (Global)
+
+Its own design ("stadium gold": warm black, gold and violet, Sora display type, glass panels, real photos) and its own
+pages; a command-centre layout with a sidebar on desktop and a tab bar on phones.
+
+- **Player card:** FIFA-style gold card. Skill ratings come only from analysed videos; skills the pipeline can't
+  measure yet (dribbling, passing, shooting) say "not measured". Overall = average of the measured skills. Physical
+  profile, mindset self-assessment (12 statements, reversed items), reaction test (median of 5 taps, impossible
+  timings refused) and logic puzzles (graded on the server from a signed seed, so answers never reach the browser).
+- **Analysis:** reports library (search, sort, filter), an "analysis command centre" per report (range bar, timeline,
+  gap between touches, quality check, coaching), compare any two sessions, progress analytics with a trend line,
+  personal bests and consistency.
+- **AI weekly training plans:** 5 training days and 2 rest days from the player's numbers. Gemini only arranges
+  library drills; replies with invented drills or numbers, the wrong shape, or field names read aloud are replaced by
+  a rule-based plan.
+- **Challenges and badges:** the monthly challenge, 11 badges earned from real data, team milestones.
+- **Coach rooms (Coach plan):** team squads or academy trials; join codes that expire after 7 days; tasks with
+  deadlines, targets and notes; hand-ins scored out of 100 with feedback; reminders 2 days before a deadline; a team
+  dashboard with automatic insights (average rising or falling, players gone quiet, overdue tasks); player drawers
+  with cards and reports; scouting notes and a pass/fail bar for trials. Players only ever see their own tasks.
+- **Everywhere:** notifications (with settings), a docked AI assistant answering from the Global FAQ, demo player and
+  demo coach accounts.
+
 ## Repository
 
 | Folder | What |
 |---|---|
 | `analysis/` | Computer vision: tracking, touch counting, camera motion, report builder, model download, spikes |
 | `worker/` | Analysis jobs (one at a time, limits); runs inside the API, or as its own HTTP service |
-| `backend/` | FastAPI API: auth, profile, plans, analysis jobs, coaching, events, support, seed data |
-| `frontend/` | Next.js 14 + Tailwind; `app/[edition]/` pages, per-edition themes (CSS variables) and region switch |
+| `backend/` | FastAPI API: auth, profile, plans, analysis jobs, coaching, events, support, seed data; Global: `routers/player.py` (card, tests, badges, plans), `insights.py` (progress, compare), `rooms.py` |
+| `frontend/` | Next.js 14 + Tailwind. `app/lite/` and `app/main/` (its own components in `components/main/`), per-edition themes (CSS variables), `middleware.ts` serves the visitor's edition |
 | `e2e/` | Playwright end-to-end and accessibility tests |
 | `data/ground_truth.json` | Hand-counted touches for the accuracy clips |
 | `docs/` | Test plan, test cases, RTM, bug reports, model accuracy, how to test, credits |
@@ -73,7 +100,7 @@ pip install -r backend/requirements-dev.txt -r worker/requirements.txt
 python -m analysis.get_models                          # MediaPipe models, checked by SHA-256
 
 cd backend && cp .env.example .env                     # add GEMINI_API_KEY for AI coaching (optional)
-python -m app.seed                                     # demo player + leaderboard
+python -m app.seed                                     # demo player, demo coach, rooms, leaderboard
 uvicorn app.main:app --port 8010                       # analysis runs in-process when WORKER_URL is empty
 
 cd ../frontend && cp .env.example .env.local && npm install && npm run dev   # http://localhost:3000
@@ -92,12 +119,14 @@ Test plan, cases, traceability and results: [docs/TEST_PLAN.md](docs/TEST_PLAN.m
 
 ## Deploy
 
-- **API + analysis:** Render Blueprint (`render.yaml`, root `Dockerfile`, Frankfurt, free plan). Env:
+- **API + analysis:** Render Blueprint (`render.yaml`, root `Dockerfile`, free plan). Env:
   `DATABASE_URL` (Neon), `GEMINI_API_KEY`, `FRONTEND_ORIGINS`; limits `MAX_UPLOAD_MB=25`, `MAX_VIDEO_SECONDS=60`.
   Measured peak memory during an analysis: ~410 MB of the 512 MB.
 - **Web:** one Vercel project from `frontend/` (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SAMPLE_MODE=stored`). The region
-  switch sets a cookie; `middleware.ts` serves `app/[edition]/…` (both editions prerendered). Later the default can
+  switch sets a cookie; `middleware.ts` serves `app/lite/…` or `app/main/…` at the same URLs. Later the default can
   come from the visitor's country (Vercel's `x-vercel-ip-country`).
+- **Database:** Global added tables only (`create_all` creates them on start), so the live database needed no
+  migration; the seed adds the Global demo data on every start.
 - **Optional separate worker:** `worker/Dockerfile` + `python -m worker.deploy_space` (Hugging Face Docker Spaces
   now need a paid plan).
 

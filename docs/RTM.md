@@ -1,4 +1,4 @@
-# Requirements traceability matrix: PitchIQ Lite
+# Requirements traceability matrix: PitchIQ (Lite and Global)
 
 Requirements come from the Lite brief and the approved plan. "Result" is from the local full-stack runs on
 2026-10-30: three consecutive E2E runs (74 passed, 1 skipped by design, 0 failed, 0 flaky, retries off), API tests
@@ -26,8 +26,60 @@ Requirements come from the Lite brief and the approved plan. "Result" is from th
 | R-17 | Privacy: videos deleted after analysis; reports private | test_upload_is_deleted_after_analysis; test_reports_are_private; test_thumbnail_needs_the_signature | Pass |
 | R-18 | Accessibility (WCAG 2 A/AA, no serious/critical issues) | TC-A11Y ×7 on 3 devices; Lighthouse accessibility 100 | Pass |
 | R-19 | Fast on slow connections (Lite budget) | Build: ≤ 118 kB first-load JS per page; Lighthouse mobile: performance 88–97, page weight 258–358 KB, CLS ≤ 0.04 | Pass |
-| R-21 | One site, region switch: Africa (Lite) default, Global (Main) coming soon | TC-REG-01, TC-REG-02 | Pass |
+| R-21 | One site, region switch: Africa (Lite) default, Global (Main) its own edition | TC-REG-01–03, TC-MAIN-15 | Pass |
 | R-20 | Security: login required, ownership, worker key, rate limits | TC-AUTH-03; test_protected_routes_need_a_valid_token; test_reports_are_private; test_health_and_key; test_public_sample_rate_limit_and_unknowns | Pass |
+
+## Global (Main) edition
+
+From the Main brief (player card, training plans, skill analysis, challenges, metrics, settings), the detailed brief
+(dashboard, reports, coach plan and rooms, AI integration, gamification, backend needs) and the owner's decisions
+(own advanced design; one site and one backend).
+
+| ID | Requirement | Tests | Result |
+|---|---|---|---|
+| R-22 | Global has its own advanced design (not Lite's look), image-led, responsive | TC-MAIN-01, TC-MAIN-14; sideways-scroll check on all 22 Global pages; Lighthouse mobile | Pass |
+| R-23 | Full player card: skill ratings, overall from skill averages, physical profile; unmeasured skills not guessed | TC-MAIN-05; test_full_card_only_rates_what_was_measured; test_physical_profile_validation_and_demo_is_read_only | Pass |
+| R-24 | Psychological traits (motivation, confidence, team spirit, leadership, communication, emotional control) | TC-MAIN-06; test_mindset_reversed_items_stop_agree_with_everything_scoring_100; test_mindset_needs_every_answer_in_range | Pass |
+| R-25 | Reaction and logic tests ("all skills analysis") that can't be faked from the browser | TC-MAIN-06; test_reaction_scores_the_median_and_refuses_impossible_taps; test_logic_is_graded_by_the_server_and_answers_never_sent; test_logic_rejects_a_forged_token; test_logic_questions_are_valid_sequences | Pass |
+| R-26 | Command-centre dashboard: card, progress, quick actions, tasks, reports, badges, notifications | TC-MAIN-04; test_overview_has_everything_the_dashboard_needs | Pass |
+| R-27 | Reports library: search, sort by date or score, filter; single-skill label | TC-MAIN-07 (picker); report list in TC-MAIN-04 | Pass |
+| R-28 | Comparison of two sessions (split view, metric changes, rhythm overlay) | TC-MAIN-07; test_compare_orders_old_to_new_and_reports_changes; test_compare_refuses_other_players_reports | Pass |
+| R-29 | Progress analytics: trend, personal bests, every metric over time, consistency | TC-MAIN-08, TC-MAIN-09; test_progress_trend_and_personal_bests | Pass |
+| R-30 | AI weekly training plans from measured numbers, checked like the coaching | TC-MAIN-10; test_training_plan_is_gated_needs_a_video_and_has_rest_days; test_training_check_rejects_invented_drills_numbers_and_shape; test_training_check_rejects_field_names_read_aloud; test_rule_based_plan_targets_the_weak_spots; test_finishing_every_session_earns_committed | Pass |
+| R-31 | Challenges, badges and milestones (incl. team milestones) | TC-MAIN-11; test_badges_are_earned_once_with_a_notification; test_rejected_videos_earn_nothing; test_team_dashboard_alerts_and_leaderboard | Pass |
+| R-32 | Coach plan: rooms with expiring join codes, roles, tasks with deadlines and notes, hand-ins, coach scores and notes, reminders | TC-MAIN-16, TC-MAIN-17; test_rooms.py (13) | Pass |
+| R-33 | Team dashboard: overview, player profiles, trends, top players, automatic alerts; academy trials with criteria and scouting notes | TC-MAIN-17; test_team_dashboard_alerts_and_leaderboard; test_academy_rooms_check_the_bar_and_keep_scouting_notes | Pass |
+| R-34 | Settings: notifications, plan (test mode), language, privacy | TC-MAIN-12; test_notification_settings_are_respected; test_task_notifications_respect_the_players_settings | Pass |
+| R-35 | AI assistant on every signed-in page, answering Global questions from its FAQ | TC-MAIN-13; test_main_assistant_knows_main_features_and_lite_stays_unchanged | Pass |
+| R-36 | Demo data for both roles (demo player and demo coach) | TC-MAIN-04, TC-MAIN-17; test_demo_coach_and_demo_player_share_a_seeded_room | Pass |
+| R-37 | Same backend for both editions; live database needs no migration | New tables only; all Lite tests still pass (TC-WEB/SMP/AUTH/UPL/PLN/EVT/SUP) | Pass |
+
+### Global run log (local full stack, retries off; whole suite: Lite + Global + region, 45 cases × 3 devices)
+
+| Run | Date | Passed | Failed | Skipped | Duration | Notes |
+|---|---|---|---|---|---|---|
+| 1 | 2026-10-31 | 131 | 0 | 4 | 8.3 min | |
+| 2 | 2026-10-31 | 131 | 0 | 4 | 9.4 min | |
+| 3 | 2026-10-31 | 130 | 1 | 4 | 9.4 min | TC-SMP-03 still queued at 120 s behind other live analyses; test waits now match the page's 180 s fallback; Global sample test desktop-only |
+| 4 | 2026-10-31 | 129 | 0 | 6 | 8.0 min | |
+| 5 | 2026-10-31 | 128 | 1 | 6 | 7.7 min | TC-MAIN-07 (iPhone) click timeout under load; not reproduced in 51 targeted repeats; no API errors in the log |
+| 6 | 2026-10-31 | 129 | 0 | 6 | 6.8 min | |
+| 7 | 2026-10-31 | 129 | 0 | 6 | 8.9 min | |
+| 8 | 2026-10-31 | 127 | 2 | 6 | 15.0 min | TC-UPL-01 (Pixel), TC-MAIN-10: uploads still "Waiting in line" at 120 s on a slow run; local wait raised to 6 min |
+| 9 | 2026-10-31 | 128 | 1 | 6 | 14.3 min | TC-MAIN-06 (iPhone): one slow tap failed the whole reaction test: BUG-24, fixed |
+| 10 | 2026-10-31 | 129 | 0 | 6 | 14.1 min | |
+| 11 | 2026-10-31 | 129 | 0 | 6 | 14.2 min | |
+| **12** | 2026-11-01 | 129 | 0 | 6 | 14.3 min | **three consecutive clean runs on the final build (12–14)** |
+| **13** | 2026-11-01 | 129 | 0 | 6 | 15.6 min | |
+| **14** | 2026-11-01 | 129 | 0 | 6 | 14.9 min | |
+
+Skipped by design: TC-WEB-04 and TC-MAIN-14 on desktop (phone layouts), TC-MAIN-02 and TC-MAIN-10 on phones (one
+real analysis per run). API: 80 passed. CI (Linux): API, frontend lint + build + route check, worker + accuracy
+regression: green. Lighthouse mobile (Global, local build): `/` 90, `/samples` 88, `/login` 96 performance;
+accessibility, best practices and SEO 100; CLS ≤ 0.003.
+
+Not built in this release (documented, not hidden): the federation price-quote chatbot (federations use the contact
+form), multi-language content, SMS, offline analysis, 3D/biomechanics, dribbling and other skills.
 
 ## Run log
 
