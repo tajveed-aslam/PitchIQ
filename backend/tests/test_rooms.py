@@ -165,3 +165,18 @@ def test_coach_can_remove_players_and_players_can_leave(client, worker):
     assert client.post(f"/rooms/{room['id']}/leave", headers=p1).status_code == 204
     assert client.get(f"/rooms/{room['id']}", headers=coach).json()["members"] == []
     assert client.get("/rooms", headers=p1).json()["rooms"] == []
+
+
+def test_demo_coach_and_demo_player_share_a_seeded_room(client, seeded):
+    coach = {"Authorization": f"Bearer {client.post('/auth/demo-coach').json()['access_token']}"}
+    rooms = client.get("/rooms", headers=coach).json()["rooms"]
+    assert {r["kind"] for r in rooms} == {"team", "academy"}
+    team = client.get(f"/rooms/{next(r['id'] for r in rooms if r['kind'] == 'team')}", headers=coach).json()
+    assert len(team["members"]) == 7 and len(team["tasks"]) == 3 and team["alerts"]
+    assert team["team"]["weekly"][-2]["average"] is not None
+
+    player = {"Authorization": f"Bearer {client.post('/auth/demo').json()['access_token']}"}
+    o = client.get("/player/overview", headers=player).json()
+    assert o["tasks"] and o["training"]["done"] == 5
+    assert o["card"]["complete"] == 100 and o["badges"]["earned"] >= 5
+    assert client.post("/auth/login", json={"email": "demo-coach@pitchiq.app", "password": "x" * 8}).status_code == 401

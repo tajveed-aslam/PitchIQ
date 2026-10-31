@@ -187,6 +187,7 @@ def mark_session(plan_id: int, body: SessionDoneIn, user: User = Depends(get_cur
     done = set(p.done or [])
     done.add(body.session) if body.done else done.discard(body.session)
     p.done = sorted(done)  # a new list, so SQLAlchemy sees the JSON change
+    db.flush()
     new = award(db, user)
     db.commit()
     return {**_plan_out(p), "new_badges": new}

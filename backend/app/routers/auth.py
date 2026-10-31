@@ -41,3 +41,13 @@ def demo(db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=503, detail="The demo account isn't set up yet.")
     return TokenOut(access_token=create_access_token(user.id))
+
+
+@router.post("/demo-coach", response_model=TokenOut)
+def demo_coach(db: Session = Depends(get_db)):
+    """Log in as the shared demo coach (Main edition): two seeded rooms with players, tasks and hand-ins."""
+    from ..seed_main import DEMO_COACH_EMAIL
+    user = db.scalar(select(User).where(User.email == DEMO_COACH_EMAIL, User.is_guest.is_(True)))
+    if not user:
+        raise HTTPException(status_code=503, detail="The demo coach isn't set up yet.")
+    return TokenOut(access_token=create_access_token(user.id))
