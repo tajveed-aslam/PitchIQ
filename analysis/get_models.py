@@ -18,6 +18,11 @@ FILES = {
                                   "40338edf5ec70d43e318b0a716a84d4564cd1802759a7a07170c7e43796dbf58"),
     "efficientdet_lite2.tflite": (f"{BASE}/object_detector/efficientdet_lite2/float32/latest/efficientdet_lite2.tflite",
                                   "ad2abbf2b4e10585e15176fd7b5ef03c28dda959ae26fc142549fdd1814db91d"),
+    # 8-bit versions: less memory on the free server (spike 3), PITCHIQ_MODELS=int8.
+    "efficientdet_lite0_int8.tflite": (f"{BASE}/object_detector/efficientdet_lite0/int8/latest/efficientdet_lite0.tflite",
+                                       "0720bf247bd76e6594ea28fa9c6f7c5242be774818997dbbeffc4da460c723bb"),
+    "efficientdet_lite2_int8.tflite": (f"{BASE}/object_detector/efficientdet_lite2/int8/latest/efficientdet_lite2.tflite",
+                                       "b3f50554cb0ea559e90328845f7d9ba4d13c8bff372914d24e06bc8bb72fa896"),
     "pose_landmarker_full.task": (f"{BASE}/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task",
                                   "4eaa5eb7a98365221087693fcc286334cf0858e2eb6e15b506aa4a7ecdcec4ad"),
 }

@@ -6,6 +6,7 @@ Run:  python -u -m analysis.spike.evaluate_juggling [clip ids...] [--contacts] [
 """
 
 import json
+import os
 import pickle
 import sys
 from pathlib import Path
@@ -23,7 +24,8 @@ TOLERANCE = 0.25  # seconds: a detected touch within this of a true touch counts
 
 def tracked(clip_id: str, every: int = 1):
     """Tracker output for a clip, cached. Delete reports/cache after changing the tracker."""
-    path = CACHE / (f"{clip_id}.pkl" if every == 1 else f"{clip_id}-every{every}.pkl")
+    variant = os.environ.get("PITCHIQ_MODELS", "")
+    path = CACHE / (f"{clip_id}{'-every' + str(every) if every != 1 else ''}{'-' + variant if variant else ''}.pkl")
     if path.exists():
         return pickle.loads(path.read_bytes())
     result = track_video(ROOT / "data/raw" / f"{clip_id}.mp4", every=every)

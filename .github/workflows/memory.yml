@@ -10,10 +10,10 @@ jobs:
       fail-fast: false
       matrix:
         opencv: [contrib, headless]
-        detector: [efficientdet_lite2.tflite, efficientdet_lite0.tflite]
+        models: [float32, int8]
     runs-on: ubuntu-latest
     env:
-      PITCHIQ_FULL_DETECTOR: ${{ matrix.detector }}
+      PITCHIQ_MODELS: ${{ matrix.models }}
       OMP_NUM_THREADS: "1"
       OPENBLAS_NUM_THREADS: "1"
     steps:
@@ -28,9 +28,9 @@ jobs:
             pip install -r worker/requirements.txt
           else
             pip install mediapipe==1.2.0 --no-deps
-            pip install "absl-py~=2.3" certifi numpy==2.5.4 "flatbuffers~=25.9" opencv-python-headless==5.0.0.93 fastapi==0.115.6 python-multipart==0.0.20
+            pip install "absl-py~=2.3" certifi numpy==2.5.4 "flatbuffers~=25.9" matplotlib opencv-python-headless==5.0.0.93 fastapi==0.115.6 python-multipart==0.0.20
           fi
-      - run: python -m analysis.get_models efficientdet_lite0.tflite efficientdet_lite2.tflite
+      - run: python -m analysis.get_models efficientdet_lite0.tflite efficientdet_lite2.tflite efficientdet_lite0_int8.tflite efficientdet_lite2_int8.tflite
       - name: Test videos (480p samples, plus 1080p and 4K made from one)
         run: |
           ffmpeg -loglevel error -i frontend/public/samples/juggling-43490.mp4 -vf scale=1920:1080 -c:v libx264 -preset fast -crf 20 -r 30 hd1080.mp4

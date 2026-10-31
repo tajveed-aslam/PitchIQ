@@ -2,7 +2,7 @@
 
 Runs each video in a fresh process (so peaks don't carry over) and prints its peak RSS and touch count.
 Run (Linux):  python -m analysis.spike.memory_check VIDEO [VIDEO...]
-Env: PITCHIQ_FULL_DETECTOR to try one detector model for both searches.
+Env: PITCHIQ_MODELS=int8 for the 8-bit models.
 """
 
 import json
@@ -24,8 +24,8 @@ print(json.dumps({"touches": r["metrics"]["touches"], "verdict": r["quality"]["v
 """
 
 if __name__ == "__main__":
-    detector = os.environ.get("PITCHIQ_FULL_DETECTOR", "efficientdet_lite2.tflite")
+    detector = os.environ.get("PITCHIQ_MODELS", "float32")
     for video in sys.argv[1:]:
         out = subprocess.run([sys.executable, "-c", CHILD, video], capture_output=True, text=True)
         line = out.stdout.strip().splitlines()[-1] if out.stdout.strip() else out.stderr[-400:]
-        print(f"{os.path.basename(video):28} full detector {detector:27} {line}", flush=True)
+        print(f"{os.path.basename(video):28} models {detector:8} {line}", flush=True)
