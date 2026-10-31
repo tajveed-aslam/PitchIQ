@@ -2,8 +2,8 @@
 
 Requirements come from the Lite brief and the approved plan. "Result" is from the local full-stack runs on
 2026-10-30: three consecutive E2E runs (74 passed, 1 skipped by design, 0 failed, 0 flaky, retries off), API tests
-(43 passed), worker tests (6 passed, real pipeline), CI green on Linux, Lighthouse mobile. Live-site results are
-added after deployment.
+(43 passed), worker tests (6 passed, real pipeline), CI green on Linux, Lighthouse mobile. The live-site run
+(2026-10-31) passed too, with the server's uptime unbroken and peak memory 372 of 512 MB.
 
 | ID | Requirement | Tests | Result |
 |---|---|---|---|
@@ -39,6 +39,7 @@ added after deployment.
 | API | 2026-10-30 | pytest | 43 | 0 | 0 | – | 26 s |
 | Worker | 2026-10-30 | pytest, real pipeline | 6 | 0 | 0 | – | 57 s |
 | CI | 2026-10-30 | GitHub Actions (Linux) | 3 jobs | 0 | – | – | – |
+| **E2E live** | 2026-10-31 | 27 cases × 3 devices against https://pitch-iq-psi.vercel.app + Render API | 80 | 0 | 1 | 0 | 6.5 min |
 
 Before the passing runs, the first E2E run found 9 failures (3 cases × 3 devices): BUG-10 (two drills) and BUG-11
 (contrast). Lighthouse then found a layout shift on login (BUG-12). All fixed; see [BUG_REPORTS](BUG_REPORTS.md).
@@ -49,3 +50,7 @@ Before the passing runs, the first E2E run found 9 failures (3 cases × 3 device
 | `/samples` | 88 | 100 | 100 | 100 | 3.7 s | 0.041 |
 | `/login` (after BUG-12 fix) | 97 | 100 | 100 | 100 | – | 0.009 |
 | `/signup` | 95 | – | – | – | – | 0 |
+
+Live runs before the final one found BUG-13 (reports pages missing from git), BUG-14 (out-of-memory restarts:
+threads, 32-bit models, GUI OpenCV) and BUG-15 (the Gemini SDK loading at the memory peak). The final live run was
+clean.
