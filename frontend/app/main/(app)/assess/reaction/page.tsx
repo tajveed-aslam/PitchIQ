@@ -1,7 +1,9 @@
 "use client";
 
 // Reaction test: the panel goes gold after a random 1.5-4 s; tap (or press Space) as fast as you can, 5 times.
-// Tapping early is a false start: counted, and that round restarts. Timing uses performance.now() on pointerdown.
+// Tapping early is a false start: counted, and that round restarts. A tap slower than the server's limit (1.5 s:
+// distracted, not a reaction) also repeats the round instead of failing the whole test at the end.
+// Timing uses performance.now() on pointerdown.
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Loader2, RotateCcw } from "lucide-react";
@@ -9,7 +11,8 @@ import { ErrorNote, PageHeader, Panel } from "@/components/main/ui";
 import { api } from "@/lib/api";
 
 const TRIALS = 5;
-type Phase = "idle" | "wait" | "go" | "early" | "saving" | "done";
+const SLOWEST_MS = 1500; // matches the API (services/assessments.py)
+type Phase = "idle" | "wait" | "go" | "early" | "slow" | "saving" | "done";
 interface Result { score: number; detail: { median_ms: number; best_ms: number; times_ms: number[]; false_starts: number }; new_badges: string[] }
 
 export default function Reaction() {
@@ -44,7 +47,7 @@ export default function Reaction() {
   }
 
   function tap() {
-    if (phase === "idle" || phase === "early") return arm();
+    if (phase === "idle" || phase === "early" || phase === "slow") return arm();
     if (phase === "wait") {
       clearTimeout(timer.current);
       setEarly((n) => n + 1);
@@ -52,6 +55,7 @@ export default function Reaction() {
     }
     if (phase === "go") {
       const ms = Math.round(performance.now() - shownAt.current);
+      if (ms > SLOWEST_MS) return setPhase("slow");
       const all = [...times, ms];
       setTimes(all);
       if (all.length >= TRIALS) return save(all, early);
@@ -67,7 +71,7 @@ export default function Reaction() {
     setPhase("idle");
   }
 
-  const big = phase === "go" ? "Tap!" : phase === "wait" ? "Wait for gold…" : phase === "early" ? "Too soon! Tap to try that round again" : phase === "saving" ? "Saving…" : times.length ? "Tap to continue" : "Tap to start";
+  const big = phase === "go" ? "Tap!" : phase === "wait" ? "Wait for gold…" : phase === "early" ? "Too soon! Tap to try that round again" : phase === "slow" ? "Too slow: tap to try that round again" : phase === "saving" ? "Saving…" : times.length ? "Tap to continue" : "Tap to start";
   return (
     <>
       <PageHeader eyebrow="Test · reaction" title="How fast do you react?" sub={`Tap the panel the moment it turns gold. ${TRIALS} rounds; we use your median.`}
@@ -79,7 +83,7 @@ export default function Reaction() {
             disabled={phase === "saving"} data-testid="reaction-pad" data-phase={phase}
             className={`flex h-[52vh] min-h-[280px] w-full select-none flex-col items-center justify-center gap-3 rounded-3xl border text-center transition-colors duration-75 ${
               phase === "go" ? "border-accent-300 bg-gradient-to-br from-accent-300 to-accent-500 text-ink-950"
-              : phase === "early" ? "border-flare/40 bg-flare/15 text-white"
+              : phase === "early" || phase === "slow" ? "border-flare/40 bg-flare/15 text-white"
               : phase === "wait" ? "border-white/10 bg-ink-800 text-chalk" : "glass text-white"}`}>
             {phase === "saving" && <Loader2 className="h-6 w-6 animate-spin" aria-hidden="true" />}
             <span className="font-display text-3xl font-semibold sm:text-5xl" aria-live="assertive">{big}</span>

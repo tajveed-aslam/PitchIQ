@@ -89,18 +89,22 @@ test.describe("Main edition: player", () => {
     await expect(page.getByTestId("mindset-result")).toContainText("Team spirit");
 
     await page.goto("/assess/reaction");
-    const pad = page.getByTestId("reaction-pad");
     await page.waitForLoadState("networkidle");
-    for (let round = 0; round < 5; round++) {
-      // Start the round; retried in case the first tap lands before the page is interactive.
-      await expect(async () => {
-        if ((await pad.getAttribute("data-phase")) !== "wait") await pad.click();
-        await expect(pad).toHaveAttribute("data-phase", "wait", { timeout: 1000 });
-      }).toPass({ timeout: 15_000 });
-      await expect(pad).toHaveAttribute("data-phase", "go", { timeout: 10_000 });
-      await page.waitForTimeout(250); // a human-speed tap: the server refuses anything under 100 ms
-      await pad.click();
-      if (round < 4) await expect(pad).toHaveAttribute("data-phase", /wait|go/);
+    // Play it like a person: start a round, wait for gold, tap ~250 ms later (the server refuses < 100 ms). A round
+    // the page repeats (tap too early or too slow on a busy machine) is just played again.
+    const pad = page.getByTestId("reaction-pad");
+    const result = page.getByTestId("reaction-result");
+    const deadline = Date.now() + 90_000;
+    while (!(await result.isVisible()) && Date.now() < deadline) {
+      const phase = await pad.getAttribute("data-phase", { timeout: 1000 }).catch(() => null); // the pad goes when the result shows
+      if (phase === "go") {
+        await page.waitForTimeout(250);
+        await pad.click();
+      } else if (phase === "idle" || phase === "early" || phase === "slow") {
+        await pad.click();
+      } else {
+        await page.waitForTimeout(100); // wait / saving
+      }
     }
     await expect(page.getByTestId("reaction-result")).toContainText("ms");
 
