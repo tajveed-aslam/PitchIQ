@@ -19,6 +19,7 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 | BUG-12 | Low | Performance | Lighthouse mobile | Fixed |
 | BUG-13 | Critical | Deployment | Owner, on the live site | Fixed |
 | BUG-14 | Critical | Analysis on the free server | Owner, on the live site | Fixed |
+| BUG-15 | High | AI coaching on the free server | Live E2E run (server uptime reset mid-run) | Fixed |
 
 ---
 
@@ -123,3 +124,13 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
   headless OpenCV; videos above 720p refused with a data-saver hint; analysis at low CPU priority. Peak at 480p on
   Linux: 522 → 401 MB. The health check now reports peak memory and uptime.
 - **Guard:** `.github/workflows/memory.yml` (Linux memory per configuration), `test_oversized_video_is_refused`.
+
+### BUG-15: The server still restarts when a trial user's report gets AI coaching
+- **Steps:** live E2E: a trial user (coaching included) uploads a video.
+- **Expected:** report with coaching.
+- **Actual:** the server restarted during the run (health check uptime reset); memory tests on a Skill Analysis
+  account (no coaching) had passed.
+- **Cause:** the google-genai SDK (~46 MB on Windows, more on Linux) was imported the first time a report needed
+  coaching, right after the analysis, at the memory peak.
+- **Fix:** Gemini is called through its REST API with httpx (already loaded); the SDK is no longer installed.
+- **Guard:** live memory check with a coaching plan; API tests for the coaching fallbacks.

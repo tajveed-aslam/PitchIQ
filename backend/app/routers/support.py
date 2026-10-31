@@ -14,6 +14,7 @@ from ..config import settings
 from ..dependencies import get_db
 from ..models import SupportMessage
 from ..schemas import ChatIn, ChatOut, SupportIn
+from ..services import gemini
 from ..services.coaching import run_with_timeout
 
 router = APIRouter()
@@ -88,19 +89,9 @@ def contact(body: SupportIn, db: Session = Depends(get_db)):
 
 
 def _ask_gemini(message: str, history: list[dict]) -> str:
-    from google import genai
-    from google.genai import types
-
-    client = genai.Client(api_key=settings.gemini_api_key)
-    turns = [types.Content(role="user" if h.get("role") == "user" else "model",
-                           parts=[types.Part(text=str(h.get("text", ""))[:500])])
+    turns = [{"role": "user" if h.get("role") == "user" else "model", "text": str(h.get("text", ""))[:500]}
              for h in history[-6:] if h.get("text")]
-    resp = client.models.generate_content(
-        model=settings.gemini_model,
-        contents=[*turns, types.Content(role="user", parts=[types.Part(text=message)])],
-        config=types.GenerateContentConfig(system_instruction=SYSTEM, temperature=0.3, max_output_tokens=300),
-    )
-    return (resp.text or "").strip()
+    return gemini.generate(SYSTEM, [*turns, {"role": "user", "text": message}], temperature=0.3, max_tokens=300)
 
 
 @router.post("/chat", response_model=ChatOut)

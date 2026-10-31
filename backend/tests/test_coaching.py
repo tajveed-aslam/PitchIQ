@@ -37,8 +37,7 @@ def test_drills_must_come_from_the_library():
 
 
 def test_contradicting_the_measured_rhythm_or_control_is_caught():
-    f = facts(GOOD_REPORT)  # this sample: uneven rhythm, controlled
-    assert f["rhythm"] == "uneven" and f["control"] == "controlled"
+    f = {**facts(GOOD_REPORT), "rhythm": "uneven", "control": "controlled"}  # set explicitly: independent of samples
     assert contradictions(make(strengths=["You kept a steady rhythm."]), f)
     assert contradictions(make(strengths=["You kept a steady pace."]), f)
     assert contradictions(make(focus=["Your loose control lets the ball fly."]), f)
@@ -46,10 +45,10 @@ def test_contradicting_the_measured_rhythm_or_control_is_caught():
 
 
 def test_check_lists_every_problem():
-    f = facts(GOOD_REPORT)
-    bad = make(summary="You hit 99 touches with a steady rhythm.", drills=("Moon kicks",))
+    f = {**facts(GOOD_REPORT), "rhythm": "uneven"}
+    bad = make(summary="You hit 250 touches with a steady rhythm.", drills=("Moon kicks",))
     problems = check(bad, f)
-    assert any("99" in p for p in problems) and any("rhythm" in p for p in problems)
+    assert any("250" in p for p in problems) and any("rhythm" in p for p in problems)
     assert any("Moon kicks" in p for p in problems)
 
 
@@ -85,9 +84,9 @@ def test_grounded_ai_reply_is_used(monkeypatch):
 
 def test_hallucinating_ai_reply_falls_back(monkeypatch):
     monkeypatch.setattr(coaching.settings, "gemini_api_key", "test-key")
-    monkeypatch.setattr(coaching, "_ask_gemini", lambda f, p: make(summary="Your kicks reach 41 km/h."))
+    monkeypatch.setattr(coaching, "_ask_gemini", lambda f, p: make(summary="Your kicks reach 87 km/h."))  # a number the report doesn't contain
     out = coaching.generate(GOOD_REPORT)
-    assert out["source"] == "rules" and "41" in out["note"] and out["drills"]
+    assert out["source"] == "rules" and "87" in out["note"] and out["drills"]
 
 
 def test_ai_error_falls_back(monkeypatch):

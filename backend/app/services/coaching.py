@@ -20,6 +20,7 @@ from concurrent.futures import TimeoutError as FutureTimeout
 from pydantic import BaseModel, Field
 
 from ..config import settings
+from . import gemini
 
 TIMEOUT_S = 25
 
@@ -212,11 +213,22 @@ SYSTEM = (
 )
 
 
-def _ask_gemini(f: dict, profile: dict) -> Coaching:
-    from google import genai
-    from google.genai import types
+# Gemini's response schema (OpenAPI subset): the shape of Coaching.
+_SCHEMA = {
+    "type": "OBJECT",
+    "properties": {
+        "summary": {"type": "STRING"},
+        "strengths": {"type": "ARRAY", "items": {"type": "STRING"}},
+        "focus": {"type": "ARRAY", "items": {"type": "STRING"}},
+        "drills": {"type": "ARRAY", "items": {"type": "OBJECT", "properties": {
+            "name": {"type": "STRING"}, "why": {"type": "STRING"}}, "required": ["name", "why"]}},
+        "next_goal": {"type": "STRING"},
+    },
+    "required": ["summary", "strengths", "focus", "drills", "next_goal"],
+}
 
-    client = genai.Client(api_key=settings.gemini_api_key)
+
+def _ask_gemini(f: dict, profile: dict) -> Coaching:
     library = {name: d["for"] for name, d in DRILLS.items()}
     prompt = (
         "Measured facts about this juggling session (JSON):\n" + json.dumps(f) +
@@ -224,13 +236,8 @@ def _ask_gemini(f: dict, profile: dict) -> Coaching:
         "\nDrill library (name: what it trains): " + json.dumps(library) +
         "\nWrite: summary (1-2 sentences), 2 strengths, 2 things to focus on, 3 drills (name, why), next_goal."
     )
-    resp = client.models.generate_content(
-        model=settings.gemini_model,
-        contents=prompt,
-        config=types.GenerateContentConfig(system_instruction=SYSTEM, temperature=0.4,
-                                           response_mime_type="application/json", response_schema=Coaching),
-    )
-    return Coaching.model_validate(json.loads(resp.text))
+    text = gemini.generate(SYSTEM, [{"role": "user", "text": prompt}], schema=_SCHEMA, temperature=0.4)
+    return Coaching.model_validate(json.loads(text))
 
 
 _pool = ThreadPoolExecutor(max_workers=4)
