@@ -110,3 +110,9 @@ def test_every_sample_report_fits_the_contract(sample):
     out = rule_based(r)
     assert out["summary"] and len(out["drills"]) == 3  # always three drills (E2E found a report with two)
     assert len({d["name"] for d in out["drills"]}) == 3
+
+
+def test_field_names_read_aloud_are_caught():
+    f = facts(GOOD_REPORT)
+    c = make(goal=f"Reach your next_target_touches of {f['next_target_touches']}.")
+    assert "field name in text: next_target_touches" in check(c, f)

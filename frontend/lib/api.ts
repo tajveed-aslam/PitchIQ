@@ -103,7 +103,7 @@ export interface User {
   preferred_foot: string | null;
 }
 
-export type PlanId = "trial" | "skill" | "coach" | "events";
+export type PlanId = "trial" | "skill" | "coach" | "events" | "team";
 
 export interface Allowance {
   plan: PlanId;
@@ -113,7 +113,7 @@ export interface Allowance {
   remaining: number;
   period: "today" | "trial" | "month";
   trial_expired: boolean;
-  features: { coaching: boolean; progress: boolean; events: boolean };
+  features: { coaching: boolean; progress: boolean; events: boolean; training?: boolean; rooms?: boolean };
 }
 
 export interface Drill {

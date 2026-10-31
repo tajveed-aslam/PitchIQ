@@ -27,8 +27,17 @@ def thumbnail_sig(analysis_id: int) -> str:
     return hmac.new(settings.secret_key.encode(), f"thumb:{analysis_id}".encode(), hashlib.sha256).hexdigest()[:24]
 
 
-def notify(db: Session, user: User, text: str, link: str | None = None):
+def notify(db: Session, user: User, text: str, link: str | None = None, kind: str | None = None):
+    """kind: "reports" | "badges" | "tasks" -- skipped if the player turned that kind off in Settings (Main)."""
+    if kind and not wants(db, user, kind):
+        return
     db.add(Notification(user_id=user.id, text=text, link=link))
+
+
+def wants(db: Session, user: User, kind: str) -> bool:
+    from ..models import PlayerProfile
+    p = db.get(PlayerProfile, user.id)
+    return not (p and p.prefs and p.prefs.get(kind) is False)
 
 
 def start_upload(db: Session, user: User, data: bytes, filename: str, title: str | None) -> Analysis:
@@ -66,12 +75,15 @@ def finish(db: Session, a: Analysis, report: dict, thumbnail_b64: str | None):
     if report["quality"]["verdict"] == "reject":
         a.status = "rejected"
         notify(db, a.user, f"“{a.title}” needs re-filming: {report['quality']['issues'][0]['message']}",
-               f"/reports/{a.id}")
+               f"/reports/{a.id}", kind="reports")
     else:
         a.status = "done"
         if plan_of(a.user).coaching or a.user.is_guest:
             a.coaching = coaching.generate(report, profile_for_coaching(a.user))
-        notify(db, a.user, f"Your report for “{a.title}” is ready: {a.touches} touches.", f"/reports/{a.id}")
+        notify(db, a.user, f"Your report for “{a.title}” is ready: {a.touches} touches.", f"/reports/{a.id}", kind="reports")
+        db.flush()
+        from .badges import award  # badges imports notify from here
+        award(db, a.user)
 
 
 def refresh(db: Session, a: Analysis) -> Analysis:

@@ -2,10 +2,9 @@ import Link from "next/link";
 import { EDITIONS, type Edition } from "@/config/editions";
 import { AuthNav } from "./AuthNav";
 import { Logo } from "./Logo";
-import { RegionSwitch } from "./RegionSwitch";
 
-/** minimal: logo and region switch only (the Global edition's coming-soon page). */
-export function SiteHeader({ edition, minimal = false }: { edition: Edition; minimal?: boolean }) {
+/** Lite's header (the Global edition has its own: components/main/Site.tsx). */
+export function SiteHeader({ edition }: { edition: Edition }) {
   const e = EDITIONS[edition];
   return (
     <header className="absolute inset-x-0 top-0 z-30">
@@ -18,7 +17,7 @@ export function SiteHeader({ edition, minimal = false }: { edition: Edition; min
             </span>
           )}
         </Link>
-        {minimal ? <RegionSwitch /> : <AuthNav />}
+        <AuthNav />
       </div>
     </header>
   );
