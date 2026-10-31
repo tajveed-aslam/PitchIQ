@@ -1,5 +1,5 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
-import { ANALYSIS_TIMEOUT, API_URL, BASE_URL } from "../playwright.config";
+import { ANALYSIS_TIMEOUT, API_URL, BASE_URL, SAMPLE_TIMEOUT } from "../playwright.config";
 import { expectAccessible, isPhone, SAMPLE_VIDEO, signedUp, uniqueEmail } from "./helpers";
 
 // The Global (Main) edition: its own pages and design at the same URLs, chosen by the region cookie.
@@ -31,12 +31,14 @@ test.describe("Main edition: public pages", () => {
     await expectAccessible(page);
   });
 
-  test("TC-MAIN-02 sample analysis shows the report next to the hand count", async ({ page }) => {
+  test("TC-MAIN-02 sample analysis shows the report next to the hand count", async ({ page }, info) => {
+    test.skip(isPhone(info.project.name), "the server analyses one video at a time; Lite's sample tests cover phones");
+    test.setTimeout(SAMPLE_TIMEOUT + 60_000);
     await global(page);
     await page.goto("/samples");
     await page.getByTestId("analyse-juggling-43487").click();
     const sample = page.getByTestId("sample-juggling-43487");
-    await expect(sample.getByTestId("report-view")).toBeVisible({ timeout: ANALYSIS_TIMEOUT });
+    await expect(sample.getByTestId("report-view")).toBeVisible({ timeout: SAMPLE_TIMEOUT });
     await expect(sample.getByTestId("touches")).toHaveText(/\d+/);
     await expect(sample.getByText(/hand count 39/)).toBeVisible();
   });

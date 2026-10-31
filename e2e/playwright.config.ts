@@ -8,6 +8,9 @@ export const API_URL = process.env.API_URL || "http://localhost:8010";
 // LIVE=1 when testing the deployed site: the free server analyses at ~8x video length, one video at a time.
 export const LIVE = !!process.env.LIVE;
 export const ANALYSIS_TIMEOUT = LIVE ? 600_000 : 120_000;
+// Sample pages in live mode fall back to the stored result after 180 s (SampleCard / SampleRunner), and the server
+// analyses one video at a time, so a sample run queued behind others can legitimately take that long.
+export const SAMPLE_TIMEOUT = 200_000;
 
 export default defineConfig({
   testDir: "./tests",
