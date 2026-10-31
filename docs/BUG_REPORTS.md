@@ -17,6 +17,7 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 | BUG-10 | Low | AI coaching | E2E (TC-AUTH-05) | Fixed |
 | BUG-11 | Medium | Accessibility | E2E axe checks | Fixed |
 | BUG-12 | Low | Performance | Lighthouse mobile | Fixed |
+| BUG-13 | Critical | Deployment | Owner, on the live site | Fixed |
 
 ---
 
@@ -98,3 +99,14 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 - **Actual:** 0.178: the form (inside a Suspense boundary for the `?next=` parameter) rendered empty first, then
   pushed the page down.
 - **Fix:** fixed-height placeholders while forms load (login, sign-up, profile). After: CLS 0.009, performance 97.
+
+### BUG-13: Live site: /reports and every report page return 404
+- **Steps:** on https://pitch-iq-psi.vercel.app, sign up and open Reports.
+- **Expected:** the reports list.
+- **Actual:** 404. Locally everything worked and all tests passed.
+- **Cause:** the root `.gitignore` rule `reports/` (meant for the analysis output folder) also matched
+  `frontend/app/[edition]/reports/` after the pages moved under `[edition]`, so the new files were silently never
+  committed. Local runs used the files on disk; the deployed build came from git.
+- **Fix:** rule anchored to the repo root (`/reports/`); pages committed.
+- **Guard:** CI runs `frontend/scripts/check-routes.mjs` after the build: every page of both editions must be in it.
+- **Lesson:** tests on a working copy can't see what git leaves out; the build in CI (clean checkout) now checks routes.

@@ -39,8 +39,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
-        env:
-          NEXT_PUBLIC_EDITION: lite
+      - run: node scripts/check-routes.mjs  # every page made it into the build (BUG-13)
 
   worker:
     name: Analysis worker + accuracy regression (real pipeline)
