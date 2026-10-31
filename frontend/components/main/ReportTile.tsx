@@ -10,11 +10,12 @@ export function StatusPill({ a }: { a: AnalysisSummary }) {
   return null;
 }
 
-/** A report as a thumbnail card. `href` lets coaches link to a player's report inside their room. */
-export function ReportTile({ a, href, compact = false }: { a: AnalysisSummary; href?: string; compact?: boolean }) {
+/** A report as a thumbnail card. `href` lets coaches link to a player's report inside their room; href={null}
+ * renders it without a link (inside another control, e.g. picking reports to compare). */
+export function ReportTile({ a, href, compact = false }: { a: AnalysisSummary; href?: string | null; compact?: boolean }) {
   const thumb = thumbUrl(a);
-  return (
-    <Link href={href ?? `/reports/${a.id}`} className="glass glass-hover group block overflow-hidden !rounded-2xl" data-testid="report-tile">
+  const body = (
+    <>
       <div className={`relative ${compact ? "aspect-[16/9]" : "aspect-video"} bg-ink-800`}>
         {thumb ? (
           // eslint-disable-next-line @next/next/no-img-element -- signed API URL, not a static asset
@@ -34,6 +35,10 @@ export function ReportTile({ a, href, compact = false }: { a: AnalysisSummary; h
         <p className="truncate text-sm font-medium text-white">{a.title}</p>
         <p className="text-xs text-chalk/50">{new Date(a.created_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
       </div>
-    </Link>
+    </>
   );
+  const cls = "glass glass-hover group block overflow-hidden !rounded-2xl";
+  return href === null
+    ? <div className={cls} data-testid="report-tile">{body}</div>
+    : <Link href={href ?? `/reports/${a.id}`} className={cls} data-testid="report-tile">{body}</Link>;
 }

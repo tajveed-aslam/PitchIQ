@@ -78,7 +78,7 @@ def award(db: Session, user: User) -> list[str]:
     new = sorted(earned_codes(db, user) - have)
     for code in new:
         db.add(Badge(user_id=user.id, code=code))
-        notify(db, user, f"Badge earned: {BADGES[code]['name']}. {BADGES[code]['text']}", "/challenges")
+        notify(db, user, f"Badge earned: {BADGES[code]['name']}. {BADGES[code]['text']}", "/challenges", kind="badges")
     return new
 
 

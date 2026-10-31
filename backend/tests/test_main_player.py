@@ -248,3 +248,12 @@ def test_main_assistant_knows_main_features_and_lite_stays_unchanged(client):
     assert not any("room" in f["q"].lower() for f in lite_faq)
     plans = next(f for f in main_faq if f["q"] == "What plans are there?")
     assert "Coach (rooms" in plans["a"] and sum(f["q"] == "What plans are there?" for f in main_faq) == 1
+
+
+def test_notification_settings_are_respected(client, worker):
+    h = signup(client)
+    client.put("/player/profile", headers=h, json={"prefs": {"tasks": True, "reports": False, "badges": False}})
+    analysed(client, worker, h)
+    texts = [n["text"] for n in client.get("/me/notifications", headers=h).json()]
+    assert not any("is ready" in t or "Badge earned" in t for t in texts)
+    assert client.get("/player/profile", headers=h).json()["prefs"]["reports"] is False

@@ -12,10 +12,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..dependencies import get_current_user, get_db
-from ..models import Analysis, Notification, PlayerProfile, Room, RoomMember, Submission, Task, User
+from ..models import Analysis, Notification, Room, RoomMember, Submission, Task, User
 from ..plans import plan_of
 from ..schemas import JoinIn, ReviewIn, RoomIn, ScoutIn, SubmitIn, TaskIn
-from ..services.analyses import notify
+from ..services.analyses import notify, wants
 from ..services.badges import award
 from ..services.card import full_card
 from .analyses import detail, summary
@@ -41,11 +41,6 @@ def _new_code(db: Session) -> str:
         code = "".join(secrets.choice(CODE_ALPHABET) for _ in range(6))
         if not db.scalar(select(Room.id).where(Room.join_code == code)):
             return code
-
-
-def _wants(db: Session, user: User, kind: str) -> bool:
-    p = db.get(PlayerProfile, user.id)
-    return not (p and p.prefs and p.prefs.get(kind) is False)
 
 
 def _room(db: Session, room_id: int) -> Room:
@@ -366,7 +361,7 @@ def create_task(room_id: int, body: TaskIn, user: User = Depends(get_current_use
     db.add(t)
     db.flush()
     for m in r.members:
-        if body.assignee_id in (None, m.user_id) and _wants(db, m.user, "tasks"):
+        if body.assignee_id in (None, m.user_id) and wants(db, m.user, "tasks"):
             notify(db, m.user, f"New task from {user.name}: {t.title} (due {due:%d %b}).", f"/rooms/{r.id}")
     db.commit()
     return {"id": t.id}
@@ -415,7 +410,7 @@ def review(submission_id: int, body: ReviewIn, user: User = Depends(get_current_
         raise HTTPException(status_code=404, detail="Submission not found")
     s.coach_score, s.coach_note, s.reviewed_at = body.score, (body.note or "").strip() or None, _now()
     player = db.get(User, s.user_id)
-    if player and _wants(db, player, "tasks"):
+    if player and wants(db, player, "tasks"):
         notify(db, player, f"Coach feedback on “{s.task.title}”: {body.score}/100.", f"/rooms/{s.task.room_id}")
     db.commit()
     return {"ok": True}
@@ -435,7 +430,7 @@ def my_open_tasks(db: Session, user: User) -> list[dict]:
             due = _aware(t.due_at)
             soon = _now() <= due <= _now() + timedelta(hours=REMIND_HOURS)
             link = f"/rooms/{r.id}?task={t.id}"
-            if soon and _wants(db, user, "tasks") and not db.scalar(select(Notification.id).where(
+            if soon and wants(db, user, "tasks") and not db.scalar(select(Notification.id).where(
                     Notification.user_id == user.id, Notification.link == link)):
                 notify(db, user, f"Reminder: “{t.title}” is due {due:%a %d %b, %H:%M} UTC.", link)
             out.append({"id": t.id, "room_id": r.id, "room": r.name, "title": t.title, "due_at": due.isoformat(),
