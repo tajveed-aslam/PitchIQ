@@ -74,6 +74,16 @@ def video_seconds(path: Path) -> float:
         cap.release()
 
 
+def _lower_priority():
+    """Run the analysis at low CPU priority. When it shares a small server with the API (Render free: 0.1 CPU), API
+    requests then go first instead of waiting behind the analysis (found by live E2E: a plan switch took over 15 s
+    during an upload). On Linux, nice is per thread and inherited by the threads OpenCV/TFLite start from here."""
+    try:
+        os.setpriority(os.PRIO_PROCESS, threading.get_native_id(), 15)
+    except (AttributeError, OSError):  # Windows has no setpriority; nothing to do
+        pass
+
+
 class JobStore:
     def __init__(self):
         self._jobs: dict[str, Job] = {}
@@ -106,6 +116,7 @@ class JobStore:
         return job
 
     def _run(self, job: Job, path: Path, delete: bool):
+        _lower_priority()
         try:
             job.status = "processing"
             seconds = video_seconds(path)

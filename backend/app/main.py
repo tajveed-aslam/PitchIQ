@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,4 +29,5 @@ app.include_router(support.router, prefix="/support", tags=["support"])
 
 @app.get("/")
 def health():
-    return {"status": "ok", "app": "PitchIQ API", "worker": "remote" if settings.worker_url else "in-process"}
+    return {"status": "ok", "app": "PitchIQ API", "worker": "remote" if settings.worker_url else "in-process",
+            "version": os.environ.get("RENDER_GIT_COMMIT", "local")[:7]}
