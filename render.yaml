@@ -7,8 +7,8 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     plan: free
-    # Same region as the Neon database (AWS eu-central-1) so API <-> DB calls stay fast.
-    region: frankfurt
+    # Same region as the Neon database (AWS us-east-2, Ohio) so API <-> DB calls stay fast.
+    region: ohio
     healthCheckPath: /
     envVars:
       - key: DATABASE_URL
