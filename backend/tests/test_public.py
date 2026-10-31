@@ -59,3 +59,10 @@ def test_faq_contact_and_chat_fallback(client):
     assert r["source"] == "faq" and "camera" in r["reply"]
     r = client.post("/support/chat", json={"message": "Write me a poem about cats"}).json()
     assert "I can help with PitchIQ" in r["reply"]
+
+
+def test_stored_sample_coaching(client):
+    r = client.get("/samples/juggling-43487/coaching")
+    assert r.status_code == 200 and r.json()["coaching"]["source"] == "rules" and len(r.json()["coaching"]["drills"]) == 3
+    assert client.get("/samples/juggling-43513/coaching").json() == {"coaching": None}  # rejected: no coaching
+    assert client.get("/samples/nope/coaching").status_code == 404

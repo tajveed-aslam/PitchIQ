@@ -43,7 +43,11 @@ def assemble(dest: Path):
     for clip in (ROOT / "frontend/public/samples").glob("*.mp4"):
         shutil.copy2(clip, samples / clip.name)
     shutil.copy2(ROOT / "worker/Dockerfile", dest / "Dockerfile")
-    (dest / "README.md").write_text(README, encoding="utf-8")
+    (dest / "README.md").write_bytes(README.encode("utf-8"))
+    # Windows checkouts can have CRLF line endings; a Dockerfile RUN line ending in "\\\r" breaks the Linux build.
+    for f in dest.rglob("*"):
+        if f.is_file() and (f.suffix in {".py", ".txt", ".md"} or f.name == "Dockerfile"):
+            f.write_bytes(f.read_bytes().replace(b"\r\n", b"\n"))
 
 
 def main():

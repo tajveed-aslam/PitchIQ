@@ -13,15 +13,18 @@ Two editions from one codebase: **Lite** (built first, for players on slow and e
 
 ```
  Phone ──(data saver: WebCodecs → 480p MP4)──► Next.js (Vercel) ──► FastAPI (Render) ──► Neon Postgres
-                                                                        │   ▲ polls
-                                                                        ▼   │
-                                                      Analysis worker (Hugging Face Space)
-                                                      MediaPipe EfficientDet + our tracking & counting
+                                                                        │
+                                                       analysis in the API process, one job at a time:
+                                                       MediaPipe EfficientDet + our tracking & counting
                                                                         │ report (JSON, schema v1)
                                                                         ▼
-                                                      Gemini (flash-lite) writes coaching FROM the numbers,
-                                                      checked; rule-based fallback
+                                                       Gemini (flash-lite) writes coaching FROM the numbers,
+                                                       checked; rule-based fallback
 ```
+
+On the free Render plan (0.1 CPU) an analysis takes about 10× the video's length (2 minutes for a 13 s clip), so
+videos are limited to 60 s and the sample library shows pre-computed results. The analysis can also run as a
+separate service (`worker/`, set `WORKER_URL`) on a host with more CPU.
 
 1. **Quality check:** background optical flow + RANSAC detects a moving camera; the video is rejected rather than
    miscounted.
@@ -51,7 +54,7 @@ list · plans with allowances (test mode) · monthly challenge leaderboard · he
 | Folder | What |
 |---|---|
 | `analysis/` | Computer vision: tracking, touch counting, camera motion, report builder, model download, spikes |
-| `worker/` | HTTP service around the analysis (jobs, limits), Dockerfile and Space deploy script |
+| `worker/` | Analysis jobs (one at a time, limits); runs inside the API, or as its own HTTP service |
 | `backend/` | FastAPI API: auth, profile, plans, analysis jobs, coaching, events, support, seed data |
 | `frontend/` | Next.js 14 + Tailwind; `NEXT_PUBLIC_EDITION=lite|main` picks the edition |
 | `e2e/` | Playwright end-to-end and accessibility tests |
@@ -87,10 +90,12 @@ Test plan, cases, traceability and results: [docs/TEST_PLAN.md](docs/TEST_PLAN.m
 
 ## Deploy
 
-- **API:** Render Blueprint (`render.yaml`, Docker, Frankfurt). Env: `DATABASE_URL` (Neon), `WORKER_URL`,
-  `WORKER_KEY`, `GEMINI_API_KEY`, `FRONTEND_ORIGINS`.
-- **Worker:** Hugging Face Space (Docker): `HF_TOKEN=… HF_SPACE=<user>/pitchiq-worker WORKER_KEY=… python -m worker.deploy_space`.
+- **API + analysis:** Render Blueprint (`render.yaml`, root `Dockerfile`, Frankfurt, free plan). Env:
+  `DATABASE_URL` (Neon), `GEMINI_API_KEY`, `FRONTEND_ORIGINS`; limits `MAX_UPLOAD_MB=25`, `MAX_VIDEO_SECONDS=60`.
+  Measured peak memory during an analysis: ~410 MB of the 512 MB.
 - **Web:** two Vercel projects from `frontend/` (`NEXT_PUBLIC_EDITION=lite` and `main`, `NEXT_PUBLIC_API_URL`).
+- **Optional separate worker:** `worker/Dockerfile` + `python -m worker.deploy_space` (Hugging Face Docker Spaces
+  now need a paid plan).
 
 ## Credits
 

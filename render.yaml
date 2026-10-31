@@ -1,10 +1,11 @@
-# Render Blueprint for the PitchIQ API. Secrets marked sync: false are entered in the Render dashboard.
+# Render Blueprint for the PitchIQ API. The video analysis runs inside the API (free plan: 0.1 CPU, 512 MB),
+# so analyses take a few minutes and run one at a time. Secrets marked sync: false are entered in the dashboard.
 services:
   - type: web
     name: pitchiq-api
     runtime: docker
-    rootDir: backend
     dockerfilePath: ./Dockerfile
+    dockerContext: .
     plan: free
     # Same region as the Neon database (AWS eu-central-1) so API <-> DB calls stay fast.
     region: frankfurt
@@ -16,11 +17,13 @@ services:
         generateValue: true
       - key: FRONTEND_ORIGINS
         sync: false # both Vercel URLs, comma-separated (Lite and Main editions)
-      - key: WORKER_URL
-        sync: false # https://<hf-user>-pitchiq-worker.hf.space
-      - key: WORKER_KEY
-        sync: false # same random key as the Space secret
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
         value: gemini-flash-lite-latest
+      - key: MAX_UPLOAD_MB
+        value: "25"
+      - key: MAX_VIDEO_SECONDS
+        value: "60"
+      - key: SAMPLE_RUNS_PER_HOUR
+        value: "3"

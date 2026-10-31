@@ -7,10 +7,13 @@ import type { Report, Sample } from "@/lib/samples";
 import { CoachingPanel } from "./CoachingPanel";
 import { ReportCard } from "./ReportCard";
 
-// "Analyse" runs the sample through the real pipeline on the server (POST /samples/{id}/analyse, then polling).
-// If the service is asleep, busy or rate-limited, the report the same pipeline produced for this exact file
-// (analysis/samples.py) is shown instead, and the page says so.
+// Two modes (NEXT_PUBLIC_SAMPLE_MODE):
+// - "stored" (default; the free server needs minutes per video): shows the report the same pipeline produced for this
+//   exact file (analysis/samples.py) after a short staged reveal, with AI coaching fetched from the API.
+// - "live": runs the sample through the real pipeline on the server (POST /samples/{id}/analyse, then polling),
+//   falling back to the stored report if the service is busy, asleep or rate-limited.
 const STAGES = ["queued", "quality", "tracking", "counting"];
+const LIVE = process.env.NEXT_PUBLIC_SAMPLE_MODE === "live";
 
 interface Job {
   status: "queued" | "processing" | "done" | "failed";
@@ -30,10 +33,24 @@ export function SampleCard({ sample }: { sample: Sample }) {
     setResult({ report: sample.report, coaching: null, live: false, note });
   }
 
+  async function showStored() {
+    for (const st of STAGES) {
+      setStage(st);
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const coaching = await api<{ coaching: Coaching | null }>(`/samples/${sample.id}/coaching`)
+      .then((r) => r.coaching)
+      .catch(() => null);
+    setStage(null);
+    setResult({ report: sample.report, coaching, live: false,
+      note: "Pre-computed by the same analysis on this exact file (a live run takes a few minutes on our free server). Download it and upload it to run it live." });
+  }
+
   async function analyse() {
     setResult(null);
     setStage("queued");
     cancelled.current = false;
+    if (!LIVE) return showStored();
     try {
       const { job_id } = await api<{ job_id: string }>(`/samples/${sample.id}/analyse`, { method: "POST" });
       const started = Date.now();
@@ -93,7 +110,7 @@ export function SampleCard({ sample }: { sample: Sample }) {
                   </li>
                 ))}
               </ol>
-              <p className="text-xs text-chalk/60">Running the real analysis on the server. If it has been asleep, the first run takes a little longer.</p>
+              {LIVE && <p className="text-xs text-chalk/60">Running the real analysis on the server. If it has been asleep, the first run takes a little longer.</p>}
             </div>
           )}
           {result && (

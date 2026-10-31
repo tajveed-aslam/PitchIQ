@@ -32,7 +32,8 @@ FAQ = [
      "a": "With the data saver on, your phone shrinks the video to 480p before uploading: about 5 MB for 30 "
           "seconds instead of 30-80 MB. It keeps enough quality for an accurate count."},
     {"q": "How long does an analysis take?",
-     "a": "Usually under a minute for a 30-second video, a bit longer if the service has just woken up."},
+     "a": "PitchIQ runs on a free server, so about 2 minutes for a 15-second video and 4 for 30 seconds (up to 60 "
+          "seconds allowed). You can leave the page: the report appears in Reports with a notification."},
     {"q": "What do rhythm and control mean?",
      "a": "Rhythm is how even the time between your touches is. Control is how high the ball rises between touches, "
           "measured in ball sizes: lower and steadier means tighter control."},

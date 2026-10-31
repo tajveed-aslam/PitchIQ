@@ -8,7 +8,7 @@ import { SAMPLES } from "@/lib/samples";
 const STATS = [
   { value: "92%", label: "of touches found in our hand-counted tests" },
   { value: "±2", label: "touches off, at most, on every test clip" },
-  { value: "<1 min", label: "to analyse a 30-second video" },
+  { value: "0", label: "videos kept: deleted right after analysis" },
   { value: "~5 MB", label: "per 30-second upload with the data saver" },
 ];
 

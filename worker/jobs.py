@@ -7,6 +7,7 @@ One job runs at a time: tracking is CPU-bound, so parallel jobs would only slow 
 """
 
 import base64
+import os
 import shutil
 import tempfile
 import threading
@@ -21,7 +22,9 @@ import cv2
 
 from analysis.report import analyse_juggling
 
-MAX_SECONDS = 90  # longer videos are refused: they'd hold the single worker for minutes
+# Longer videos are refused: they'd hold the single worker for minutes. 60 on the free Render server
+# (~1 CPU-second per second of video, at 0.1 CPU: a 60 s clip takes ~10 min).
+MAX_SECONDS = int(os.environ.get("MAX_VIDEO_SECONDS", "90"))
 KEEP_SECONDS = 3600  # finished jobs are forgotten after an hour (the API stores what it needs)
 
 

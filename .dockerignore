@@ -1,0 +1,14 @@
+.git
+.venv
+**/__pycache__
+**/node_modules
+frontend/.next
+data/raw
+reports
+models
+e2e
+docs
+backend/.env
+backend/*.db
+deploy-worker-key.txt
+PROGRESS.md

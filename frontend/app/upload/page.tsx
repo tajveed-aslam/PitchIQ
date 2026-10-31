@@ -11,7 +11,7 @@ import { uploadVideo } from "@/lib/api";
 import { useRequireUser } from "@/lib/auth";
 import { dataSaverSupported, shrinkVideo } from "@/lib/dataSaver";
 
-const MAX_MB = 40;
+const MAX_MB = 25; // matches MAX_UPLOAD_MB on the server (protects the free server's 512 MB of memory)
 const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 
 type Step = { kind: "idle" } | { kind: "shrinking"; pct: number } | { kind: "uploading"; pct: number; size: number };
@@ -125,7 +125,7 @@ export default function UploadPage() {
                 Analyse my session
               </button>
               <p className="text-xs text-chalk/60">
-                {allowance.remaining} of {allowance.limit} analyses left. Videos are deleted after analysis; we keep a thumbnail and the report. Up to 90 seconds.
+                {allowance.remaining} of {allowance.limit} analyses left. Videos are deleted after analysis; we keep a thumbnail and the report. Up to 60 seconds; analysis takes a few minutes.
               </p>
             </>
           )}
