@@ -179,7 +179,7 @@ def _weekly_average(analyses: list[Analysis], weeks: int = 6) -> list[dict]:
 def _alerts(room: Room, weekly: list[dict], last_seen: dict[int, datetime]) -> list[dict]:
     """Automatic team insights for the coach: average dropping, players gone quiet, overdue tasks."""
     out = []
-    have = [w for w in weekly if w["average"] is not None]
+    have = [w for w in weekly[:-1] if w["average"] is not None]  # complete weeks only: this week is still going
     if len(have) >= 2 and have[-1]["average"] < have[-2]["average"]:
         out.append({"level": "warn", "text": f"Team average fell from {have[-2]['average']} to {have[-1]['average']} "
                                              "touches week on week."})
@@ -189,8 +189,8 @@ def _alerts(room: Room, weekly: list[dict], last_seen: dict[int, datetime]) -> l
     quiet = [_display(m.user) for m in room.members
              if m.user_id not in last_seen or last_seen[m.user_id] < _now() - timedelta(days=14)]
     if quiet:
-        out.append({"level": "warn", "text": f"No videos in 14 days: {', '.join(quiet[:4])}"
-                                             f"{f' and {len(quiet) - 4} more' if len(quiet) > 4 else ''}."})
+        names = ", ".join(quiet[:4]) + (f" and {len(quiet) - 4} more" if len(quiet) > 4 else "")
+        out.append({"level": "warn", "text": f"No videos in 14 days: {names}" + ("" if names.endswith(".") else ".")})
     for t in room.tasks:
         expected = 1 if t.assignee_id else len(room.members)
         if _aware(t.due_at) < _now() and len(t.submissions) < expected:

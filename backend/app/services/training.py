@@ -29,7 +29,6 @@ EXTRA_DRILLS: dict[str, dict] = {
 }
 LIBRARY = {**DRILLS, **EXTRA_DRILLS}
 TRAINING_DAYS, REST_DAYS = 5, (4, 7)  # day numbers 1-7; rest on Thursday-ish and Sunday-ish
-DAY_TITLES = ["Rhythm", "Control", "Balance", "Endurance", "Variety", "Reaction", "Mindset"]
 
 
 class DayDrill(BaseModel):
@@ -106,15 +105,18 @@ def _drill(name: str, minutes: int, note: str) -> dict:
 
 
 def rule_based(f: dict) -> dict:
+    """Day i leads with the i-th most needed drill and pairs it with one half the list further on, so every day is a
+    different combination; each day is named after what its lead drill trains."""
     pri = _priorities(f)
+    n = len(pri)
     days = []
     for i in range(TRAINING_DAYS):
-        a, b = pri[i % len(pri)], pri[(i + TRAINING_DAYS) % len(pri)]
-        sessions = [_drill(a[0], 10, a[1])] + ([_drill(b[0], 10, b[1])] if b[0] != a[0] else [])
-        days.append({"title": DAY_TITLES[i], "sessions": sessions})
+        (a, why_a), (b, why_b) = pri[i % n], pri[(i + max(1, n // 2)) % n]
+        sessions = [_drill(a, 10, why_a)] + ([_drill(b, 10, why_b)] if b != a else [])
+        days.append({"title": LIBRARY[a]["for"].capitalize(), "sessions": sessions})
     focus = [why for _, why in pri[:2]]
-    return {"summary": f"A week built from your last video ({f['latest_touches']} touches, rhythm {f['rhythm']}, "
-                       f"control {f['control']}). Goal: {f['week_goal_touches']} touches by the end of the week.",
+    return {"summary": f"A week built from your last video: {f['latest_touches']} touches, rhythm {f['rhythm']}, "
+                       f"ball control {f['control']}. Goal: {f['week_goal_touches']} touches by the end of the week.",
             "focus": focus, "goal_touches": f["week_goal_touches"], "days": _with_rest(days), "source": "rules"}
 
 

@@ -101,6 +101,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [more, setMore] = useState(false);
   useEffect(() => setMore(false), [pathname]);
+  useEffect(() => {
+    if (!more) return;
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setMore(false); };
+    document.addEventListener("keydown", esc);
+    return () => document.removeEventListener("keydown", esc);
+  }, [more]);
 
   if (!user) return <Loading label="Opening your command centre" />;
 
@@ -167,7 +173,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link href="/dashboard" className="lg:hidden" aria-label="PitchIQ command centre"><MainLogo /></Link>
           <p className="hud hidden lg:block">{allowance ? `${allowance.remaining} of ${allowance.limit} analyses left this ${allowance.period === "trial" ? "trial" : allowance.period === "today" ? "day" : "month"}` : ""}</p>
           <div className="flex items-center gap-1">
-            <Link href="/upload" className="btn-primary hidden !px-4 !py-2 sm:inline-flex"><Upload className="h-4 w-4" aria-hidden="true" /> Analyse</Link>
+            <Link href="/upload" className="btn-primary hidden !px-4 !py-2 sm:inline-flex lg:hidden"><Upload className="h-4 w-4" aria-hidden="true" /> Analyse</Link>
             <NotificationBell />
           </div>
         </div>

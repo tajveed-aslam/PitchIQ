@@ -72,6 +72,11 @@ function PlayerDrawer({ room, member, onClose, onChanged }: { room: RoomView; me
   useEffect(() => {
     api<PlayerInRoom>(`/rooms/${room.id}/players/${member.user_id}`).then(setP).catch((e) => setError(e.message));
   }, [room.id, member.user_id]);
+  useEffect(() => {
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", esc);
+    return () => document.removeEventListener("keydown", esc);
+  }, [onClose]);
   async function saveNote() {
     try {
       await api(`/rooms/${room.id}/members/${member.user_id}/note`, { method: "PUT", json: { note } });

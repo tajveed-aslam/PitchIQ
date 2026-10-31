@@ -23,7 +23,7 @@ export function Panel({ title, hud, action, className = "", children, id, testId
   id?: string; testId?: string;
 }) {
   return (
-    <section id={id} className={`glass p-5 sm:p-6 ${className}`} data-testid={testId}>
+    <section id={id} className={`glass min-w-0 p-5 sm:p-6 ${className}`} data-testid={testId}>
       {(title || hud || action) && (
         <div className="mb-5 flex items-start justify-between gap-3">
           <div>

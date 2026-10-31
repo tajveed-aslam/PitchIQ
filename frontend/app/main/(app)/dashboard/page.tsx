@@ -125,7 +125,7 @@ export default function CommandCentre() {
           )}
         </Panel>
 
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <Panel hud="From your coach" title="Tasks" testId="tasks-panel">
             {o.tasks.length ? (
               <ul className="space-y-2">

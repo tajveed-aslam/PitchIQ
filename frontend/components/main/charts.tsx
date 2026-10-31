@@ -202,6 +202,9 @@ export function Columns({ data, height = 160, ariaLabel, unit = "", testId }: {
                 <path fill={d.highlight ? "rgb(var(--accent-400))" : hover === i ? "rgb(var(--series-1) / .95)" : "rgb(var(--series-1) / .7)"}
                   d={`M${cx - bw / 2},${sy(0)}V${sy(v) + r}Q${cx - bw / 2},${sy(v)} ${cx - bw / 2 + r},${sy(v)}H${cx + bw / 2 - r}Q${cx + bw / 2},${sy(v)} ${cx + bw / 2},${sy(v) + r}V${sy(0)}Z`} />
               )}
+              {d.highlight && d.value != null && (
+                <text x={cx} y={sy(v) - 6} textAnchor="middle" className="fill-white font-mono text-[11px] font-medium">{d.value}{unit.trim() ? "" : unit}</text>
+              )}
               {(i === 0 || i === data.length - 1) && (
                 <text x={cx} y={height - 6} textAnchor="middle" className="fill-chalk/50 font-mono text-[10px]">{d.label}</text>
               )}

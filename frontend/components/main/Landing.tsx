@@ -18,31 +18,36 @@ function TrackingPhoto() {
   return (
     <div className="relative">
       <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-br from-accent-400/20 via-transparent to-glow/30 blur-2xl" aria-hidden="true" />
-      <figure className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl sm:aspect-[16/10]">
-        <Image src="/images/main/hero-trick.webp" alt="A player sitting on a garage floor keeps a football in the air with his feet" fill priority
-          sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[35%_center]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-ink-950/10" />
-        <div className="grid-bg absolute inset-0 opacity-60" aria-hidden="true" />
-        {/* scanner line */}
-        <div className="absolute inset-x-0 top-0 h-[10%] animate-sweep bg-gradient-to-b from-transparent via-accent-300/25 to-transparent" aria-hidden="true" />
-        {/* the ball's measured arc and the reticle (ball centre in this frame: 25.8% across, 43% down) */}
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M8 92 Q 18 20 26 43" fill="none" stroke="rgb(var(--accent-300))" strokeWidth=".5" strokeDasharray="1.2 1.2" vectorEffect="non-scaling-stroke" />
-        </svg>
-        <div className="absolute left-[25.8%] top-[43%] h-[34%] w-[25%] -translate-x-1/2 -translate-y-1/2 animate-lock" aria-hidden="true">
-          <span className="absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-accent-300" />
-          <span className="absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-accent-300" />
-          <span className="absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 border-accent-300" />
-          <span className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-accent-300" />
-          <span className="hud absolute -top-6 left-0 whitespace-nowrap !text-[10px] text-accent-200">ball · locked</span>
+      <figure className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-ink-900 shadow-2xl">
+        <div className="relative aspect-[4/3]">
+          <Image src="/images/main/hero-trick.webp" alt="A player sitting on a garage floor keeps a football in the air with his feet" fill priority
+            sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[30%_center]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-900 via-transparent to-ink-950/10" />
+          <div className="grid-bg absolute inset-0 opacity-60" aria-hidden="true" />
+          {/* scanner line */}
+          <div className="absolute inset-x-0 top-0 h-[10%] animate-sweep bg-gradient-to-b from-transparent via-accent-300/25 to-transparent" aria-hidden="true" />
+          {/* the ball's measured arc and a reticle locked on it (ball centre in this 4:3 crop: 24% across, 43% down) */}
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M6 98 Q 16 16 24.4 43" fill="none" stroke="rgb(var(--accent-300))" strokeWidth=".5" strokeDasharray="1.2 1.2" vectorEffect="non-scaling-stroke" />
+          </svg>
+          <div className="absolute left-[24.4%] top-[43%] h-[40%] w-[30%] -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
+            <div className="relative h-full w-full animate-lock">
+              <span className="absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-accent-300" />
+              <span className="absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-accent-300" />
+              <span className="absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 border-accent-300" />
+              <span className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-accent-300" />
+              <span className="hud absolute -top-6 left-0 whitespace-nowrap !text-[10px] text-accent-200">ball · locked</span>
+            </div>
+          </div>
         </div>
-        <figcaption className="absolute inset-x-3 bottom-3 grid grid-cols-3 gap-2 sm:inset-x-4 sm:bottom-4">
+        <p className="hud absolute right-4 top-4 rounded-full bg-ink-950/70 px-2.5 py-1 !text-[10px] backdrop-blur">Numbers: sample report</p>
+        <figcaption className="grid grid-cols-3 divide-x divide-white/[0.06] border-t border-white/[0.06]">
           {[
             ["Touches", `${m.touches}`, `likely ${m.touches_range[0]}–${m.touches_range[1]}`],
             ["Rhythm", rhythmLabel(m.interval_s?.cv), `${m.interval_s?.mean.toFixed(2)} s apart`],
             ["Control", controlLabel(m.arc_height_balls?.mean), `${m.arc_height_balls?.mean.toFixed(1)} ball heights`],
           ].map(([k, v, s]) => (
-            <div key={k} className="rounded-2xl border border-white/10 bg-ink-950/70 p-2.5 backdrop-blur-md sm:p-3">
+            <div key={k} className="p-3 sm:p-4" title="From a sample clip's report">
               <p className="hud !text-[9px] sm:!text-[10px]">{k}</p>
               <p className="mt-1 truncate font-display text-base font-semibold text-white sm:text-xl">{v}</p>
               <p className="truncate text-[10px] text-chalk/60 sm:text-xs">{s}</p>
@@ -50,7 +55,7 @@ function TrackingPhoto() {
           ))}
         </figcaption>
       </figure>
-      <div className="glass absolute -right-2 -top-6 hidden w-44 p-4 shadow-2xl sm:block lg:-right-6" aria-hidden="true">
+      <div className="glass absolute -right-3 bottom-24 hidden w-44 p-4 shadow-2xl sm:block lg:-right-8" aria-hidden="true">
         <p className="hud !text-[10px]">Example player card</p>
         <div className="mt-2 flex items-end gap-2">
           <span className="figure text-5xl leading-none text-gradient">78</span>
