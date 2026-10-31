@@ -5,10 +5,13 @@ import { defineConfig, devices } from "@playwright/test";
 // docs/TEST_PLAN.md must see every failure.
 export const BASE_URL = process.env.BASE_URL || "http://localhost:3100";
 export const API_URL = process.env.API_URL || "http://localhost:8010";
+// LIVE=1 when testing the deployed site: the free server analyses at ~8x video length, one video at a time.
+export const LIVE = !!process.env.LIVE;
+export const ANALYSIS_TIMEOUT = LIVE ? 600_000 : 120_000;
 
 export default defineConfig({
   testDir: "./tests",
-  timeout: 150_000, // a real analysis runs inside some tests
+  timeout: LIVE ? 900_000 : 150_000, // a real analysis runs inside some tests
   expect: { timeout: 15_000 },
   fullyParallel: true,
   workers: process.env.CI ? 2 : 3,

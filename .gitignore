@@ -14,7 +14,7 @@ out/
 data/raw/
 data/uploads/
 models/*.onnx
-reports/
+/reports/
 # internal working notes (local only)
 PROGRESS.md
 # downloaded AI models (fetched by scripts/fetch_models.py)

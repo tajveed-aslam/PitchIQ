@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { ANALYSIS_TIMEOUT } from "../playwright.config";
 import { demoLogin, signedUp, uniqueEmail } from "./helpers";
 
 test.describe("Accounts", () => {
@@ -74,7 +75,7 @@ test.describe("Upload and analysis", () => {
     await page.getByTestId("upload-submit").click();
     await expect(page).toHaveURL(/\/reports\/\d+$/, { timeout: 120_000 });
     const count = page.getByTestId("touch-count");
-    await expect(count).toBeVisible({ timeout: 120_000 });
+    await expect(count).toBeVisible({ timeout: ANALYSIS_TIMEOUT });
     const n = Number(await count.textContent());
     expect(n).toBeGreaterThanOrEqual(12); // hand count 16
     expect(n).toBeLessThanOrEqual(18);
