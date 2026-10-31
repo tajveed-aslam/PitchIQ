@@ -238,3 +238,13 @@ def test_overview_has_everything_the_dashboard_needs(client, worker):
     o = client.get("/player/overview", headers=h).json()
     assert set(o) == {"card", "badges", "training", "tasks", "week"}
     assert o["badges"]["earned"] >= 1 and o["week"]["sessions"] == 1
+
+
+def test_main_assistant_knows_main_features_and_lite_stays_unchanged(client):
+    main = client.post("/support/chat", json={"message": "How do I join my coach's room?", "edition": "main"}).json()
+    assert "join code" in main["reply"]
+    lite_faq = client.get("/support/faq").json()
+    main_faq = client.get("/support/faq?edition=main").json()
+    assert not any("room" in f["q"].lower() for f in lite_faq)
+    plans = next(f for f in main_faq if f["q"] == "What plans are there?")
+    assert "Coach (rooms" in plans["a"] and sum(f["q"] == "What plans are there?" for f in main_faq) == 1

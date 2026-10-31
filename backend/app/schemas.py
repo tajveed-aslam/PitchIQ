@@ -92,6 +92,7 @@ class SupportIn(BaseModel):
 class ChatIn(BaseModel):
     message: str = Field(min_length=1, max_length=500)
     history: list[dict] = Field(default_factory=list, max_length=10)
+    edition: Literal["lite", "main"] = "lite"
 
 
 class ChatOut(BaseModel):
