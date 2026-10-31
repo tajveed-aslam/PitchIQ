@@ -23,7 +23,26 @@ How accurate PitchIQ's touch count is, how that was measured, and where it fails
 | 43487 | **Blind test** | Hand-counted, then run once with the counter frozen. One rule was added afterwards (below) and is reported separately. |
 | 43513 | Quality-gate case | The camera zooms throughout: the app must reject it, not count it. |
 
-## Results
+## Production numbers (what the live site does)
+
+Measured by `.github/workflows/accuracy.yml` on Linux (the platform the API runs on), with the 8-bit models and the
+480p files the site serves, matching touch by touch against the ground truth:
+
+| Clip | Truth | Model | Likely range | Found | Invented |
+|---|---|---|---|---|---|
+| 42524 | 16 | 15 | 10–17 | 15 | 0 |
+| 43490 | 19 | 16 | 13–21 | 15 | 1 |
+| 43487 | 39 | 39 | 38–41 | 37 | 2 |
+
+**67 of 74 touches found (90%), 3 invented (96% of reported touches are real), every count within ±3, every true
+count inside the reported range.** The site's claims use these numbers.
+
+Why 8-bit models: on the free server (512 MB shared with the API) the original 32-bit models peaked at ~520 MB for a
+480p video on Linux and crashed the server; the 8-bit versions peak at ~400 MB (spike 3, `.github/workflows/memory.yml`).
+8-bit maths is not bit-identical across platforms: the same files give 19/39/16 on Windows and 16/39/15 on Linux, so
+production accuracy is measured on Linux.
+
+## Development results
 
 ### Original clips (720p, tracking every 2nd frame as in production)
 

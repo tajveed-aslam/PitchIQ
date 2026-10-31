@@ -34,7 +34,7 @@
     },
     "report": {
       "schema_version": 1,
-      "model_version": "juggling-0.1",
+      "model_version": "juggling-0.2",
       "skill": "juggling",
       "video": {
         "duration_s": 12.93,
@@ -45,44 +45,43 @@
       "quality": {
         "verdict": "ok",
         "issues": [],
-        "ball_seen_pct": 55,
-        "camera_moving_pct": 3,
+        "ball_seen_pct": 57,
+        "camera_moving_pct": 4,
         "ball_size_pct": 8.6
       },
       "metrics": {
-        "touches": 17,
+        "touches": 16,
         "touches_range": [
-          12,
-          20
+          13,
+          21
         ],
-        "touches_certain": 12,
+        "touches_certain": 13,
         "touch_times_s": [
-          0.42,
+          0.5,
           1.0,
           1.46,
-          1.84,
-          2.42,
-          2.92,
-          4.25,
-          4.71,
+          2.5,
+          4.67,
           5.21,
-          5.67,
-          7.88,
-          8.72,
+          5.8,
+          7.09,
+          7.72,
+          8.68,
           9.3,
           9.88,
-          10.3,
-          10.97,
-          11.59
+          10.39,
+          10.89,
+          11.51,
+          12.18
         ],
-        "touches_per_minute": 85.9,
+        "touches_per_minute": 77.1,
         "interval_s": {
-          "mean": 0.7,
-          "cv": 0.64
+          "mean": 0.78,
+          "cv": 0.56
         },
         "arc_height_balls": {
-          "mean": 2.07,
-          "cv": 0.62
+          "mean": 2.05,
+          "cv": 0.56
         }
       },
       "notes": [
@@ -90,7 +89,7 @@
         "Rhythm and arc height are approximate."
       ],
       "timing": {
-        "analysis_s": 22.4
+        "analysis_s": 5.9
       }
     }
   },
@@ -149,7 +148,7 @@
     },
     "report": {
       "schema_version": 1,
-      "model_version": "juggling-0.1",
+      "model_version": "juggling-0.2",
       "skill": "juggling",
       "video": {
         "duration_s": 24.57,
@@ -160,30 +159,31 @@
       "quality": {
         "verdict": "ok",
         "issues": [],
-        "ball_seen_pct": 82,
+        "ball_seen_pct": 91,
         "camera_moving_pct": 0,
-        "ball_size_pct": 4.7
+        "ball_size_pct": 4.8
       },
       "metrics": {
-        "touches": 38,
+        "touches": 39,
         "touches_range": [
-          36,
-          39
+          38,
+          41
         ],
-        "touches_certain": 36,
+        "touches_certain": 38,
         "touch_times_s": [
           0.0,
           0.38,
-          1.0,
+          0.96,
           1.46,
           1.96,
           2.46,
+          3.21,
           3.96,
           4.63,
           5.26,
           5.71,
           6.21,
-          6.88,
+          6.92,
           7.55,
           8.13,
           8.72,
@@ -191,34 +191,34 @@
           9.8,
           10.3,
           10.8,
-          11.26,
-          12.3,
-          12.93,
+          11.3,
+          12.35,
+          12.89,
           13.64,
           14.1,
           14.51,
-          14.89,
+          14.97,
           15.47,
           16.27,
-          17.52,
+          17.43,
           18.14,
           18.64,
           19.23,
-          19.77,
+          19.73,
           20.31,
           20.85,
           21.31,
-          21.77,
-          23.61
+          21.9,
+          23.19
         ],
-        "touches_per_minute": 94.0,
+        "touches_per_minute": 98.3,
         "interval_s": {
-          "mean": 0.64,
-          "cv": 0.47
+          "mean": 0.61,
+          "cv": 0.32
         },
         "arc_height_balls": {
-          "mean": 2.15,
-          "cv": 0.7
+          "mean": 2.18,
+          "cv": 0.69
         }
       },
       "notes": [
@@ -226,7 +226,7 @@
         "Rhythm and arc height are approximate."
       ],
       "timing": {
-        "analysis_s": 26.6
+        "analysis_s": 8.4
       }
     }
   },
@@ -262,7 +262,7 @@
     },
     "report": {
       "schema_version": 1,
-      "model_version": "juggling-0.1",
+      "model_version": "juggling-0.2",
       "skill": "juggling",
       "video": {
         "duration_s": 11.18,
@@ -273,41 +273,42 @@
       "quality": {
         "verdict": "ok",
         "issues": [],
-        "ball_seen_pct": 44,
+        "ball_seen_pct": 57,
         "camera_moving_pct": 0,
-        "ball_size_pct": 14.6
+        "ball_size_pct": 14.7
       },
       "metrics": {
-        "touches": 14,
+        "touches": 15,
         "touches_range": [
-          8,
-          18
+          10,
+          17
         ],
-        "touches_certain": 8,
+        "touches_certain": 10,
         "touch_times_s": [
           0.0,
-          0.83,
+          0.92,
           1.5,
-          2.92,
-          3.67,
+          2.88,
+          3.71,
           4.38,
-          5.09,
-          5.67,
-          6.26,
-          7.72,
+          5.05,
+          5.71,
+          6.38,
+          6.97,
+          7.63,
           8.38,
-          8.88,
+          9.01,
           9.55,
-          10.26
+          10.18
         ],
-        "touches_per_minute": 76.0,
+        "touches_per_minute": 82.5,
         "interval_s": {
-          "mean": 0.79,
-          "cv": 0.37
+          "mean": 0.73,
+          "cv": 0.28
         },
         "arc_height_balls": {
           "mean": 1.27,
-          "cv": 0.48
+          "cv": 0.43
         }
       },
       "notes": [
@@ -315,7 +316,7 @@
         "Rhythm and arc height are approximate."
       ],
       "timing": {
-        "analysis_s": 18.9
+        "analysis_s": 5.4
       }
     }
   },
@@ -334,7 +335,7 @@
     },
     "report": {
       "schema_version": 1,
-      "model_version": "juggling-0.1",
+      "model_version": "juggling-0.2",
       "skill": "juggling",
       "video": {
         "duration_s": 14.89,
@@ -350,25 +351,28 @@
             "message": "The camera moved. Prop the phone up so it stays still."
           }
         ],
-        "ball_seen_pct": 64,
+        "ball_seen_pct": 75,
         "camera_moving_pct": 77,
-        "ball_size_pct": 6.8
+        "ball_size_pct": 6.9
       },
       "metrics": {
-        "touches": 17,
+        "touches": 20,
         "touches_range": [
-          13,
-          19
+          16,
+          22
         ],
-        "touches_certain": 13,
+        "touches_certain": 16,
         "touch_times_s": [
           0.92,
+          2.25,
           3.09,
           3.59,
           4.21,
           4.71,
-          5.34,
+          5.38,
           6.09,
+          6.92,
+          7.67,
           8.38,
           9.05,
           9.47,
@@ -380,14 +384,14 @@
           12.97,
           13.81
         ],
-        "touches_per_minute": 74.5,
+        "touches_per_minute": 88.4,
         "interval_s": {
-          "mean": 0.81,
-          "cv": 0.68
+          "mean": 0.68,
+          "cv": 0.29
         },
         "arc_height_balls": {
-          "mean": 2.32,
-          "cv": 0.41
+          "mean": 2.63,
+          "cv": 0.43
         }
       },
       "notes": [
@@ -395,7 +399,7 @@
         "Rhythm and arc height are approximate."
       ],
       "timing": {
-        "analysis_s": 21.4
+        "analysis_s": 5.7
       }
     }
   }

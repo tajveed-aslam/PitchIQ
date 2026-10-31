@@ -9,7 +9,7 @@ No football videos of your own? Everything below works with the built-in samples
    counting touches), then the report.
 3. Compare the AI's count with the **hand count**: the range bar shows both, and the timeline marks each touch the
    AI found against each touch a person counted. Orange ticks didn't match.
-   Expected: about 17 touches (likely 12–20) against a hand count of 19.
+   Expected: about 16 touches (likely 13–21) against a hand count of 19.
 4. Try **Garage session (moving camera)**. Expected: "Please re-film": the camera zooms out while filming, so the
    quality check refuses to count it.
 
@@ -18,9 +18,9 @@ stored result from the same pipeline and says so.
 
 | Sample | Hand count | Expect the AI to say |
 |---|---|---|
-| Floodlit freestyle | 19 | ~17, range covering 19 |
-| Long session, full body | 39 | ~38 |
-| Street pitch rhythm | 16 | ~14 |
+| Floodlit freestyle | 19 | ~16, range covering 19 |
+| Long session, full body | 39 | ~39 |
+| Street pitch rhythm | 16 | ~15 |
 | Garage session | – | Rejected: camera moving |
 
 ## 2. The demo player (no sign-up)

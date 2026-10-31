@@ -22,7 +22,7 @@ added after deployment.
 | R-13 | Events: monthly challenge and leaderboard | TC-EVT-01, TC-PLN-02; test_leaderboard_ranks_seeded_players_and_hides_non_entrants | Pass |
 | R-14 | Support: FAQ, contact, AI help chat | TC-SUP-01; test_faq_contact_and_chat_fallback | Pass |
 | R-15 | Sample videos for testing without own footage (analyse, download, ground truth) | TC-SMP-01–03; test_public_sample_run_with_coaching; test_public_sample_rejected_has_no_coaching | Pass |
-| R-16 | Touch count accurate against hand counts; regression guarded | MODEL_ACCURACY (68/74 found, ±2, truth in range); test_sample_counts_stay_near_the_hand_count ×2 (CI) | Pass |
+| R-16 | Touch count accurate against hand counts; regression guarded | MODEL_ACCURACY (production: 67/74 found, ±3, truth in range); test_sample_counts_stay_near_the_hand_count ×2 (CI) | Pass |
 | R-17 | Privacy: videos deleted after analysis; reports private | test_upload_is_deleted_after_analysis; test_reports_are_private; test_thumbnail_needs_the_signature | Pass |
 | R-18 | Accessibility (WCAG 2 A/AA, no serious/critical issues) | TC-A11Y ×7 on 3 devices; Lighthouse accessibility 100 | Pass |
 | R-19 | Fast on slow connections (Lite budget) | Build: ≤ 118 kB first-load JS per page; Lighthouse mobile: performance 88–97, page weight 258–358 KB, CLS ≤ 0.04 | Pass |

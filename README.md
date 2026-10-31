@@ -41,8 +41,8 @@ separate service (`worker/`, set `WORKER_URL`) on a host with more CPU.
 ## Accuracy
 
 Hand-counted ground truth, with a tuning clip, a development clip and a **blind** test clip:
-**68 of 74 touches found (92%), 92% of reported touches real, every count within ±2, every true count inside the
-reported range.** Method, numbers, what was tried and dropped, and limitations: [docs/MODEL_ACCURACY.md](docs/MODEL_ACCURACY.md).
+on the production server (Linux, 8-bit models, the 480p files the site serves): **67 of 74 touches found (90%),
+96% of reported touches real, every count within ±3, every true count inside the reported range.** Method, numbers, what was tried and dropped, and limitations: [docs/MODEL_ACCURACY.md](docs/MODEL_ACCURACY.md).
 
 ## Features (Lite)
 

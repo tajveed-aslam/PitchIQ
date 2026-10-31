@@ -26,7 +26,7 @@ FAQ = [
      "a": "The quality check rejects videos where the camera moves (pans or zooms) or the ball can't be found. "
           "Rejected videos don't use your allowance. Prop the phone up and film again."},
     {"q": "How accurate is the touch count?",
-     "a": "On our hand-counted test videos it found 92% of touches and was within 2 touches every time. Each report "
+     "a": "On our hand-counted test videos it found 90% of touches and was within 3 touches every time. Each report "
           "shows a likely range: touches the camera couldn't see clearly are covered by it."},
     {"q": "How much data does an upload use?",
      "a": "With the data saver on, your phone shrinks the video to 480p before uploading: about 5 MB for 30 "

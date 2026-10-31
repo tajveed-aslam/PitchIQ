@@ -18,6 +18,7 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 | BUG-11 | Medium | Accessibility | E2E axe checks | Fixed |
 | BUG-12 | Low | Performance | Lighthouse mobile | Fixed |
 | BUG-13 | Critical | Deployment | Owner, on the live site | Fixed |
+| BUG-14 | Critical | Analysis on the free server | Owner, on the live site | Fixed |
 
 ---
 
@@ -110,3 +111,15 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 - **Fix:** rule anchored to the repo root (`/reports/`); pages committed.
 - **Guard:** CI runs `frontend/scripts/check-routes.mjs` after the build: every page of both editions must be in it.
 - **Lesson:** tests on a working copy can't see what git leaves out; the build in CI (clean checkout) now checks routes.
+
+### BUG-14: The server restarts in the middle of an analysis ("The analysis service restarted and lost this job")
+- **Steps:** on the live site, upload a video (even a 480p sample) while other requests are running.
+- **Expected:** the report after a few minutes.
+- **Actual:** the API restarted, the job was lost, and pages showed "Can't reach PitchIQ" for about a minute.
+- **Cause:** out of memory on Render's free plan (512 MB, shared with the API). The container sees 8 CPUs, so FFmpeg
+  and OpenCV started a thread per CPU, each with frame buffers; and on Linux the 32-bit detector models and the GUI
+  build of OpenCV peaked at ~520 MB for a 480p video (my Windows measurements had under-counted).
+- **Fix:** one decoding thread and one OpenCV thread; 8-bit detector models (accuracy re-measured on Linux) and
+  headless OpenCV; videos above 720p refused with a data-saver hint; analysis at low CPU priority. Peak at 480p on
+  Linux: 522 → 401 MB. The health check now reports peak memory and uptime.
+- **Guard:** `.github/workflows/memory.yml` (Linux memory per configuration), `test_oversized_video_is_refused`.
