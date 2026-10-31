@@ -1,6 +1,6 @@
 # Bug reports
 
-Real defects found while building and testing PitchIQ Lite. Each was reproduced, fixed, and covered by a test so it
+Real defects found while building and testing PitchIQ (Lite, then Global). Each was reproduced, fixed, and covered by a test so it
 can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCURACY.md).)
 
 | ID | Severity | Area | Found by | Status |
@@ -20,6 +20,14 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 | BUG-13 | Critical | Deployment | Owner, on the live site | Fixed |
 | BUG-14 | Critical | Analysis on the free server | Owner, on the live site | Fixed |
 | BUG-15 | High | AI coaching on the free server | Live E2E run (server uptime reset mid-run) | Fixed |
+| BUG-16 | Medium | Global: coach task reminders | API test (test_due_soon_tasks_send_one_reminder) | Fixed |
+| BUG-17 | Medium | Seed / local database | Re-running the seed | Fixed |
+| BUG-18 | High | Global on phones | Screenshot review at 390 px | Fixed |
+| BUG-19 | Low | Global landing hero | Screenshot review | Fixed |
+| BUG-20 | Medium | Global coach insights | Screenshot review of the demo coach | Fixed |
+| BUG-21 | High | AI training plans | E2E with the real Gemini API (TC-MAIN-10 page snapshot) | Fixed |
+| BUG-22 | Medium | Global accessibility | E2E axe checks | Fixed |
+| BUG-23 | Low | Rule-based training plan | Screenshot review | Fixed |
 
 ---
 
@@ -134,3 +142,67 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
   coaching, right after the analysis, at the memory peak.
 - **Fix:** Gemini is called through its REST API with httpx (already loaded); the SDK is no longer installed.
 - **Guard:** live memory check with a coaching plan; API tests for the coaching fallbacks.
+
+## Global (Main) edition
+
+### BUG-16: A coach's task reminder was never saved
+- **Steps:** a task due within 48 hours; the player opens the dashboard three times.
+- **Expected:** one "Reminder" notification.
+- **Actual:** none.
+- **Cause:** the dashboard overview committed the database session before it collected the open tasks (which is
+  where reminders are created), so the reminder was discarded.
+- **Fix:** collect tasks first, then commit.
+- **Guard:** `test_due_soon_tasks_send_one_reminder`.
+
+### BUG-17: Re-running the seed doubled the demo rooms' players, tasks and hand-ins (local database)
+- **Steps:** `python -m app.seed` twice on SQLite.
+- **Expected:** the same 2 rooms, 11 members, 3 tasks.
+- **Actual:** 22 members, 6 tasks, 18 hand-ins.
+- **Cause:** a bulk delete of rooms relied on ON DELETE CASCADE, which SQLite ignores unless foreign keys are turned
+  on (Postgres in production does cascade, so local and live behaved differently).
+- **Fix:** rooms are deleted through the ORM (cascades to members, tasks and hand-ins), and SQLite connections turn on
+  foreign keys so local runs and tests match production.
+- **Guard:** `test_demo_coach_and_demo_player_share_a_seeded_room` (seed runs per test); seed run twice in review.
+
+### BUG-18: The command centre scrolled sideways on phones
+- **Steps:** demo player, `/dashboard`, 390 px wide.
+- **Expected:** everything fits the screen.
+- **Actual:** the page was 658 px wide; the coach-task panel stuck out.
+- **Cause:** grid columns default to a minimum width of their content, and the task titles (truncated with an
+  ellipsis) still counted at full length.
+- **Fix:** panels and that column get `min-width: 0`.
+- **Guard:** a script checks all 22 Global pages at 390 px for sideways scrolling; TC-MAIN-01/04/14 assert it.
+
+### BUG-19: The landing page's tracking box wasn't on the ball
+- **Steps:** open Global `/`.
+- **Expected:** the "ball · locked" box around the ball in the hero photo.
+- **Actual:** the box started at the ball's centre, half off it.
+- **Cause:** the box's pulse animation sets `transform`, which replaced the `translate(-50%, -50%)` that centred it.
+- **Fix:** the pulse runs on an inner element; the box position was re-measured for the photo's 4:3 crop.
+
+### BUG-20: Misleading team alert: "Team average fell from 27.0 to 24.5"
+- **Steps:** demo coach, Riverside U16, mid-week.
+- **Expected:** alerts that compare like with like.
+- **Actual:** the current, half-finished week was compared with a full week, so the average looked like it was
+  falling; a name ending in a full stop also produced "Omar H..".
+- **Fix:** week-on-week alerts use complete weeks only; no double full stop.
+
+### BUG-21: The AI training plan read a field name aloud: "reach your week_goal_touches of 19"
+- **Steps:** AI Coach user with a Gemini key builds a training week (TC-MAIN-10).
+- **Expected:** "reach 19 touches this week".
+- **Actual:** the summary contained the JSON field name. It passed the number check because 19 was right.
+- **Fix:** replies that contain a fact's field name are rejected and replaced by the rule-based plan; the same check
+  now guards the report coaching (`next_target_touches`); the prompt says to write plain numbers.
+- **Guard:** `test_training_check_rejects_field_names_read_aloud`, `test_field_names_read_aloud_are_caught`.
+
+### BUG-22: Accessibility violations on Global pages
+- **Steps:** axe (WCAG 2 A/AA) in TC-MAIN-04/07/09/11/17.
+- **Actual:** chart columns had `aria-label` without a role (`aria-prohibited-attr`); the sidebar's group labels
+  were too faint (contrast); the chart's table view scrolled but couldn't be reached by keyboard.
+- **Fix:** columns are `role="img"`; labels use the standard muted text; the table region is focusable and named.
+
+### BUG-23: Rule-based training days were named wrongly and repeated
+- **Steps:** build a week without Gemini (or when its reply is rejected).
+- **Actual:** "Balance" day with a breathing drill; Friday and Saturday identical to Monday and Tuesday.
+- **Fix:** each day is named after what its lead drill trains, and drills are paired with an offset so every day is a
+  different combination.

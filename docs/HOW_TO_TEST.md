@@ -60,6 +60,36 @@ Rejected videos and samples never use up your allowance.
 **Help** page: ask the chat things like "Why was my video rejected?" or "How much data does it use?". Off-topic
 questions get a polite refusal.
 
+## 6. The Global edition (the full platform)
+
+Pick **Global** in the region switch (top right, or in the phone menu). Same address, a different site: its own
+design and features. Everything below has demo data, so nothing needs a video.
+
+**As the demo player** (Log in, then **Demo player**):
+
+| Where | Try this | Expect |
+|---|---|---|
+| Command centre | Open it | Overall rating, this week's training, two coach tasks from Riverside U16, latest reports and badges |
+| Player card | Scroll the skills | Touches, rhythm and control rated; dribbling, passing etc. say "not measured" |
+| Tests | Take the reaction test | Five taps; your median in ms and a rating (the demo is shared, so sign up to keep yours) |
+| Reports, then Compare two | Pick "First session back" and "Best one yet" | Up 18 touches, every metric's change, both rhythms on one chart |
+| Progress | Open it | Trend line (+2.5 a week), personal bests, sessions per week |
+| Training plan | Tick a session | The ring counts it |
+| Challenges | Scroll down | Badges earned and still to earn |
+| Ask PitchIQ (bottom right) | "How do I join my coach's room?" | An answer about join codes |
+
+**As the demo coach** (Log in, then **Demo coach**): open **Riverside U16**.
+
+- **Team dashboard:** average best, hand-in rate, automatic insights (who's gone quiet, overdue tasks), the weekly
+  team average and team milestones.
+- **Players:** click a player for their gold card, reports and your private notes.
+- **Tasks:** set a task with a deadline and touch target; score a hand-in with the slider and a note.
+- **Northside Academy Trials:** each applicant is checked against the 25-touch bar, with scouting reports.
+
+**Coach and player together** (two browsers): sign up as a coach (Coach plan), create a room, copy the join code
+from Settings; sign up as a player in another browser and join with the code on **Rooms**. Set a task as the coach:
+the player sees it on their command centre and in notifications.
+
 ## For testers
 
 The automated suites, test cases and results are in [TEST_PLAN](TEST_PLAN.md), [TEST_CASES](TEST_CASES.md),
