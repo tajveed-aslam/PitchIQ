@@ -154,7 +154,7 @@ export function LineChart({ series, height = 240, xLabel, yUnit = "", trend, tre
             {table ? "Hide table" : "Show as table"}
           </button>
           {table && (
-            <div className="mt-2 max-h-64 overflow-auto rounded-xl border border-white/10">
+            <div className="mt-2 max-h-64 overflow-auto rounded-xl border border-white/10" tabIndex={0} role="region" aria-label={`${ariaLabel}: table`}>
               <table className="w-full text-left text-xs">
                 <thead className="sticky top-0 bg-ink-900 text-chalk/60"><tr>{tableHeaders.map((h) => <th key={h} className="px-3 py-2 font-medium">{h}</th>)}</tr></thead>
                 <tbody>
@@ -195,7 +195,7 @@ export function Columns({ data, height = 160, ariaLabel, unit = "", testId }: {
           const h = sy(0) - sy(v);
           const r = Math.min(4, h);
           return (
-            <g key={i} onPointerEnter={() => setHover(i)} onPointerLeave={() => setHover(null)} onFocus={() => setHover(i)} onBlur={() => setHover(null)} tabIndex={0}
+            <g key={i} role="img" onPointerEnter={() => setHover(i)} onPointerLeave={() => setHover(null)} onFocus={() => setHover(i)} onBlur={() => setHover(null)} tabIndex={0}
               aria-label={`${d.label}: ${d.value ?? "no data"}${unit}`}>
               <rect x={pad.l + slot * i} y={pad.t} width={slot} height={height - pad.t - pad.b} fill="transparent" />
               {d.value != null && d.value > 0 && (

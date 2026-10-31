@@ -119,7 +119,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <nav aria-label="App" className="space-y-6">
       {NAV.map((g) => (
         <div key={g.group}>
-          <p className="hud mb-2 px-3 text-chalk/40">{g.group}</p>
+          <p className="hud mb-2 px-3">{g.group}</p>
           <ul className="space-y-0.5">
             {g.items.map((i) => {
               const on = active(pathname, i.href);

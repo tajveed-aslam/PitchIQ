@@ -257,3 +257,12 @@ def test_notification_settings_are_respected(client, worker):
     texts = [n["text"] for n in client.get("/me/notifications", headers=h).json()]
     assert not any("is ready" in t or "Badge earned" in t for t in texts)
     assert client.get("/player/profile", headers=h).json()["prefs"]["reports"] is False
+
+
+def test_training_check_rejects_field_names_read_aloud():
+    """Seen in a real Gemini reply: 'reach your week_goal_touches of 19'."""
+    f = {"latest_touches": 18, "best_touches": 16, "rhythm": "very even", "control": "tight", "touches_per_minute": 70.0,
+         "week_goal_touches": 19, "reaction_rating": None, "lowest_mindset_trait": None, "lowest_mindset_value": None}
+    day = {"title": "Rhythm", "drills": [{"name": "Metronome touches", "minutes": 10, "note": "Keeps your beat."}]}
+    w = training.Week(summary="Reach your week_goal_touches of 19 this week.", focus=[], days=[day] * 5)
+    assert any("week_goal_touches" in p for p in training.check(w, f))

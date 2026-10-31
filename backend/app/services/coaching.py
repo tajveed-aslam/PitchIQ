@@ -248,9 +248,16 @@ def run_with_timeout(fn, *args, timeout: float = TIMEOUT_S):
     return _pool.submit(fn, *args).result(timeout=timeout)
 
 
+def leaked_keys(text: str, f: dict) -> list[str]:
+    """Fact names copied into the prose ("your week_goal_touches of 19"): the model read the JSON aloud. Only
+    snake_case names count; one-word names like "rhythm" are ordinary words."""
+    return [k for k in f if "_" in k and k in text]
+
+
 def check(c: Coaching, f: dict) -> list[str]:
     """Every reason to reject a Gemini reply (empty = usable)."""
     problems = [f"number not measured: {n}" for n in ungrounded_numbers(c, f)]
+    problems += [f"field name in text: {k}" for k in leaked_keys(_claims(c), f)]
     problems += contradictions(c, f)
     problems += [f"drill not in library: {n}" for n in unknown_drills(c)]
     if not c.drills or not c.strengths or not c.focus:

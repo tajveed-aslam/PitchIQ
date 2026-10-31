@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 
 from ..config import settings
 from . import gemini
-from .coaching import DRILLS, _NUMBER, facts, goal_touches, run_with_timeout
+from .coaching import DRILLS, _NUMBER, facts, goal_touches, leaked_keys, run_with_timeout
 
 # Drills for the non-video parts of the card, in the same form as the juggling library.
 EXTRA_DRILLS: dict[str, dict] = {
@@ -125,7 +125,9 @@ def rule_based(f: dict) -> dict:
 SYSTEM = (
     "You are PitchIQ's football coach planning one training week for a young player from MEASURED facts. Use only "
     "drills from the library, by exact name. Write exactly 5 training days (rest days are added for you), each with "
-    "a short title and 1-3 drills of 5-20 minutes, each drill with a one-sentence note on why it suits this player. "
+    "a 1-3 word title naming its focus (like 'Rhythm' or 'Weak foot', never 'Day One') and 1-3 drills of 5-20 "
+    "minutes, each drill with a one-sentence note on why it suits this player. Write the goal as a plain number of "
+    "touches; never copy the facts' field names (like week_goal_touches) into the text. "
     "Describe rhythm and control only with the words in the facts. Never write a number that isn't in the facts, "
     "except drill minutes. The summary must mention week_goal_touches. Plain English for a young teenager."
 )
@@ -168,6 +170,7 @@ def check(w: Week, f: dict) -> list[str]:
             problems.append(f"number not measured: {token}")
     if str(f["week_goal_touches"]) not in w.summary:
         problems.append("summary doesn't state the week's goal")
+    problems += [f"field name in text: {k}" for k in leaked_keys(" ".join([text, *(d.title for d in w.days)]), f)]
     return problems
 
 
