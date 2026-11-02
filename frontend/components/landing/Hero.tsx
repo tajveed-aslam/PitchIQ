@@ -7,7 +7,7 @@ export function Hero() {
   const showcase = SAMPLES.find((s) => s.id === "juggling-43487") ?? SAMPLES[0];
   const m = showcase?.report.metrics;
   return (
-    <section className="relative isolate flex min-h-[640px] items-end overflow-hidden pb-16 pt-28 sm:min-h-[720px] sm:items-center">
+    <section data-surface="photo" className="relative isolate flex min-h-[640px] items-end overflow-hidden pb-16 pt-16 sm:min-h-[720px] sm:items-center">
       <Image
         src="/images/hero-bicycle.webp"
         alt="A player attempts a bicycle kick under floodlights on an artificial pitch"

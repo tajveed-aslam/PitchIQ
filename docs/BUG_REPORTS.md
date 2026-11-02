@@ -28,7 +28,9 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 | BUG-21 | High | AI training plans | E2E with the real Gemini API (TC-MAIN-10 page snapshot) | Fixed |
 | BUG-22 | Medium | Global accessibility | E2E axe checks | Fixed |
 | BUG-23 | Low | Rule-based training plan | Screenshot review | Fixed |
-| BUG-24 | Medium | Global reaction test | Three-run E2E check (run 6, iPhone) | Fixed |
+| BUG-24 | Medium | Global reaction test | Three-run E2E check (run 9, iPhone) | Fixed |
+| BUG-25 | Medium | Monthly leaderboard | Screenshot review (light theme) | Fixed |
+| BUG-26 | Medium | Global charts on phones | Live E2E (TC-MAIN-04, iPhone) | Fixed |
 
 ---
 
@@ -218,3 +220,17 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
   like an early tap. The API still checks every timing.
 - **Guard:** TC-MAIN-06 plays the rounds like a person and handles repeated rounds.
 
+### BUG-25: The demo coach's fictional squad appeared on the monthly leaderboard
+- **Steps:** open the challenge page in either edition.
+- **Expected:** the leaderboard's own sample players and real entrants.
+- **Actual:** squad and trial players (Lucas M., Mateo R...) filled the top 20 and could push real entrants off it.
+- **Fix:** only the leaderboard's own seeded players count.
+- **Guard:** `test_demo_coachs_fictional_squad_stays_off_the_monthly_leaderboard`.
+
+### BUG-26: Global pages with a chart overflowed phones for a moment
+- **Steps:** demo player, `/dashboard` on iPhone against the live site.
+- **Expected:** no sideways scrolling at any time.
+- **Actual:** the page measured 637 px wide until the chart measured its container (seen only on slower runs).
+- **Cause:** charts first rendered at a default width of 600 px.
+- **Fix:** charts reserve their height and draw once the width is known.
+- **Guard:** TC-MAIN-01/04/14 sideways-scroll checks.

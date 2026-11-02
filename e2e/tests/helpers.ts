@@ -12,7 +12,9 @@ export function uniqueEmail(tag = "e2e"): string {
 /** Creates an account through the API (fast) and logs the page in by storing the token before any page loads. */
 export async function signedUp(page: Page, request: APIRequestContext, plan = "trial", name = "Test Player") {
   const email = uniqueEmail(plan);
-  const res = await request.post(`${API_URL}/auth/signup`, { data: { name, email, password: "goodpass123", plan } });
+  const data = { name, email, password: "goodpass123", plan };
+  // One retry: the free host's proxy occasionally drops a connection (ECONNRESET), which isn't what this tests.
+  const res = await request.post(`${API_URL}/auth/signup`, { data }).catch(() => request.post(`${API_URL}/auth/signup`, { data }));
   expect(res.status(), await res.text()).toBe(201);
   const { access_token } = await res.json();
   await page.addInitScript((t) => localStorage.setItem("pitchiq.token", t), access_token);

@@ -80,12 +80,12 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <Link href="/upload" className="group relative isolate flex min-h-28 items-end overflow-hidden rounded-2xl p-4">
+            <Link href="/upload" data-surface="photo" className="group relative isolate flex min-h-28 items-end overflow-hidden rounded-2xl p-4">
               <Image src="/images/knee-volley-sm.webp" alt="" fill sizes="300px" className="-z-20 object-cover transition group-hover:scale-105" />
               <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink-950 to-ink-950/20" />
               <span className="flex items-center gap-2 font-display text-xl font-bold uppercase text-white"><CloudUpload className="h-5 w-5 text-accent-400" aria-hidden="true" /> Analyse a new session</span>
             </Link>
-            <Link href="/events" className="group relative isolate flex min-h-28 items-end overflow-hidden rounded-2xl p-4">
+            <Link href="/events" data-surface="photo" className="group relative isolate flex min-h-28 items-end overflow-hidden rounded-2xl p-4">
               <Image src="/images/high-kick-sm.webp" alt="" fill sizes="300px" className="-z-20 object-cover transition group-hover:scale-105" />
               <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink-950 to-ink-950/20" />
               <span className="flex items-center gap-2 font-display text-xl font-bold uppercase text-white"><Trophy className="h-5 w-5 text-accent-400" aria-hidden="true" /> Monthly challenge</span>

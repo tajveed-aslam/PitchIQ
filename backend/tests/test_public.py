@@ -66,3 +66,9 @@ def test_stored_sample_coaching(client):
     assert r.status_code == 200 and r.json()["coaching"]["source"] == "rules" and len(r.json()["coaching"]["drills"]) == 3
     assert client.get("/samples/juggling-43513/coaching").json() == {"coaching": None}  # rejected: no coaching
     assert client.get("/samples/nope/coaching").status_code == 404
+
+
+def test_demo_coachs_fictional_squad_stays_off_the_monthly_leaderboard(client, worker, seeded):
+    names = [row["name"] for row in client.get("/events/current").json()["leaderboard"]]
+    assert "Kwame A." in names
+    assert not {"Lucas M.", "Mateo R.", "Sofia L."} & set(names)

@@ -7,7 +7,7 @@ import { Logo } from "./Logo";
 export function SiteHeader({ edition }: { edition: Edition }) {
   const e = EDITIONS[edition];
   return (
-    <header className="absolute inset-x-0 top-0 z-30">
+    <header className="sticky top-0 z-30 border-b border-white/10 bg-ink-800/95 backdrop-blur">
       <div className="container-page relative flex h-16 items-center justify-between gap-3">
         <Link href="/" className="flex items-center gap-2" aria-label={`${e.name} home`}>
           <Logo />

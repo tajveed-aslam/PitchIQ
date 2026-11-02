@@ -10,7 +10,7 @@ export function PageShell({ eyebrow, title, action, children }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="container-page pb-20 pt-24">
+    <div className="container-page pb-20 pt-10">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           {eyebrow && <p className="eyebrow">{eyebrow}</p>}
@@ -83,7 +83,7 @@ export function ReportTile({ a }: { a: AnalysisSummary }) {
 export function PlayerCard({ data }: { data: Dashboard }) {
   const { user, card } = data;
   return (
-    <div className="relative isolate overflow-hidden rounded-3xl border border-accent-400/30 p-6 shadow-glow" data-testid="player-card">
+    <div data-surface="photo" className="relative isolate overflow-hidden rounded-3xl border border-accent-400/30 p-6 shadow-lg" data-testid="player-card">
       <Image src="/images/floodlights-sm.webp" alt="" fill sizes="400px" className="-z-20 object-cover" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-950/60 via-ink-950/85 to-ink-950" />
       <div className="flex items-start justify-between">

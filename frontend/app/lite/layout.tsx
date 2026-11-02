@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { EDITIONS } from "@/config/editions";
@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   title: `${EDITIONS.lite.name}: AI football skill analysis`,
   description: "Film a juggling session on your phone and get your touch count, rhythm and control measured by computer vision, with coaching tips.",
 };
+
+export const viewport: Viewport = { themeColor: "#ffffff" };
 
 export default function LiteLayout({ children }: { children: React.ReactNode }) {
   return (

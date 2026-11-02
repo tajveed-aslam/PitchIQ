@@ -206,7 +206,7 @@ export function Testimonials() {
 
 export function FinalCta() {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section data-surface="photo" className="relative isolate overflow-hidden bg-ink-950">
       <Image src="/images/high-kick.webp" alt="" fill sizes="100vw" className="-z-20 object-cover" />
       <div className="absolute inset-0 -z-10 bg-ink-950/60" />
       <div className="container-page py-24 text-center">

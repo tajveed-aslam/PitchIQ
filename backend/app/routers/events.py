@@ -34,7 +34,9 @@ def current(db: Session = Depends(get_db), credentials: HTTPAuthorizationCredent
             .group_by(Analysis.user_id).subquery())
     rows = db.execute(select(User, best.c.touches).join(best, best.c.user_id == User.id)
                       .order_by(best.c.touches.desc())).all()
-    board = [(u, t) for u, t in rows if u.is_seed or plan_of(u).events or u.is_guest]
+    # Seeded players on the board: only the leaderboard's own (player1@seed...), not the demo coach's fictional squad.
+    board = [(u, t) for u, t in rows
+             if (u.is_seed and u.email.startswith("player")) or (not u.is_seed and (plan_of(u).events or u.is_guest))]
     return {
         "title": f"{now:%B} Touch Challenge",
         "rules": "Your best juggling count this month from one video. The video must pass the quality check "

@@ -2,12 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---- Themes. The [edition] layout sets data-edition on its wrapper. ----
-   Lite (Africa): night-match navy, one pitch-green accent, condensed sporty uppercase headings.
-   Main (Global): warm stadium black, championship gold with a violet glow, geometric display font, glass cards. */
+/* ---- Themes. Each edition's layout sets data-edition on its wrapper. ----
+   Lite (Africa): light. Off-white page, white cards, dark text, a deep pitch green, condensed sporty headings.
+   Main (Global): warm stadium black, championship gold with a violet glow, geometric display font, glass cards.
+   The names keep their jobs in both: ink-950 = page, ink-800 = card, chalk = body text, "white" (--contrast) =
+   strongest text and hairlines, accent-400 = accent. data-surface="photo" puts Lite's dark palette back for text
+   over a photo (hero, player card, banners). */
 @layer base {
   :root,
   [data-edition="lite"] {
+    --ink-950: 245 248 243;
+    --ink-900: 236 242 234;
+    --ink-800: 255 255 255;
+    --ink-700: 226 232 223;
+    --ink-600: 208 216 205;
+    --ink-500: 170 180 168;
+    --accent-200: 13 79 38;
+    --accent-300: 16 94 45;
+    --accent-400: 20 110 53;
+    --accent-500: 22 130 64;
+    --accent-600: 24 148 74;
+    --glow: 14 108 133;
+    --chalk: 6 20 14;
+    --contrast: 11 28 20;
+    --flare: 170 72 6;
+    --good: 20 110 53;
+    --series-1: 20 110 53;
+    --series-2: 14 108 133;
+    --font-display: var(--font-barlow);
+  }
+
+  [data-surface="photo"] {
     --ink-950: 5 10 20;
     --ink-900: 8 16 31;
     --ink-800: 14 26 46;
@@ -21,11 +46,10 @@
     --accent-600: 31 161 72;
     --glow: 34 211 238;
     --chalk: 232 238 247;
+    --contrast: 255 255 255;
     --flare: 255 181 71;
     --good: 91 224 127;
-    --series-1: 91 224 127;
-    --series-2: 34 211 238;
-    --font-display: var(--font-barlow);
+    color: rgb(var(--chalk));
   }
 
   [data-edition="main"] {
@@ -43,6 +67,7 @@
     --glow: 139 92 246;
     --chalk: 240 236 228;
     --flare: 251 113 133;
+    --contrast: 255 255 255;
     --good: 52 211 153;
     /* Chart series (dataviz validator, dark surface #100E17: lightness band, CVD and contrast all pass):
        ochre for "this / newer", violet for "earlier / comparison". The brighter gold stays for UI. */
@@ -56,6 +81,9 @@
   }
   body {
     @apply bg-ink-950 text-chalk font-sans antialiased;
+  }
+  html:has([data-edition="main"]) body {
+    background: rgb(9 8 13); /* overscroll beyond the Global wrapper stays dark */
   }
   :focus-visible {
     @apply outline-none ring-2 ring-accent-400 ring-offset-2 ring-offset-ink-950;
@@ -91,6 +119,11 @@
   }
   .chip {
     @apply inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-chalk;
+  }
+
+  /* Lite on its light page: solid white cards with a soft shadow. */
+  [data-edition="lite"] .card {
+    @apply bg-ink-800 shadow-[0_1px_3px_rgb(11_28_20/0.08)];
   }
 
   /* Main: sentence-case display type, glass cards with a gold edge, gradient buttons. */

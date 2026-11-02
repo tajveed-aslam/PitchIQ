@@ -17,7 +17,8 @@ export const SAMPLE_TIMEOUT = 200_000;
 export default defineConfig({
   testDir: "./tests",
   timeout: LIVE ? 900_000 : 150_000, // tests that wait for a real analysis set their own (ANALYSIS_TIMEOUT + margin)
-  expect: { timeout: 15_000 },
+  // Live: the free server (0.1 CPU) answers slowly while it analyses other tests' videos.
+  expect: { timeout: LIVE ? 60_000 : 15_000 },
   fullyParallel: true,
   workers: process.env.CI ? 2 : 3,
   retries: 0,
