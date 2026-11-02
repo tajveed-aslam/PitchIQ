@@ -153,8 +153,11 @@ class Room(Base):
     criteria: Mapped[dict | None] = mapped_column(JSON, nullable=True)  # academy: {"min_touches": 20, ...}
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
-    members: Mapped[list["RoomMember"]] = relationship(back_populates="room", cascade="all, delete-orphan")
-    tasks: Mapped[list["Task"]] = relationship(back_populates="room", cascade="all, delete-orphan")
+    # Explicit orders: without one, Postgres returns an updated row later, so a hand-in jumped down the list as soon
+    # as the coach scored it (BUG-27; SQLite doesn't do this, so only the live site showed it).
+    members: Mapped[list["RoomMember"]] = relationship(back_populates="room", cascade="all, delete-orphan",
+                                                       order_by="RoomMember.id")
+    tasks: Mapped[list["Task"]] = relationship(back_populates="room", cascade="all, delete-orphan", order_by="Task.id")
 
 
 class RoomMember(Base):
@@ -185,7 +188,8 @@ class Task(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
     room: Mapped[Room] = relationship(back_populates="tasks")
-    submissions: Mapped[list["Submission"]] = relationship(back_populates="task", cascade="all, delete-orphan")
+    submissions: Mapped[list["Submission"]] = relationship(back_populates="task", cascade="all, delete-orphan",
+                                                           order_by="Submission.id")
 
 
 class Submission(Base):
