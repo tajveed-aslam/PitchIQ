@@ -72,9 +72,13 @@ From the Main brief (player card, training plans, skill analysis, challenges, me
 | **12** | 2026-11-01 | 129 | 0 | 6 | 14.3 min | **three consecutive clean runs on the final build (12–14)** |
 | **13** | 2026-11-01 | 129 | 0 | 6 | 15.6 min | |
 | **14** | 2026-11-01 | 129 | 0 | 6 | 14.9 min | |
+| Live | 2026-11-02 | 125 | 4 | 6 | 12.6 min | Against the live site, iPhone only: BUG-26 (chart overflow, fixed); two 15 s waits too short while the free server analysed videos (now 60 s live); one dropped connection (helper retries). No server restarts, peak 389 of 512 MB |
+| **15** | 2026-11-02 | 129 | 0 | 6 | 7.1 min | **Light theme for Lite, BUG-25, BUG-26: three consecutive clean runs (15–17)** |
+| **16** | 2026-11-02 | 129 | 0 | 6 | 7.2 min | |
+| **17** | 2026-11-02 | 129 | 0 | 6 | 6.8 min | |
 
 Skipped by design: TC-WEB-04 and TC-MAIN-14 on desktop (phone layouts), TC-MAIN-02 and TC-MAIN-10 on phones (one
-real analysis per run). API: 80 passed. CI (Linux): API, frontend lint + build + route check, worker + accuracy
+real analysis per run). API: 81 passed. CI (Linux): API, frontend lint + build + route check, worker + accuracy
 regression: green. Lighthouse mobile (Global, local build): `/` 90, `/samples` 88, `/login` 96 performance;
 accessibility, best practices and SEO 100; CLS ≤ 0.003.
 
