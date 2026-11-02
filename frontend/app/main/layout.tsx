@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { EditionProvider } from "@/lib/edition";
 
 // PitchIQ Global (the Main edition): its own pages, components (components/main) and design. middleware.ts serves
@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   title: { default: "PitchIQ: measured football skills, AI coaching, team tools", template: "%s · PitchIQ" },
   description: "Computer vision counts every juggling touch; a full player card, AI training plans, comparisons and coach rooms turn the numbers into progress.",
 };
+
+export const viewport: Viewport = { themeColor: "#09080d" };
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (

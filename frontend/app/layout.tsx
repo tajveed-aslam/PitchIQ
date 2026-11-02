@@ -10,7 +10,7 @@ const body = Inter({ subsets: ["latin"], variable: "--font-body" });
 // Main's data labels ("scientific data typography" in the brief).
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
-export const viewport: Viewport = { themeColor: "#050a14" };
+export const viewport: Viewport = { themeColor: "#ffffff" };
 
 // The edition (Africa = Lite in app/lite, Global = Main in app/main) is chosen by middleware.ts.
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

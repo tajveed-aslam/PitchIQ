@@ -38,7 +38,7 @@ measured"), the federation price-quote chatbot, IP-based region default, more la
 
 | Level | Tool | Where | What |
 |---|---|---|---|
-| Unit + API | pytest (80 tests) | `backend/tests` | Auth, profile, plans/allowances, job flow with a fake worker fed real reports, coaching checks, samples, leaderboard, support; Global: tests, card, badges, training plans, analytics, rooms |
+| Unit + API | pytest (81 tests) | `backend/tests` | Auth, profile, plans/allowances, job flow with a fake worker fed real reports, coaching checks, samples, leaderboard, support; Global: tests, card, badges, training plans, analytics, rooms |
 | Worker + model regression | pytest, real pipeline (6 tests) | `worker/tests` | HTTP contract, bad inputs, corrupt files, sample counts within bands, videos deleted |
 | Model accuracy | evaluation scripts | `analysis/spike/evaluate_juggling.py` | Precision/recall/count error against ground truth |
 | End to end | Playwright (45 cases × 3 devices) | `e2e/` | User journeys on desktop Chrome, Pixel 7 (Chromium) and iPhone 14 (WebKit) against the real stack |

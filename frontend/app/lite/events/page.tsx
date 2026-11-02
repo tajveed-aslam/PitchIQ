@@ -17,7 +17,7 @@ interface Board {
   logged_in: boolean;
 }
 
-const MEDAL = ["text-yellow-300", "text-slate-200", "text-amber-600"];
+const MEDAL = ["text-yellow-600", "text-slate-400", "text-amber-700"];
 
 export default function EventsPage() {
   const { loading } = useSession();
@@ -32,9 +32,9 @@ export default function EventsPage() {
   const daysLeft = board ? Math.max(0, Math.ceil((new Date(board.ends).getTime() - Date.now()) / 86_400_000)) : null;
   return (
     <>
-      <section className="relative isolate overflow-hidden pb-12 pt-32">
+      <section data-surface="photo" className="relative isolate overflow-hidden pb-12 pt-16">
         <Image src="/images/high-kick.webp" alt="" fill priority sizes="100vw" className="-z-20 object-cover" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-950/40 via-ink-950/75 to-ink-950" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-950/40 via-ink-950/75 to-ink-950/90" />
         <div className="container-page">
           <p className="eyebrow">Monthly challenge</p>
           <h1 className="heading mt-2 sm:text-6xl">{board?.title ?? "Touch Challenge"}</h1>
@@ -42,7 +42,7 @@ export default function EventsPage() {
           {daysLeft != null && <p className="chip mt-4 w-fit">{daysLeft} days left</p>}
         </div>
       </section>
-      <div className="container-page grid gap-8 pb-20 lg:grid-cols-[1.4fr_1fr]">
+      <div className="container-page grid gap-8 pb-20 pt-10 lg:grid-cols-[1.4fr_1fr]">
         <div className="card overflow-hidden">
           {error && <p className="p-6 text-flare">{error}</p>}
           {!board && !error && <Loading label="Loading the leaderboard" />}

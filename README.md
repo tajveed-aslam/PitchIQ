@@ -5,9 +5,9 @@ rhythm and ball control, and an AI coach turns those numbers into feedback and d
 
 Two editions on one site, picked with the **region switch** in the header, each with its own design:
 
-- **Africa = PitchIQ Lite** (the default): built for slow, expensive mobile data. Small pages, on-device video
-  shrinking, one skill done properly.
-- **Global = the full platform**: a measured player card with mindset, reaction and logic tests, comparisons and
+- **Africa = PitchIQ Lite** (the default, a light theme): built for slow, expensive mobile data. Small pages,
+  on-device video shrinking, one skill done properly.
+- **Global = the full platform** (a dark theme): a measured player card with mindset, reaction and logic tests, comparisons and
   analytics, AI weekly training plans, challenges and badges, and coach rooms for squads and academy trials.
 
 One API and one database serve both. A portfolio project: payments are in test mode.

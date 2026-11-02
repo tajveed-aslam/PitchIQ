@@ -6,12 +6,15 @@
 // two or more series, a crosshair + tooltip on hover/focus, and a table view so no value is hover-only.
 import { useEffect, useId, useRef, useState } from "react";
 
+/** The container's width; 0 until measured, and charts draw nothing until then (a default width overflowed phones
+ * for a moment on slow devices: BUG-26). */
 function useWidth<T extends HTMLElement>(): [React.RefObject<T>, number] {
   const ref = useRef<T>(null);
-  const [w, setW] = useState(600);
+  const [w, setW] = useState(0);
   useEffect(() => {
     if (!ref.current) return;
-    const ro = new ResizeObserver(([e]) => setW(Math.max(260, Math.round(e.contentRect.width))));
+    setW(Math.round(ref.current.clientWidth));
+    const ro = new ResizeObserver(([e]) => setW(Math.round(e.contentRect.width)));
     ro.observe(ref.current);
     return () => ro.disconnect();
   }, []);
@@ -76,8 +79,8 @@ export function LineChart({ series, height = 240, xLabel, yUnit = "", trend, tre
           {trend && <li className="flex items-center gap-2"><span className="w-4 border-t border-dashed border-chalk/50" />{trendLabel ?? "Trend"}</li>}
         </ul>
       )}
-      <div ref={ref} className="relative">
-        <svg width={width} height={height} role="img" aria-label={ariaLabel} className="block touch-none select-none"
+      <div ref={ref} className="relative" style={{ minHeight: height }}>
+        {width > 0 && <svg width={width} height={height} role="img" aria-label={ariaLabel} className="block touch-none select-none"
           tabIndex={0}
           onPointerMove={(e) => setHover(nearest(e.clientX - e.currentTarget.getBoundingClientRect().left))}
           onPointerLeave={() => setHover(null)}
@@ -130,7 +133,7 @@ export function LineChart({ series, height = 240, xLabel, yUnit = "", trend, tre
               </g>
             );
           })}
-        </svg>
+        </svg>}
         {hx != null && (
           <div className="pointer-events-none absolute top-0 z-10 min-w-[8rem] rounded-xl border border-white/10 bg-ink-950/95 px-3 py-2 text-xs shadow-xl backdrop-blur"
             style={{ left: Math.min(Math.max(sx(hx) - 64, 0), width - 150) }}>
@@ -186,8 +189,8 @@ export function Columns({ data, height = 160, ariaLabel, unit = "", testId }: {
   const bw = Math.min(24, slot - 4);
   const sy = (v: number) => pad.t + (1 - v / top) * (height - pad.t - pad.b);
   return (
-    <div ref={ref} className="relative" data-testid={testId}>
-      <svg width={width} height={height} role="img" aria-label={ariaLabel} className="block">
+    <div ref={ref} className="relative" style={{ minHeight: height }} data-testid={testId}>
+      {width > 0 && <svg width={width} height={height} role="img" aria-label={ariaLabel} className="block">
         <line x1={pad.l} x2={width - pad.r} y1={sy(0)} y2={sy(0)} stroke="rgb(255 255 255 / .1)" />
         {data.map((d, i) => {
           const cx = pad.l + slot * i + slot / 2;
@@ -211,7 +214,7 @@ export function Columns({ data, height = 160, ariaLabel, unit = "", testId }: {
             </g>
           );
         })}
-      </svg>
+      </svg>}
       {hover != null && (
         <div className="pointer-events-none absolute top-0 z-10 rounded-xl border border-white/10 bg-ink-950/95 px-3 py-2 text-xs shadow-xl"
           style={{ left: Math.min(Math.max(pad.l + slot * hover - 30, 0), width - 120) }}>

@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 // Colours are CSS variables (RGB channels) set per edition in app/globals.css, so one set of class names gives
-// Lite its night-match navy + pitch green and Main its warm black + gold. `<alpha-value>` keeps /20-style opacity.
+// Lite its light page + pitch green and Main its warm black + gold. `<alpha-value>` keeps /20-style opacity.
 const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
 
 const config: Config = {
@@ -12,7 +12,8 @@ const config: Config = {
         ink: { 950: v("ink-950"), 900: v("ink-900"), 800: v("ink-800"), 700: v("ink-700"), 600: v("ink-600"), 500: v("ink-500") },
         accent: { 200: v("accent-200"), 300: v("accent-300"), 400: v("accent-400"), 500: v("accent-500"), 600: v("accent-600") },
         glow: v("glow"), // second colour for gradients (Main: violet)
-        chalk: v("chalk"), // body text on dark surfaces
+        chalk: v("chalk"), // body text
+        white: v("contrast"), // strongest text and hairlines: real white on dark surfaces, near-black on Lite's light page
         flare: v("flare"), // warnings only (quality issues)
         good: v("good"), // status: improved / met / done (always with an icon or word, never colour alone)
         series: { 1: v("series-1"), 2: v("series-2") }, // chart series, validated for colour-blind separation
