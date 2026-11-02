@@ -61,7 +61,7 @@ export default function Training() {
       <>
         {header("Five training days and two rest days, built from your numbers.")}
         <section className="relative isolate overflow-hidden rounded-3xl border border-white/[0.08]">
-          <Image src="/images/main/knee-touch.webp" alt="A player juggles the ball on her knee" fill sizes="100vw" className="-z-20 object-cover object-[50%_25%] opacity-40" />
+          <Image src="/images/main/knee-touch.webp" alt="A player juggles the ball on the knee" fill sizes="100vw" className="-z-20 object-cover object-[50%_25%] opacity-40" />
           <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/85 to-ink-950/30" />
           <div className="max-w-lg space-y-4 p-8 sm:p-12">
             {cur.has_analysis ? (

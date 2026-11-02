@@ -6,7 +6,7 @@ test.describe("Landing page", () => {
   test("TC-WEB-01 hero, accuracy stats and calls to action", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("every touch");
-    await expect(page.getByRole("img", { name: /bicycle kick/i })).toBeVisible();
+    await expect(page.getByRole("img", { name: /green artificial pitch/i })).toBeVisible();
     await expect(page.getByText("of touches found in our hand-counted tests")).toBeVisible();
     await page.getByRole("link", { name: /analyse a sample video/i }).click();
     await expect(page).toHaveURL(/\/samples$/);

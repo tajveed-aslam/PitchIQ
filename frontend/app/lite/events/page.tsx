@@ -32,14 +32,15 @@ export default function EventsPage() {
   const daysLeft = board ? Math.max(0, Math.ceil((new Date(board.ends).getTime() - Date.now()) / 86_400_000)) : null;
   return (
     <>
-      <section data-surface="photo" className="relative isolate overflow-hidden pb-12 pt-16">
-        <Image src="/images/high-kick.webp" alt="" fill priority sizes="100vw" className="-z-20 object-cover" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-950/40 via-ink-950/75 to-ink-950/90" />
-        <div className="container-page">
+      <section className="container-page grid items-center gap-8 pb-2 pt-10 lg:grid-cols-[1.4fr_1fr]">
+        <div>
           <p className="eyebrow">Monthly challenge</p>
           <h1 className="heading mt-2 sm:text-6xl">{board?.title ?? "Touch Challenge"}</h1>
           {board && <p className="mt-3 max-w-2xl text-chalk/80">{board.rules}</p>}
           {daysLeft != null && <p className="chip mt-4 w-fit">{daysLeft} days left</p>}
+        </div>
+        <div className="relative hidden aspect-[16/9] overflow-hidden rounded-3xl shadow-lg lg:block">
+          <Image src="/images/day-dribble.webp" alt="A player rolls a football underfoot on a green pitch" fill priority sizes="33vw" className="object-cover" />
         </div>
       </section>
       <div className="container-page grid gap-8 pb-20 pt-10 lg:grid-cols-[1.4fr_1fr]">

@@ -144,7 +144,7 @@ export function SignupScreen() {
   }
 
   return (
-    <Frame title="Create your account" sub="Start with three free analyses, or pick a plan (test mode: nothing is charged)." image="/images/main/thigh-control.webp" alt="Close-up of a player controlling a ball on her thigh on an artificial pitch">
+    <Frame title="Create your account" sub="Start with three free analyses, or pick a plan (test mode: nothing is charged)." image="/images/main/thigh-control.webp" alt="Close-up of a player controlling a ball on the thigh on an artificial pitch">
       <form onSubmit={submit} className="space-y-4">
         <Label text="Name"><input name="name" required maxLength={80} autoComplete="name" className="m-input" data-testid="signup-name" /></Label>
         <Label text="Email"><input name="email" type="email" required autoComplete="email" className="m-input" data-testid="signup-email" /></Label>

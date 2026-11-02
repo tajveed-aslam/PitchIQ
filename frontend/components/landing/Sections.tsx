@@ -29,7 +29,7 @@ export function StatsStrip() {
 
 const STEPS = [
   { icon: Camera, title: "Film", text: "Prop your phone up, whole body and ball in the picture, and juggle for up to a minute.", img: "/images/floodlights-sm.webp", alt: "A player juggling on a floodlit pitch, filmed from a distance" },
-  { icon: CloudUpload, title: "Upload", text: "The data saver shrinks your video before it leaves your phone. A quality check tells you if it needs re-filming.", img: "/images/knee-volley-sm.webp", alt: "A player lifting the ball with his knee" },
+  { icon: CloudUpload, title: "Upload", text: "The data saver shrinks your video before it leaves your phone. A quality check tells you if it needs re-filming.", img: "/images/knee-volley-sm.webp", alt: "A player lifting the ball with a knee" },
   { icon: MessageSquareText, title: "Improve", text: "Get your touch count, rhythm and control, then coaching and drills written from those numbers.", img: "/images/head-height-sm.webp", alt: "A player watching the ball drop from head height" },
 ];
 
@@ -206,10 +206,8 @@ export function Testimonials() {
 
 export function FinalCta() {
   return (
-    <section data-surface="photo" className="relative isolate overflow-hidden bg-ink-950">
-      <Image src="/images/high-kick.webp" alt="" fill sizes="100vw" className="-z-20 object-cover" />
-      <div className="absolute inset-0 -z-10 bg-ink-950/60" />
-      <div className="container-page py-24 text-center">
+    <section data-surface="photo" className="bg-[rgb(13_79_38)]">
+      <div className="container-page py-20 text-center">
         <h2 className="heading mx-auto max-w-2xl">Your next session counts. Literally.</h2>
         <p className="mx-auto mt-4 max-w-xl text-chalk/80">Start with a sample, then try your own video on the free trial.</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
