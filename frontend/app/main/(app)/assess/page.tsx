@@ -13,7 +13,7 @@ interface Taken { id: number; kind: string; score: number; detail: Record<string
 const TESTS = [
   { kind: "mindset", href: "/assess/mindset", icon: BrainCircuit, title: "Mindset", time: "3 min",
     text: "12 statements about how you train and play: motivation, confidence, team spirit, leadership, communication, emotional control.",
-    img: "/images/main/thigh-control-sm.webp", alt: "A player controls the ball on her thigh" },
+    img: "/images/main/thigh-control-sm.webp", alt: "A player controls the ball on the thigh" },
   { kind: "reaction", href: "/assess/reaction", icon: Timer, title: "Reaction", time: "1 min",
     text: "Tap the moment the panel turns gold, five times. We score your median, so one slow tap doesn't count against you.",
     img: "/images/main/night-kick-sm.webp", alt: "A player volleys the ball under floodlights" },

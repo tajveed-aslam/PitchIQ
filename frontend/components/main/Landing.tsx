@@ -20,7 +20,7 @@ function TrackingPhoto() {
       <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-br from-accent-400/20 via-transparent to-glow/30 blur-2xl" aria-hidden="true" />
       <figure className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-ink-900 shadow-2xl">
         <div className="relative aspect-[4/3]">
-          <Image src="/images/main/hero-trick.webp" alt="A player sitting on a garage floor keeps a football in the air with his feet" fill priority
+          <Image src="/images/main/hero-trick.webp" alt="A player sitting on a garage floor keeps a football in the air with both feet" fill priority
             sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[30%_center]" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink-900 via-transparent to-ink-950/10" />
           <div className="grid-bg absolute inset-0 opacity-60" aria-hidden="true" />
@@ -152,7 +152,7 @@ export function Platform() {
         <SectionHead hud="The platform" title={<>Everything on your card <span className="text-gradient">was measured.</span></>}
           sub="Video analysis, tests and training in one place. Where we can't measure something yet, the card says so instead of guessing." />
         <div className="grid auto-rows-[minmax(280px,auto)] gap-4 md:grid-cols-6">
-          <PhotoTile src="/images/main/thigh-control.webp" alt="Close-up of a player controlling the ball on her thigh" className="md:col-span-4 md:row-span-2" pos="50% 40%">
+          <PhotoTile src="/images/main/thigh-control.webp" alt="Close-up of a player controlling the ball on the thigh" className="md:col-span-4 md:row-span-2" pos="50% 40%">
             <IdCard className="h-6 w-6 text-accent-300" aria-hidden="true" />
             <h3 className="mt-3 font-display text-2xl font-semibold text-white">The full player card</h3>
             <p className="mt-2 max-w-md text-chalk/75">Skill ratings from your videos, physical profile, a mindset self-assessment and reaction and logic tests. One overall rating, built only from what was measured.</p>
@@ -183,7 +183,7 @@ export function Platform() {
               </div>
             </div>
           </article>
-          <PhotoTile src="/images/main/knee-touch-sm.webp" alt="A player in a green top juggles the ball on her knee" className="md:col-span-3" pos="50% 30%">
+          <PhotoTile src="/images/main/knee-touch-sm.webp" alt="A player in a green top juggles the ball on the knee" className="md:col-span-3" pos="50% 30%">
             <CalendarCheck2 className="h-6 w-6 text-accent-300" aria-hidden="true" />
             <h3 className="mt-3 font-display text-xl font-semibold text-white">AI training plans</h3>
             <p className="mt-2 text-sm text-chalk/75">A week built from your weakest numbers: five training days, two rest days, drills from a vetted library only.</p>
@@ -240,7 +240,7 @@ export function Coaches() {
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
         <div className="relative order-last lg:order-first">
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-white/10">
-            <Image src="/images/main/trick-closeup.webp" alt="A player sitting on the floor juggles the ball in front of his face" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[45%_center]" />
+            <Image src="/images/main/trick-closeup.webp" alt="A player sitting on the floor juggles the ball at face height" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[45%_center]" />
             <div className="absolute inset-0 bg-gradient-to-tr from-ink-950/70 to-transparent" />
           </div>
           <div className="glass absolute -bottom-8 right-4 w-64 p-4 shadow-2xl sm:right-8" aria-hidden="true">

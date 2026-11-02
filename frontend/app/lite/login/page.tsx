@@ -77,7 +77,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <AuthLayout title="Welcome back" subtitle="Log in to see your reports and upload new sessions." image="/images/head-height.webp" imageAlt="A player watches the ball drop from head height under floodlights">
+    <AuthLayout title="Welcome back" subtitle="Log in to see your reports and upload new sessions." image="/images/day-kick.webp" imageAlt="A player lifts a football with a raised foot on a green pitch">
       {/* fixed-height placeholder while the form loads: no layout shift (Lighthouse CLS) */}
       <Suspense fallback={<div className="min-h-[460px]" />}>
         <LoginForm />

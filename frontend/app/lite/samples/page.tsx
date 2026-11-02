@@ -11,16 +11,17 @@ export const metadata: Metadata = {
 export default function SamplesPage() {
   return (
     <>
-      <section data-surface="photo" className="relative isolate overflow-hidden pb-14 pt-16">
-        <Image src="/images/knee-volley.webp" alt="" fill priority sizes="100vw" className="-z-20 object-cover object-top" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-950/40 via-ink-950/70 to-ink-950/90" />
-        <div className="container-page max-w-3xl">
+      <section className="container-page grid items-center gap-8 pb-4 pt-10 lg:grid-cols-[1.4fr_1fr]">
+        <div>
           <p className="eyebrow">Sample library</p>
           <h1 className="heading mt-2 sm:text-6xl">See the AI count, then check it</h1>
           <p className="mt-4 text-lg text-chalk/80">
             Every sample was counted by hand, frame by frame. Analyse one to see the AI&apos;s count, its likely range,
             and where each touch landed against the hand count. One sample is filmed badly on purpose.
           </p>
+        </div>
+        <div className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl shadow-lg lg:block">
+          <Image src="/images/day-kick.webp" alt="A player lifts a football with a raised foot on a green pitch" fill priority sizes="33vw" className="object-cover" />
         </div>
       </section>
       <div className="container-page space-y-8 pb-20 pt-10">

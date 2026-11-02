@@ -195,8 +195,9 @@ def _alerts(room: Room, weekly: list[dict], last_seen: dict[int, datetime]) -> l
     for t in room.tasks:
         expected = 1 if t.assignee_id else len(room.members)
         if _aware(t.due_at) < _now() and len(t.submissions) < expected:
-            out.append({"level": "warn", "text": f"“{t.title}” is past its deadline with "
-                                                 f"{expected - len(t.submissions)} hand-ins missing."})
+            missing = expected - len(t.submissions)
+            out.append({"level": "warn", "text": f"“{t.title}” is past its deadline with {missing} hand-in"
+                                                 f"{'' if missing == 1 else 's'} missing."})
     return out
 
 

@@ -73,7 +73,7 @@ function SignupForm() {
 
 export default function SignupPage() {
   return (
-    <AuthLayout title="Start training smarter" subtitle="Free for 7 days: three analyses with AI coaching. No card needed." image="/images/knee-volley.webp" imageAlt="A player lifts the ball with his knee on a floodlit pitch">
+    <AuthLayout title="Start training smarter" subtitle="Free for 7 days: three analyses with AI coaching. No card needed." image="/images/day-kick.webp" imageAlt="A player lifts a football with a raised foot on a green pitch">
       {/* fixed-height placeholder while the form loads: no layout shift (Lighthouse CLS) */}
       <Suspense fallback={<div className="min-h-[600px]" />}>
         <SignupForm />

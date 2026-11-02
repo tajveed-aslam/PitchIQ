@@ -133,7 +133,7 @@ export default function UploadPage() {
 
         <aside className="space-y-4">
           <div className="relative aspect-video overflow-hidden rounded-2xl">
-            <Image src="/images/floodlights.webp" alt="A player juggling, filmed from a still camera with his whole body in the picture" fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+            <Image src="/images/floodlights.webp" alt="A player juggling, filmed from a still camera with the whole body in the picture" fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
             <span className="chip absolute bottom-3 left-3 bg-ink-950/80">Like this: still camera, whole body</span>
           </div>
           <ul className="card space-y-2 p-5 text-sm text-chalk/85">

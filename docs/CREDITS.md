@@ -43,6 +43,9 @@ photos, no famous players. Files in `frontend/public/images/`:
 | street-juggle.webp | 42524 | 8.0 s |
 | garage-session.webp | 43513 | 9.0 s |
 | first-touch.webp | 42529 | 4.0 s |
+| day-juggle.webp | 42543 | 4.4 s (Lite hero) |
+| day-kick.webp | 42543 | 3.0 s |
+| day-dribble.webp | 42530 | 9.3 s |
 
 The Global (Main) edition has its own stills, from clips the Lite pages don't use, in `frontend/public/images/main/`
 (each with a half-size `-sm` version):
