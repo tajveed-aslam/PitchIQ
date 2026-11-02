@@ -180,3 +180,23 @@ def test_demo_coach_and_demo_player_share_a_seeded_room(client, seeded):
     assert o["tasks"] and o["training"]["done"] == 5
     assert o["card"]["complete"] == 100 and o["badges"]["earned"] >= 5
     assert client.post("/auth/login", json={"email": "demo-coach@pitchiq.app", "password": "x" * 8}).status_code == 401
+
+
+def test_room_lists_have_a_fixed_order():
+    """Postgres returns updated rows later unless told otherwise (BUG-27). SQLite can't show that, so pin the ORDER BY."""
+    from app.models import Room, Task
+    for rel in (Room.members, Room.tasks, Task.submissions):
+        assert rel.property.order_by, rel
+
+
+def test_scoring_keeps_hand_ins_in_the_same_order(client, worker):
+    coach, room, players = squad(client, worker, players=3)
+    t = client.post(f"/rooms/{room['id']}/tasks", headers=coach, json={"title": "All", "due_at": later()}).json()
+    for h in players:
+        a = analysed(client, worker, h)
+        client.post(f"/rooms/tasks/{t['id']}/submit", headers=h, json={"analysis_id": a})
+    subs = lambda: client.get(f"/rooms/{room['id']}", headers=coach).json()["tasks"][0]["submissions"]  # noqa: E731
+    before = [s["id"] for s in subs()]
+    client.post(f"/rooms/submissions/{before[0]}/review", headers=coach, json={"score": 80})
+    assert [s["id"] for s in subs()] == before == sorted(before)
+

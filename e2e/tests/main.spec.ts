@@ -279,8 +279,10 @@ test.describe("Main edition: coach rooms", () => {
     await page.keyboard.press("Escape");
     await page.getByTestId("tab-tasks").click();
     const sub = page.getByTestId("submission").first();
+    const player = (await sub.locator("p").first().textContent())!;
     await sub.getByRole("textbox").fill("Nice work, keep the ball lower");
     await sub.getByTestId("review-save").click();
     await expect(sub).toContainText("/100");
+    await expect(sub).toContainText(player); // the same hand-in stays in place once scored (BUG-27)
   });
 });

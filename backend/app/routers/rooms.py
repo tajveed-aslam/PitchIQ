@@ -89,7 +89,8 @@ def _room_brief(r: Room, role: str) -> dict:
 @router.get("")
 def my_rooms(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     coaching = list(db.scalars(select(Room).where(Room.coach_id == user.id).order_by(Room.created_at.desc())))
-    member_of = list(db.scalars(select(Room).join(RoomMember).where(RoomMember.user_id == user.id)))
+    member_of = list(db.scalars(select(Room).join(RoomMember).where(RoomMember.user_id == user.id)
+                               .order_by(Room.created_at.desc())))
     out = []
     for r in coaching:
         out.append({**_room_brief(r, "coach"), "coach": user.name})

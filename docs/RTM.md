@@ -47,7 +47,7 @@ From the Main brief (player card, training plans, skill analysis, challenges, me
 | R-29 | Progress analytics: trend, personal bests, every metric over time, consistency | TC-MAIN-08, TC-MAIN-09; test_progress_trend_and_personal_bests | Pass |
 | R-30 | AI weekly training plans from measured numbers, checked like the coaching | TC-MAIN-10; test_training_plan_is_gated_needs_a_video_and_has_rest_days; test_training_check_rejects_invented_drills_numbers_and_shape; test_training_check_rejects_field_names_read_aloud; test_rule_based_plan_targets_the_weak_spots; test_finishing_every_session_earns_committed | Pass |
 | R-31 | Challenges, badges and milestones (incl. team milestones) | TC-MAIN-11; test_badges_are_earned_once_with_a_notification; test_rejected_videos_earn_nothing; test_team_dashboard_alerts_and_leaderboard | Pass |
-| R-32 | Coach plan: rooms with expiring join codes, roles, tasks with deadlines and notes, hand-ins, coach scores and notes, reminders | TC-MAIN-16, TC-MAIN-17; test_rooms.py (13) | Pass |
+| R-32 | Coach plan: rooms with expiring join codes, roles, tasks with deadlines and notes, hand-ins, coach scores and notes, reminders | TC-MAIN-16, TC-MAIN-17; test_rooms.py (15) | Pass |
 | R-33 | Team dashboard: overview, player profiles, trends, top players, automatic alerts; academy trials with criteria and scouting notes | TC-MAIN-17; test_team_dashboard_alerts_and_leaderboard; test_academy_rooms_check_the_bar_and_keep_scouting_notes | Pass |
 | R-34 | Settings: notifications, plan (test mode), language, privacy | TC-MAIN-12; test_notification_settings_are_respected; test_task_notifications_respect_the_players_settings | Pass |
 | R-35 | AI assistant on every signed-in page, answering Global questions from its FAQ | TC-MAIN-13; test_main_assistant_knows_main_features_and_lite_stays_unchanged | Pass |
@@ -78,7 +78,7 @@ From the Main brief (player card, training plans, skill analysis, challenges, me
 | **17** | 2026-11-02 | 129 | 0 | 6 | 6.8 min | |
 
 Skipped by design: TC-WEB-04 and TC-MAIN-14 on desktop (phone layouts), TC-MAIN-02 and TC-MAIN-10 on phones (one
-real analysis per run). API: 81 passed. CI (Linux): API, frontend lint + build + route check, worker + accuracy
+real analysis per run). API: 83 passed. CI (Linux): API, frontend lint + build + route check, worker + accuracy
 regression: green. Lighthouse mobile (Global, local build): `/` 90, `/samples` 88, `/login` 96 performance;
 accessibility, best practices and SEO 100; CLS ≤ 0.003.
 

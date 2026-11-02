@@ -31,6 +31,7 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 | BUG-24 | Medium | Global reaction test | Three-run E2E check (run 9, iPhone) | Fixed |
 | BUG-25 | Medium | Monthly leaderboard | Screenshot review (light theme) | Fixed |
 | BUG-26 | Medium | Global charts on phones | Live E2E (TC-MAIN-04, iPhone) | Fixed |
+| BUG-27 | Medium | Coach rooms, live database only | Live E2E (TC-MAIN-17, all devices) | Fixed |
 
 ---
 
@@ -234,3 +235,13 @@ can't come back. (Model accuracy findings are in [MODEL_ACCURACY.md](MODEL_ACCUR
 - **Cause:** charts first rendered at a default width of 600 px.
 - **Fix:** charts reserve their height and draw once the width is known.
 - **Guard:** TC-MAIN-01/04/14 sideways-scroll checks.
+
+### BUG-27: A hand-in jumped down the list as soon as the coach scored it
+- **Steps:** on the live site, demo coach, Riverside U16, Tasks: score the first hand-in.
+- **Expected:** the row stays where it is and shows its score.
+- **Actual:** the row moved; the next player's unscored row took its place, so it looked as if the score hadn't saved.
+- **Cause:** the room's lists had no explicit order. Postgres returns an updated row later in the table; SQLite
+  (local runs and API tests) doesn't, so only the live run could catch it.
+- **Fix:** members, tasks and hand-ins have a fixed order.
+- **Guard:** `test_room_lists_have_a_fixed_order`, `test_scoring_keeps_hand_ins_in_the_same_order`, TC-MAIN-17.
+
