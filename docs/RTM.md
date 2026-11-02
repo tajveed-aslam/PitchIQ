@@ -3,7 +3,8 @@
 Requirements come from the Lite brief and the approved plan. "Result" is from the local full-stack runs on
 2026-10-30: three consecutive E2E runs (74 passed, 1 skipped by design, 0 failed, 0 flaky, retries off), API tests
 (43 passed), worker tests (6 passed, real pipeline), CI green on Linux, Lighthouse mobile. The live-site run
-(2026-10-31) passed too, with the server's uptime unbroken and peak memory 372 of 512 MB.
+(2026-10-31) passed too, with the server's uptime unbroken and peak memory 372 of 512 MB. The Global run log below
+includes the final live run on 2026-11-02.
 
 | ID | Requirement | Tests | Result |
 |---|---|---|---|
@@ -76,6 +77,11 @@ From the Main brief (player card, training plans, skill analysis, challenges, me
 | **15** | 2026-11-02 | 129 | 0 | 6 | 7.1 min | **Light theme for Lite, BUG-25, BUG-26: three consecutive clean runs (15–17)** |
 | **16** | 2026-11-02 | 129 | 0 | 6 | 7.2 min | |
 | **17** | 2026-11-02 | 129 | 0 | 6 | 6.8 min | |
+| Live | 2026-11-02 | 114 | 15 | 6 | 2.2 h | 14 failures: this test PC lost its connection (ERR_INTERNET_DISCONNECTED, ENOTFOUND; health log gap 12:13–13:54, most likely sleep). 1 real: BUG-27, TC-MAIN-17 on all devices |
+| 18 | 2026-11-02 | 129 | 0 | 6 | 15.3 min | BUG-27 fixed |
+| Live | 2026-11-02 | 129 | 0 | 6 | 12.7 min | No restarts, peak 379 of 512 MB |
+| 19 | 2026-11-02 | 129 | 0 | 6 | 14.3 min | Lite: daylight photos on its first screens |
+| **Live, final** | 2026-11-02 | 129 | 0 | 6 | 12.1 min | **Final build on https://pitch-iq-psi.vercel.app: no restarts, peak 385 of 512 MB** |
 
 Skipped by design: TC-WEB-04 and TC-MAIN-14 on desktop (phone layouts), TC-MAIN-02 and TC-MAIN-10 on phones (one
 real analysis per run). API: 83 passed. CI (Linux): API, frontend lint + build + route check, worker + accuracy
